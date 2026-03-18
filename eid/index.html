@@ -2,12 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
 
     <title>Emaar Gulf | Premium Eid Experience</title>
 
@@ -48,7 +44,6 @@
     }
     </script>
 
-    <!-- Asset preloading — starts fetching before JS runs -->
     <link rel="preload" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" as="image">
     <link rel="preload" href="ambient.mp3" as="audio">
     <link rel="preload" href="chime.mp3" as="audio">
@@ -62,10 +57,13 @@
     <style>
         /* ═══════════════════════════════════════════════════════
            Developer/Author: archengsafdar@gmail.com
-           V23 DEFINITIVE — Enterprise Core + Cinematic Soul
-           Built on V22 base. Two final fixes applied:
-           1. @media (max-width:500px) — mobile button layout
-           2. Resize handler — moon position clamping on viewport change
+           V24 — Star Hunt + Procedural Clouds + Constellation Hints
+           Built on V23 base.
+           New systems:
+           1. Act 1: find 3 hidden stars before moon unlocks
+           2. Procedural cloud canvas with spyglass reveal
+           3. Constellation hint after 15s idle in Act 2
+           4. Nebula wisps on background canvas
            ═══════════════════════════════════════════════════════ */
 
         :root {
@@ -77,8 +75,8 @@
 
         body, html {
             width: 100vw;
-            height: 100vh;      /* Fallback for browsers without dvh support */
-            height: 100dvh;     /* Dynamic viewport — correct on iOS Safari */
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden; background: #030510;
             font-family: 'Inter', sans-serif;
         }
@@ -87,11 +85,6 @@
 
         @media (pointer: fine) { #game-overlay.active { cursor: none; } }
 
-        /* ─────────────────────────────────────────
-           HARDWARE ORIENTATION LOCK
-           CSS-only — protects all devices including
-           iPhones where JS orientation.lock() fails
-        ───────────────────────────────────────── */
         #landscape-warning {
             display: none; position: fixed; top: 0; left: 0;
             width: 100vw; height: 100dvh;
@@ -101,7 +94,6 @@
             font-family: 'Inter', sans-serif; font-weight: 600; padding: 20px;
         }
         #landscape-warning svg { margin-bottom: 20px; animation: tiltPhone 2s infinite ease-in-out; }
-
         @keyframes tiltPhone { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } }
 
         @media (max-width: 900px) and (orientation: landscape) {
@@ -109,9 +101,6 @@
             #start-screen, #game-overlay, #film-noise { display: none !important; }
         }
 
-        /* ─────────────────────────────────────────
-           START SCREEN & FILM NOISE
-        ───────────────────────────────────────── */
         #film-noise {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             pointer-events: none; z-index: 200; opacity: 0.035; mix-blend-mode: overlay;
@@ -131,7 +120,6 @@
             justify-content: center; align-items: center; text-align: center; padding: 20px;
             transition: opacity 0.8s ease, visibility 0.8s;
         }
-
         @media (prefers-reduced-motion: reduce) { #start-screen { animation: none; } }
 
         #start-screen::after {
@@ -140,7 +128,6 @@
         }
 
         .brand-logo-main { width: 220px; max-width: 80%; height: auto; margin-bottom: 30px; }
-
         #start-screen h2 { color: #fff; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px; }
         #start-screen p  { color: #ccc; max-width: 85%; font-size: 1rem; line-height: 1.5; font-weight: 400; margin-bottom: 10px; }
 
@@ -161,9 +148,6 @@
         }
         @media (hover: hover) { .portfolio-link-start:hover { color: var(--emaar-gold); } }
 
-        /* ─────────────────────────────────────────
-           GPU ACCELERATED SKY & HORIZON
-        ───────────────────────────────────────── */
         @keyframes skyShift { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(8deg); } }
 
         #game-overlay {
@@ -187,17 +171,15 @@
             transition: opacity 2.5s ease, height 2.5s ease;
         }
 
-        /* ─────────────────────────────────────────
-           CANVAS LAYERS (Z-Axis Depth Parallax)
-        ───────────────────────────────────────── */
         .parallax-layer {
             position: absolute; top: -5%; left: -5%; width: 110%; height: 110%;
             z-index: 1; pointer-events: none; will-change: transform, filter;
             transition: filter 2.5s ease, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        #stars-canvas { position: absolute; top: 0; left: 0; will-change: transform; }
-        #vfx-canvas   { position: absolute; top: 0; left: 0; z-index: 120; pointer-events: none; transform: translateZ(0); }
+        #stars-canvas  { position: absolute; top: 0; left: 0; will-change: transform; }
+        #cloud-canvas  { position: absolute; top: 0; left: 0; z-index: 8; pointer-events: none; }
+        #vfx-canvas    { position: absolute; top: 0; left: 0; z-index: 120; pointer-events: none; transform: translateZ(0); }
 
         .comet {
             position: absolute; width: 2px; height: 180px;
@@ -206,36 +188,31 @@
             z-index: 5; pointer-events: none; transform-origin: top center;
         }
 
-        /* ─────────────────────────────────────────
-           MOON MASK
-        ───────────────────────────────────────── */
         #moon-mask-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
-            clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
-            -webkit-clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
+            clip-path: circle(90px at var(--x, 50%) var(--y, 50%));
+            -webkit-clip-path: circle(90px at var(--x, 50%) var(--y, 50%));
             will-change: clip-path, -webkit-clip-path; pointer-events: none;
         }
 
         #moon-container {
             position: absolute; top: 0; left: 0; width: 90px; height: 90px;
             will-change: transform; transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0; transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        #moon-container.visible { opacity: 1; }
 
         .moon-svg {
             width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
             transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: rotate(-25deg);
         }
 
-        /* ─────────────────────────────────────────
-           OPTICAL GLASS SPYGLASS
-        ───────────────────────────────────────── */
         #spyglass {
             position: absolute; top: 0; left: 0; width: 180px; height: 180px;
             border-radius: 50%; z-index: 50; pointer-events: none;
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
             background: rgba(255,255,255,0.02);
-            /* WebKit fix: prevents backdrop-filter bleed outside border-radius on Safari/iOS */
             -webkit-mask-image: -webkit-radial-gradient(white, black);
             will-change: transform; transition: opacity 0.6s ease;
         }
@@ -254,9 +231,31 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-weight: 600;
         }
 
-        /* ─────────────────────────────────────────
-           WIN UI
-        ───────────────────────────────────────── */
+        /* ─── STAR HUNT HUD ─── */
+        #star-hunt-hud {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 155; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            pointer-events: none; transition: opacity 0.6s ease;
+        }
+        #star-hunt-hud.hidden { opacity: 0; }
+        .star-hunt-label {
+            color: rgba(255,255,255,0.7); font-size: 11px; letter-spacing: 3px;
+            text-transform: uppercase; font-weight: 600; text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        }
+        .star-pips {
+            display: flex; gap: 10px; align-items: center;
+        }
+        .star-pip {
+            width: 18px; height: 18px; position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+        }
+        .star-pip svg { width: 100%; height: 100%; }
+        .star-pip.found { transform: scale(1.4); }
+        .star-pip.found svg path { fill: #f1aa27; filter: drop-shadow(0 0 5px rgba(241,170,39,0.9)); }
+        @keyframes pipPop { 0%{transform:scale(1)} 50%{transform:scale(1.8)} 100%{transform:scale(1.4)} }
+        .star-pip.popping { animation: pipPop 0.4s ease-out forwards; }
+
+        /* ─── WIN UI ─── */
         #win-ui {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
             text-align: center; opacity: 0; pointer-events: none; transition: opacity 1.5s ease;
@@ -279,7 +278,6 @@
         .share-pill { color: #fff; border-color: rgba(255,255,255,0.3); pointer-events: auto; }
         @media (hover: hover) { .share-pill:hover { background: rgba(255,255,255,0.1); } }
 
-        /* Premium Share Toast */
         #custom-share-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(3,5,16,0.9); border: 1px solid var(--emaar-gold);
@@ -338,11 +336,7 @@
         }
         #play-again-btn:active, .portfolio-btn-secondary:active { transform: scale(0.95); }
 
-        /* ─────────────────────────────────────────
-           LANTERNS
-        ───────────────────────────────────────── */
         @keyframes swing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
-
         .lanterns {
             position: absolute; top: -350px; width: 100%; max-width: 700px;
             left: 50%; transform: translateX(-50%); display: flex; justify-content: space-around;
@@ -355,9 +349,6 @@
         .lantern-string { width: 2px; background: linear-gradient(to bottom, rgba(var(--emaar-gold-rgb), 0), rgba(var(--emaar-gold-rgb), 0.8)); }
         .fanoos { width: 50px; height: auto; filter: drop-shadow(0 10px 20px rgba(var(--emaar-gold-rgb), 0.4)); }
 
-        /* ─────────────────────────────────────────
-           WIN STATES (Camera Pull + HDR Bloom)
-        ───────────────────────────────────────── */
         @keyframes moonPulseHDR {
             0%, 100% { transform: scale(1.6) rotate(-10deg); filter: drop-shadow(0 0 20px rgba(var(--emaar-gold-rgb), 0.8)) drop-shadow(0 0 40px rgba(var(--emaar-gold-rgb), 0.4)); }
             50%       { transform: scale(1.65) rotate(-10deg); filter: drop-shadow(0 0 30px rgba(var(--emaar-gold-rgb), 1)) drop-shadow(0 0 60px rgba(var(--emaar-gold-rgb), 0.6)) drop-shadow(0 0 120px rgba(var(--emaar-gold-rgb), 0.3)); }
@@ -369,62 +360,29 @@
         .found .moon-svg        { animation: moonPulseHDR 3.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); }
         .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
 
-        /* ═══════════════════════════════════════════════════════
-           V23 FIX #1 — MOBILE RESPONSIVE BREAKPOINTS
-           Taken from index-19 (best mobile implementation).
-           Fixes "Building Saudi Arabia's Future" button being
-           clipped/invisible on phones under 500px wide.
-        ═══════════════════════════════════════════════════════ */
-
-        /* Standard mobile phones (up to 500px wide or 800px tall) */
         @media (max-width: 500px), (max-height: 800px) {
             #win-ui { width: 92%; transform: translate(-50%, -48%); }
             .brand-icon-win { width: 38px; margin-bottom: 8px; }
             .score-container { margin-bottom: 12px; }
-
             #win-ui h1 { font-size: clamp(28px, 8vw, 42px); margin-bottom: -5px; }
             #win-ui h2 { font-size: clamp(16px, 5vw, 22px); margin-bottom: 12px; }
-
             .eid-greeting-ar { font-size: clamp(0.9rem, 4.5vw, 1.1rem); margin-bottom: 8px; line-height: 1.4; }
             .eid-greeting-en { font-size: clamp(0.8rem, 3.5vw, 0.95rem); margin-bottom: 16px; line-height: 1.4; max-width: 100%; }
-
-            /* Stack buttons vertically + full width — this is what makes both buttons visible */
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-                width: 100%;
-            }
-            #play-again-btn,
-            .portfolio-btn-secondary {
-                width: 100%;
-                max-width: 280px;
-                padding: 11px 16px;
-                font-size: 0.9rem;
-            }
-
-            /* Scale down lanterns so they don't crowd the win UI */
-            .lanterns {
-                transform: translateX(-50%) scale(0.65);
-                transform-origin: top center;
-            }
+            .action-buttons { flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+            #play-again-btn, .portfolio-btn-secondary { width: 100%; max-width: 280px; padding: 11px 16px; font-size: 0.9rem; }
+            .lanterns { transform: translateX(-50%) scale(0.65); transform-origin: top center; }
         }
-
-        /* Very short screens — landscape-adjacent / small Android */
         @media (max-height: 650px) {
             #win-ui { transform: translate(-50%, -50%); }
             .brand-icon-win { display: none; }
             .lanterns { transform: translateX(-50%) scale(0.5); }
             .eid-greeting-en { margin-bottom: 10px; }
         }
-
-        /* Very narrow screens — 320px and older small Androids */
         @media (max-width: 360px) {
             #start-screen h2 { font-size: 1.8rem; }
             .score-pill, .share-pill { font-size: 0.75rem; padding: 6px 12px; }
         }
 
-        /* Noscript Fallback */
         #noscript-msg {
             position: fixed; inset: 0; display: flex; flex-direction: column;
             align-items: center; justify-content: center; background: #030510;
@@ -442,7 +400,6 @@
         </div>
     </noscript>
 
-    <!-- CSS-controlled landscape block — works even without JS -->
     <div id="landscape-warning" aria-hidden="true">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -463,9 +420,8 @@
             loading="eager"
         >
         <h2>Find the Eid Moon</h2>
-        <p id="dynamic-instruction">Explore the night sky. Drag the lens to search. Tap for a shooting star.</p>
+        <p id="dynamic-instruction">Find 3 hidden stars, then sight the Hilal. Drag the lens to search.</p>
         <button id="start-btn" aria-label="Begin the Eid moon sighting experience">Begin Search</button>
-
         <a
             href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link"
             target="_blank" rel="noopener noreferrer"
@@ -480,28 +436,52 @@
     <!-- ═══════════════ GAME OVERLAY ═══════════════ -->
     <div id="game-overlay" role="application" aria-label="Eid moon sighting game — move or drag to scan the night sky">
         <canvas id="vfx-canvas" aria-hidden="true"></canvas>
+        <canvas id="cloud-canvas" aria-hidden="true"></canvas>
         <div id="horizon-glow" aria-hidden="true"></div>
 
         <div class="parallax-layer" id="parallax-master" aria-hidden="true">
             <canvas id="stars-canvas"></canvas>
-            <div id="moon-mask-layer">
-                <div id="moon-container">
-                    <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <defs>
-                            <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
-                                <stop offset="40%"  stop-color="#f1aa27" stop-opacity="1"/>
-                                <stop offset="100%" stop-color="#a67111" stop-opacity="1"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M50,5 A45,45 0 1,1 15,85 A55,55 0 0,0 50,5 Z" fill="url(#moonGrad)"/>
-                    </svg>
-                </div>
+        </div>
+
+        <div id="moon-mask-layer" aria-hidden="true">
+            <div id="moon-container">
+                <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+                            <stop offset="40%"  stop-color="#f1aa27" stop-opacity="1"/>
+                            <stop offset="100%" stop-color="#a67111" stop-opacity="1"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50,5 A45,45 0 1,1 15,85 A55,55 0 0,0 50,5 Z" fill="url(#moonGrad)"/>
+                </svg>
             </div>
         </div>
 
         <div id="spyglass" aria-hidden="true">
             <div id="direction-compass"></div>
+        </div>
+
+        <!-- ─── STAR HUNT HUD ─── -->
+        <div id="star-hunt-hud" aria-live="polite">
+            <div class="star-hunt-label">Find the 3 stars</div>
+            <div class="star-pips">
+                <div class="star-pip" id="pip-0">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+                <div class="star-pip" id="pip-1">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+                <div class="star-pip" id="pip-2">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+            </div>
         </div>
 
         <div id="guide-text" aria-live="polite" aria-atomic="true">
@@ -572,20 +552,11 @@
     <div id="custom-share-toast" role="alert" aria-live="assertive"></div>
 
     <script>
-        // ═══════════════════════════════════════════════════════════════
-        // Developer/Author: archengsafdar@gmail.com
-        // V23 DEFINITIVE FINAL BUILD
-        // Base: V22 (index-22.html) — "Enterprise Core + Cinematic Soul"
-        // Additions:
-        //   1. @media (max-width:500px) mobile button layout
-        //   2. Standalone resize handler — moon position clamping
-        // ═══════════════════════════════════════════════════════════════
         "use strict";
 
         // ─── HARDWARE DETECTION ─────────────────────────────────────────
         const logicalCores      = navigator.hardwareConcurrency || 4;
-        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isLowEnd          = logicalCores <= 2; // Only truly weak CPUs get degraded quality
+        const isLowEnd          = logicalCores <= 2;
         const isTouch           = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
         // ─── GAME CONSTANTS ──────────────────────────────────────────────
@@ -594,13 +565,15 @@
             magneticPull:              0.08,
             winDistance:               50
         };
-
         const THRESHOLDS = {
-            magneticActivation: 150,   // px from moon to enable magnetic pull
-            compassAppear:      0.6,   // intensity level for compass glow
-            hapticStart:        0.3,   // intensity level for haptic feedback
-            spyglassScale:      0.15   // max additional scale on spyglass zoom
+            magneticActivation: 150,
+            compassAppear:      0.6,
+            hapticStart:        0.3,
+            spyglassScale:      0.15,
+            starCatchRadius:    55   // px radius to "catch" a hidden star
         };
+        const NUM_HUNT_STARS = 3;
+        const CONSTELLATION_HINT_DELAY = 15000; // ms before hint appears
 
         // ─── DOM REFERENCES ──────────────────────────────────────────────
         const startScreen        = document.getElementById('start-screen');
@@ -622,22 +595,29 @@
         const lanternsUi         = document.getElementById('lanterns');
         const scoreDisplay       = document.getElementById('score-display');
         const greetingEnEl       = document.getElementById('eid-greeting-en');
+        const starHuntHud        = document.getElementById('star-hunt-hud');
+        const cloudCanvas        = document.getElementById('cloud-canvas');
 
         // ─── STATE ───────────────────────────────────────────────────────
-        let isDragging      = false;
-        let hasFoundMoon    = false;
+        let isDragging       = false;
+        let hasFoundMoon     = false;
         let animationFrameId = null;
-        let cometTimer      = null;
-        let isCometFlying   = false;
-        let lastVibeTime    = 0;
-        let searchStartTime = 0;
-        let finalTimeTaken  = 0;
+        let cometTimer       = null;
+        let isCometFlying    = false;
+        let lastVibeTime     = 0;
+        let searchStartTime  = 0;
+        let finalTimeTaken   = 0;
         let tapStartX = 0, tapStartY = 0;
+        let lastInputTime    = performance.now();
 
-        // Idle tracker — activates living engine drift after 5s of no input
-        let lastInputTime = performance.now();
+        // Act 1 — star hunt state
+        let starsFoundCount  = 0;
+        let huntStars        = [];   // [{x, y, found, pulseOffset}]
+        let moonUnlocked     = false;
+        let constellationAlpha = 0; // fades in after hint delay
+        let constellationTimer = null;
 
-        // Cached viewport — never read window.innerWidth inside the 60fps render loop
+        // Viewport cache
         let vW = window.innerWidth;
         let vH = window.innerHeight;
 
@@ -645,7 +625,6 @@
         let currentX = targetX, currentY = targetY;
         let moonX = 0, moonY = 0;
 
-        // Auto-parallax (replaces gyroscope — no permission needed, works in all browsers/WebViews)
         let autoParallaxX = 0, autoParallaxY = 0;
 
         let lastFrameTime = 0;
@@ -658,13 +637,12 @@
             spyglass.style.webkitBackdropFilter = 'none';
             spyglass.style.background           = 'rgba(255,255,255,0.10)';
         } else {
-            // Apple-tier lens optics: blur + brightness + contrast + saturation
             spyglass.style.backdropFilter       = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
             spyglass.style.webkitBackdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
         }
 
         if (!isTouch) {
-            dynamicInstruction.innerText = "Explore the night sky. Move your mouse to search. Click for a shooting star.";
+            dynamicInstruction.innerText = "Find 3 hidden stars, then sight the Hilal. Move your mouse to search.";
             inGameInstruction.innerText  = "MOVE MOUSE TO SCAN";
         }
 
@@ -681,39 +659,66 @@
         }
         updateLocalizedGreeting();
 
-        // ─── HIGH-DPI CANVAS SETUP ───────────────────────────────────────
-        const starsCtx = starsCanvas.getContext('2d', { alpha: true });
+        // ─── CANVAS SETUP ────────────────────────────────────────────────
+        const starsCtx  = starsCanvas.getContext('2d', { alpha: true });
         const vfxCanvas = document.getElementById('vfx-canvas');
         const vfxCtx    = vfxCanvas.getContext('2d', { alpha: true });
+        const cloudCtx  = cloudCanvas.getContext('2d', { alpha: true });
 
         let starData = [], canvasParticles = [];
         let oldStarsW = 0, oldStarsH = 0;
-        let sCSS_W = 0, sCSS_H = 0; // stars canvas CSS dimensions (for clearRect)
-        let vCSS_W = 0, vCSS_H = 0; // vfx canvas CSS dimensions
+        let sCSS_W = 0, sCSS_H = 0;
+        let vCSS_W = 0, vCSS_H = 0;
+        let cCSS_W = 0, cCSS_H = 0;
+
+        // Cloud blobs — pre-generated, animated by phase offset
+        let cloudBlobs = [];
+
+        function generateClouds() {
+            cloudBlobs = [];
+            const count = isLowEnd ? 5 : 8;
+            for (let i = 0; i < count; i++) {
+                cloudBlobs.push({
+                    x:      Math.random() * vW,
+                    y:      Math.random() * vH * 0.75 + vH * 0.05,
+                    rx:     Math.random() * 180 + 120,  // ellipse x-radius
+                    ry:     Math.random() * 60  + 40,   // ellipse y-radius
+                    speed:  (Math.random() * 0.008 + 0.004) * (Math.random() > 0.5 ? 1 : -1),
+                    alpha:  Math.random() * 0.35 + 0.25,
+                    phase:  Math.random() * Math.PI * 2
+                });
+            }
+        }
 
         function resizeCanvases() {
             const dpr = window.devicePixelRatio || 1;
-
-            // Update viewport cache whenever we resize
             vW = window.innerWidth;
             vH = window.innerHeight;
 
-            sCSS_W = vW * 1.1; sCSS_H = vH * 1.1; // 10% overhang for parallax edges
+            sCSS_W = vW * 1.1; sCSS_H = vH * 1.1;
             vCSS_W = vW;       vCSS_H = vH;
+            cCSS_W = vW;       cCSS_H = vH;
 
             starsCanvas.width        = sCSS_W * dpr;
             starsCanvas.height       = sCSS_H * dpr;
             starsCanvas.style.width  = `${sCSS_W}px`;
             starsCanvas.style.height = `${sCSS_H}px`;
-            starsCtx.setTransform(1, 0, 0, 1, 0, 0); // reset matrix — prevent DPR scale stacking
+            starsCtx.setTransform(1, 0, 0, 1, 0, 0);
             starsCtx.scale(dpr, dpr);
 
             vfxCanvas.width        = vCSS_W * dpr;
             vfxCanvas.height       = vCSS_H * dpr;
             vfxCanvas.style.width  = `${vCSS_W}px`;
             vfxCanvas.style.height = `${vCSS_H}px`;
-            vfxCtx.setTransform(1, 0, 0, 1, 0, 0); // reset matrix
+            vfxCtx.setTransform(1, 0, 0, 1, 0, 0);
             vfxCtx.scale(dpr, dpr);
+
+            cloudCanvas.width        = cCSS_W * dpr;
+            cloudCanvas.height       = cCSS_H * dpr;
+            cloudCanvas.style.width  = `${cCSS_W}px`;
+            cloudCanvas.style.height = `${cCSS_H}px`;
+            cloudCtx.setTransform(1, 0, 0, 1, 0, 0);
+            cloudCtx.scale(dpr, dpr);
 
             if (starData.length === 0) {
                 const count = isLowEnd ? 80 : 180;
@@ -728,7 +733,6 @@
                     });
                 }
             } else if (oldStarsW > 0) {
-                // Non-destructive resize: proportionally reposition stars
                 const rx = sCSS_W / oldStarsW, ry = sCSS_H / oldStarsH;
                 starData.forEach(s => { s.x *= rx; s.y *= ry; });
             }
@@ -739,25 +743,196 @@
         resizeCanvases();
 
         // ─── PARTICLE BURST ──────────────────────────────────────────────
-        function triggerParticleBurst(x, y) {
-            // Mobile gets fewer, faster-decaying particles to avoid frame drops
+        function triggerParticleBurst(x, y, color) {
             const n = isLowEnd ? 30 : (isTouch ? 55 : 90);
+            const col = color || '#f1aa27';
             for (let i = 0; i < n; i++) {
                 canvasParticles.push({
                     x, y,
                     vx: (Math.random() - 0.5) * (Math.random() * 18 + 8),
                     vy: (Math.random() - 0.5) * (Math.random() * 18 + 8),
-                    life: 1.0, decay: Math.random() * 0.04 + 0.025,  // faster decay = shorter burst
-                    size: Math.random() * 2.5 + 1.5
+                    life: 1.0, decay: Math.random() * 0.04 + 0.025,
+                    size: Math.random() * 2.5 + 1.5,
+                    col
                 });
             }
             if (canvasParticles.length > 200) canvasParticles.splice(0, canvasParticles.length - 200);
         }
 
-        // ─── CANVAS DRAW ─────────────────────────────────────────────────
+        // Small sparkle burst when a hunt star is found
+        function triggerStarBurst(x, y) {
+            const n = isLowEnd ? 16 : 28;
+            for (let i = 0; i < n; i++) {
+                const angle = (i / n) * Math.PI * 2;
+                const speed = Math.random() * 5 + 3;
+                canvasParticles.push({
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1.0, decay: Math.random() * 0.05 + 0.04,
+                    size: Math.random() * 2 + 1,
+                    col: '#ffffff'
+                });
+            }
+        }
+
+        // ─── CLOUD DRAW ──────────────────────────────────────────────────
+        // Clouds are drawn as blurred ellipses. The spyglass reveal works because
+        // the moon-mask-layer (clip-path) sits ABOVE the cloud canvas (z-index 10 > 8),
+        // so the spyglass circle always shows through clouds to the moon beneath.
+        function drawClouds(time) {
+            cloudCtx.clearRect(0, 0, cCSS_W, cCSS_H);
+            if (!moonUnlocked && starsFoundCount === 0) return; // no clouds in Act 1 until at least 1 star found
+
+            const opacity = moonUnlocked ? 1 : (starsFoundCount / NUM_HUNT_STARS) * 0.6;
+            if (opacity <= 0) return;
+
+            cloudCtx.save();
+            // Blur is expensive — skip on low-end
+            if (!isLowEnd) cloudCtx.filter = 'blur(28px)';
+
+            for (let i = 0; i < cloudBlobs.length; i++) {
+                const b = cloudBlobs[i];
+                // Drift horizontally, wrap around edges
+                b.x += b.speed * 0.5;
+                if (b.x > vW + b.rx + 50) b.x = -b.rx - 50;
+                if (b.x < -b.rx - 50)     b.x = vW + b.rx + 50;
+
+                // Gentle vertical bob
+                const bobY = b.y + Math.sin(time * 0.0003 + b.phase) * 8;
+
+                cloudCtx.globalAlpha = b.alpha * opacity;
+                cloudCtx.fillStyle   = '#1a2a5e';  // deep navy — dark sky cloud colour
+
+                cloudCtx.beginPath();
+                cloudCtx.ellipse(b.x, bobY, b.rx, b.ry, 0, 0, Math.PI * 2);
+                cloudCtx.fill();
+
+                // Second, slightly offset ellipse for depth
+                cloudCtx.globalAlpha = b.alpha * opacity * 0.5;
+                cloudCtx.fillStyle   = '#0d1a3a';
+                cloudCtx.beginPath();
+                cloudCtx.ellipse(b.x + b.rx * 0.3, bobY - b.ry * 0.2, b.rx * 0.75, b.ry * 0.7, 0, 0, Math.PI * 2);
+                cloudCtx.fill();
+            }
+
+            cloudCtx.filter = 'none';
+            cloudCtx.globalAlpha = 1;
+            cloudCtx.restore();
+        }
+
+        // ─── CONSTELLATION HINT ──────────────────────────────────────────
+        function drawConstellation(time) {
+            if (constellationAlpha <= 0) return;
+
+            const r   = 80;
+            const pts = [
+                { x: moonX,     y: moonY - r },
+                { x: moonX + r, y: moonY      },
+                { x: moonX,     y: moonY + r  },
+                { x: moonX - r, y: moonY      }
+            ];
+
+            const lineAlpha = constellationAlpha * (0.3 + Math.sin(time * 0.002) * 0.1);
+
+            // Draw on vfxCtx — viewport-fixed, matches moonX/moonY exactly
+            vfxCtx.save();
+            vfxCtx.globalCompositeOperation = 'source-over';
+            vfxCtx.globalAlpha = lineAlpha;
+            vfxCtx.strokeStyle = '#c8a86b';
+            vfxCtx.lineWidth   = 0.8;
+            vfxCtx.setLineDash([4, 6]);
+
+            vfxCtx.beginPath();
+            vfxCtx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) vfxCtx.lineTo(pts[i].x, pts[i].y);
+            vfxCtx.closePath();
+            vfxCtx.stroke();
+            vfxCtx.setLineDash([]);
+
+            vfxCtx.fillStyle = '#f1d080';
+            for (const p of pts) {
+                const pulse = 1.5 + Math.sin(time * 0.003 + p.x) * 0.5;
+                vfxCtx.globalAlpha = constellationAlpha * 0.8;
+                vfxCtx.beginPath();
+                vfxCtx.arc(p.x, p.y, pulse, 0, Math.PI * 2);
+                vfxCtx.fill();
+            }
+
+            vfxCtx.restore();
+        }
+
+        // ─── HUNT STARS DRAW ─────────────────────────────────────────────
+        // Draws the 3 hidden golden stars on the stars canvas.
+        // They pulse subtly to be discoverable but not obvious.
+        function drawHuntStars(time) {
+            for (let i = 0; i < huntStars.length; i++) {
+                const s = huntStars[i];
+                if (s.found) continue;
+
+                const pulse = 1 + Math.sin(time * 0.003 + s.pulseOffset) * 0.4;
+                const alpha = 0.55 + Math.sin(time * 0.003 + s.pulseOffset) * 0.25;
+
+                // Draw on vfxCtx — viewport-fixed, coords match detection exactly
+                vfxCtx.save();
+                vfxCtx.globalAlpha = alpha;
+                vfxCtx.globalCompositeOperation = 'source-over';
+
+                // Outer glow ring
+                vfxCtx.fillStyle = 'rgba(241,210,100,0.18)';
+                vfxCtx.beginPath();
+                vfxCtx.arc(s.x, s.y, 14 * pulse, 0, Math.PI * 2);
+                vfxCtx.fill();
+
+                // Star core
+                drawStarShape(vfxCtx, s.x, s.y, 6 * pulse, 3 * pulse, '#f1d264');
+
+                vfxCtx.restore();
+            }
+        }
+
+        function drawStarShape(ctx, cx, cy, outerR, innerR, color) {
+            const points = 5;
+            const step   = Math.PI / points;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = i * step - Math.PI / 2;
+                if (i === 0) ctx.moveTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+                else         ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // ─── NEBULA WISPS ────────────────────────────────────────────────
+        // Painted once onto the stars canvas background (static, not animated)
+        // Called inside drawFrame every frame but skipped after first pass
+        // Actually: drawn per-frame at very low opacity so they don't flicker
+        function drawNebula(time) {
+            const wisps = [
+                { x: vW * 0.25, y: vH * 0.3,  rx: 180, ry: 60,  col: 'rgba(80,40,120,0.035)' },
+                { x: vW * 0.75, y: vH * 0.5,  rx: 140, ry: 50,  col: 'rgba(30,60,120,0.03)'  },
+                { x: vW * 0.5,  y: vH * 0.15, rx: 200, ry: 40,  col: 'rgba(60,30,100,0.025)' },
+                { x: vW * 0.15, y: vH * 0.7,  rx: 120, ry: 45,  col: 'rgba(20,50,100,0.02)'  }
+            ];
+            for (const w of wisps) {
+                starsCtx.globalAlpha = 1;
+                starsCtx.fillStyle   = w.col;
+                starsCtx.beginPath();
+                starsCtx.ellipse(w.x, w.y, w.rx, w.ry, 0, 0, Math.PI * 2);
+                starsCtx.fill();
+            }
+            starsCtx.globalAlpha = 1.0;
+        }
+
+        // ─── CANVAS DRAW FRAME ───────────────────────────────────────────
         function drawFrame(time) {
-            // Stars — clearRect uses CSS pixel dimensions, not physical pixels
+            // ── Stars canvas (parallax-shifted, inside parallax-master) ───
             starsCtx.clearRect(0, 0, sCSS_W, sCSS_H);
+            drawNebula(time);
+
             starsCtx.fillStyle = '#ffffff';
             for (let i = 0; i < starData.length; i++) {
                 const s = starData[i];
@@ -768,25 +943,39 @@
             }
             starsCtx.globalAlpha = 1.0;
 
-            // Particles — destination-out trail + additive bloom
+            // ── Cloud canvas (viewport-fixed, separate element) ───────────
+            drawClouds(time);
+
+            // ── VFX canvas (viewport-fixed) ───────────────────────────────
+            // Always clear first, then draw viewport-fixed overlays in source-over,
+            // then switch to lighter composite for additive particle bloom.
+            vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
+            vfxCtx.globalCompositeOperation = 'source-over';
+
+            // Hunt stars — drawn here so coords match viewport exactly
+            if (!moonUnlocked) drawHuntStars(time);
+
+            // Constellation hint — drawn here so it aligns with moonX/moonY
+            if (moonUnlocked && !hasFoundMoon) drawConstellation(time);
+
+            // Particles — additive bloom on top
             if (canvasParticles.length > 0) {
+                // Fade trail: paint semi-transparent black over previous frame content
                 vfxCtx.globalCompositeOperation = 'destination-out';
                 vfxCtx.fillStyle = 'rgba(0,0,0,0.2)';
                 vfxCtx.fillRect(0, 0, vCSS_W, vCSS_H);
 
                 vfxCtx.globalCompositeOperation = 'lighter';
-                // No per-particle shadowColor — avoids string alloc every frame
-                // Single ambient glow set once; particles use flat fill for perf
                 vfxCtx.shadowBlur  = isTouch ? 6 : 10;
                 vfxCtx.shadowColor = 'rgba(241,170,39,0.6)';
 
                 for (let i = canvasParticles.length - 1; i >= 0; i--) {
                     const p = canvasParticles[i];
-                    p.x += p.vx; p.y += p.vy; p.vy += 0.15; // subtle gravity
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.15;
                     p.life -= p.decay;
                     if (p.life <= 0) { canvasParticles.splice(i, 1); continue; }
                     vfxCtx.globalAlpha = p.life;
-                    vfxCtx.fillStyle   = p.life > 0.5 ? '#f1aa27' : '#ffffff';
+                    vfxCtx.fillStyle   = p.life > 0.5 ? (p.col || '#f1aa27') : '#ffffff';
                     vfxCtx.beginPath();
                     vfxCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
                     vfxCtx.fill();
@@ -794,8 +983,6 @@
                 vfxCtx.globalAlpha = 1.0;
                 vfxCtx.shadowBlur  = 0;
                 vfxCtx.globalCompositeOperation = 'source-over';
-            } else {
-                vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
             }
         }
 
@@ -836,16 +1023,15 @@
             pauseAll() { this.ambient.pause(); this.hum.pause(); this.chime.pause(); }
         };
 
-        // Unlock audio on first pointer interaction
         document.addEventListener('pointerdown', () => {
             if (overlay.classList.contains('active')) audio.playStart();
         }, { once: true });
 
-        // Pause/resume on tab hide/show
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                if (cometTimer) clearTimeout(cometTimer);
+                if (cometTimer)       clearTimeout(cometTimer);
+                if (constellationTimer) clearTimeout(constellationTimer);
                 audio.pauseAll();
             } else {
                 if (overlay.classList.contains('active') && !hasFoundMoon) {
@@ -865,25 +1051,22 @@
             const comet = document.createElement('div');
             comet.className = 'comet';
 
-            const r    = Math.max(vW, vH) + 300; // uses cached viewport
+            const r    = Math.max(vW, vH) + 300;
             const a    = Math.random() * Math.PI * 2;
-            const sX   = cx + Math.cos(a) * r,  sY = cy + Math.sin(a) * r;
-            const eX   = cx - Math.cos(a) * r,  eY = cy - Math.sin(a) * r;
+            const sX   = cx + Math.cos(a) * r, sY = cy + Math.sin(a) * r;
+            const eX   = cx - Math.cos(a) * r, eY = cy - Math.sin(a) * r;
             const aDeg = (Math.atan2(eY - sY, eX - sX) * 180 / Math.PI) + 90;
 
-            overlay.appendChild(comet); // uses cached DOM reference
+            overlay.appendChild(comet);
 
-            // Feature-detect Web Animations API — fallback for old Android WebViews
             if (typeof comet.animate === 'function') {
                 const anim = comet.animate([
                     { transform: `translate3d(${sX}px,${sY}px,0) rotate(${aDeg}deg)`, opacity: 0 },
                     { transform: `translate3d(${sX-(sX-eX)*0.1}px,${sY-(sY-eY)*0.1}px,0) rotate(${aDeg}deg)`, opacity: 1, offset: 0.1 },
                     { transform: `translate3d(${eX}px,${eY}px,0) rotate(${aDeg}deg)`, opacity: 0 }
                 ], { duration: 1200 + Math.random() * 400, easing: 'linear' });
-                // Clean up on both finish AND cancel — prevents ghost nodes and stuck isCometFlying
                 anim.onfinish = anim.oncancel = () => { comet.remove(); isCometFlying = false; };
             } else {
-                // Fallback: just remove after animation duration
                 setTimeout(() => { comet.remove(); isCometFlying = false; }, 1600);
             }
         }
@@ -895,15 +1078,117 @@
             cometTimer = setTimeout(spawnAmbientComet, 3500 + Math.random() * 4000);
         }
 
+        // ─── STAR HUNT HELPERS ───────────────────────────────────────────
+        function placeHuntStars() {
+            huntStars = [];
+            for (let i = 0; i < NUM_HUNT_STARS; i++) {
+                let sx, sy, ok;
+                let attempts = 0;
+                // Place away from center, screen edges, and each other
+                do {
+                    sx = Math.random() * (vW - 200) + 100;
+                    sy = Math.random() * (vH - 200) + 100;
+                    ok = Math.hypot(sx - vW/2, sy - vH/2) > 130;
+                    if (ok) {
+                        for (const s of huntStars) {
+                            if (Math.hypot(sx - s.x, sy - s.y) < 130) { ok = false; break; }
+                        }
+                    }
+                    attempts++;
+                } while (!ok && attempts < 200);
+
+                huntStars.push({ x: sx, y: sy, found: false, pulseOffset: Math.random() * Math.PI * 2 });
+            }
+            starsFoundCount = 0;
+            // Reset all pips
+            for (let i = 0; i < NUM_HUNT_STARS; i++) {
+                const pip = document.getElementById(`pip-${i}`);
+                if (pip) pip.classList.remove('found', 'popping');
+            }
+        }
+
+        function markStarFound(index) {
+            if (huntStars[index].found) return;
+            huntStars[index].found = true;
+            starsFoundCount++;
+
+            // Burst particles at star
+            triggerStarBurst(huntStars[index].x, huntStars[index].y);
+            if (navigator.vibrate && isTouch) navigator.vibrate([10, 15, 10]);
+
+            // Update pip
+            const pip = document.getElementById(`pip-${index}`);
+            if (pip) {
+                pip.classList.add('found', 'popping');
+                // Update pip star color inline
+                const path = pip.querySelector('path');
+                if (path) path.setAttribute('fill', '#f1aa27');
+            }
+
+            if (starsFoundCount >= NUM_HUNT_STARS) {
+                // Short delay then unlock moon
+                setTimeout(unlockMoon, 600);
+            }
+        }
+
+        function unlockMoon() {
+            moonUnlocked = true;
+            moonContainer.classList.add('visible');
+
+            // Update HUD
+            starHuntHud.classList.add('hidden');
+            setTimeout(() => { starHuntHud.style.display = 'none'; }, 700);
+
+            // Update instruction
+            guideText.style.opacity = '1';
+            inGameInstruction.innerText = isTouch ? 'DRAG TO FIND THE MOON' : 'MOVE MOUSE TO FIND THE MOON';
+
+            // Start constellation hint timer
+            constellationAlpha = 0;
+            if (constellationTimer) clearTimeout(constellationTimer);
+            constellationTimer = setTimeout(() => {
+                // Fade constellation in over 3 seconds using rAF-friendly increments
+                const fadeIn = () => {
+                    constellationAlpha = Math.min(1, constellationAlpha + 0.008);
+                    if (constellationAlpha < 1) requestAnimationFrame(fadeIn);
+                };
+                fadeIn();
+            }, CONSTELLATION_HINT_DELAY);
+
+            // Reset search timer to count from moon unlock
+            searchStartTime = performance.now();
+        }
+
+        // ─── CHECK SPYGLASS OVER HUNT STARS (called from render loop) ────
+        function checkHuntStarProximity() {
+            if (moonUnlocked) return;
+            for (let i = 0; i < huntStars.length; i++) {
+                if (huntStars[i].found) continue;
+                const dist = Math.hypot(currentX - huntStars[i].x, currentY - huntStars[i].y);
+                if (dist < THRESHOLDS.starCatchRadius) {
+                    markStarFound(i);
+                }
+            }
+        }
+
         // ─── ENGINE INIT / RESET ─────────────────────────────────────────
         function initializeEngine() {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-            if (cometTimer) clearTimeout(cometTimer);
+            if (animationFrameId)    cancelAnimationFrame(animationFrameId);
+            if (cometTimer)          clearTimeout(cometTimer);
+            if (constellationTimer)  clearTimeout(constellationTimer);
+
             canvasParticles = [];
             vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
+            cloudCtx.clearRect(0, 0, cCSS_W, cCSS_H);
 
-            hasFoundMoon              = false;
+            // Reset game flags
+            hasFoundMoon      = false;
+            moonUnlocked      = false;
+            constellationAlpha = 0;
+
             guideText.style.opacity   = '1';
+            inGameInstruction.innerText = isTouch ? 'DRAG TO SCAN' : 'MOVE MOUSE TO SCAN';
+
             winUi.style.opacity       = '0';
             winUi.style.pointerEvents = 'none';
             lanternsUi.style.top      = '-350px';
@@ -916,12 +1201,18 @@
             parallaxMaster.style.transition = 'none';
             parallaxMaster.style.transform  = 'translate3d(0,0,0)';
             parallaxMaster.style.filter     = 'none';
-            starsCanvas.style.transform     = 'translate3d(0,0,0)'; // reset depth layer
+            starsCanvas.style.transform     = 'translate3d(0,0,0)';
 
-            // Defer .found removal by one frame — prevents parallax flash on replay
             requestAnimationFrame(() => document.body.classList.remove('found'));
 
-            // Place moon randomly, guaranteed away from screen center
+            // Hide moon until Act 1 complete
+            moonContainer.classList.remove('visible');
+
+            // Reset star hunt HUD
+            starHuntHud.style.display = 'flex';
+            starHuntHud.classList.remove('hidden');
+
+            // Place moon away from center
             do {
                 moonX = Math.random() * (vW - 240) + 120;
                 moonY = Math.random() * (vH - 240) + 120;
@@ -935,16 +1226,18 @@
             moonMaskLayer.style.setProperty('--y', `${currentY}px`);
             compass.style.opacity = '0';
 
+            // Generate clouds and hunt stars
+            generateClouds();
+            placeHuntStars();
+
             searchStartTime = performance.now();
             lastFrameTime   = performance.now();
-            lastInputTime   = performance.now(); // reset idle tracker
+            lastInputTime   = performance.now();
             updateLocalizedGreeting();
         }
 
         // ─── START BUTTON ────────────────────────────────────────────────
         startBtn.addEventListener('click', () => {
-
-            // Lock orientation to portrait (Android Chrome + some iOS contexts)
             if (screen.orientation && screen.orientation.lock) {
                 screen.orientation.lock('portrait').catch(() => {});
             }
@@ -964,7 +1257,7 @@
         playAgainBtn.addEventListener('click', () => {
             initializeEngine();
             audio.playStart();
-            spawnAmbientComet(); // was missing in all versions before V20
+            spawnAmbientComet();
             animationFrameId = requestAnimationFrame(renderEngine);
         });
 
@@ -974,9 +1267,8 @@
         });
 
         shareBtn.addEventListener('click', async () => {
-            if (!finalTimeTaken) return; // guard — prevent share before win
-            const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI just sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\nMay this season bring peace and prosperity to your home. Can you find the moon faster than me?\n\n🔭 Play here: ${window.location.href}`;
-
+            if (!finalTimeTaken) return;
+            const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI found 3 stars and sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\nCan you find them faster?\n\n🔭 Play here: ${window.location.href}`;
             if (navigator.share) {
                 navigator.share({ title: 'Eid Mubarak from Emaar Gulf', text: shareText }).catch(console.error);
             } else {
@@ -991,37 +1283,25 @@
             }
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        // V23 FIX #2 — STANDALONE RESIZE HANDLER (Moon Position Clamping)
-        // Missing from V22. Ensures moon stays within new viewport bounds
-        // when window is resized (desktop) or foldable phone unfolds.
-        // The resizeCanvases() listener handles canvas + vW/vH updates.
-        // This separate listener handles the game object positions.
-        // ═══════════════════════════════════════════════════════════════
+        // ─── RESIZE HANDLER ──────────────────────────────────────────────
         window.addEventListener('resize', () => {
-            // vW/vH are already updated by resizeCanvases() listener above
             if (!overlay.classList.contains('active') || hasFoundMoon) return;
-
-            // Clamp moon to new viewport bounds
             moonX = Math.min(Math.max(moonX, 120), vW - 120);
             moonY = Math.min(Math.max(moonY, 120), vH - 120);
             moonContainer.style.transform = `translate3d(${moonX-45}px,${moonY-45}px,0)`;
-
-            // Clamp spyglass target to new viewport
             targetX = Math.min(targetX, vW);
             targetY = Math.min(targetY, vH);
         });
 
-        // ─── UNIFIED POINTER ENGINE ───────────────────────────────────────
+        // ─── UNIFIED POINTER ENGINE ──────────────────────────────────────
         const handlePointerDown = (e) => {
-            lastInputTime = performance.now(); // record for idle drift reset
+            lastInputTime = performance.now();
             if (e.pointerType === 'touch') {
                 overlay.setPointerCapture(e.pointerId);
                 isDragging = true;
                 tapStartX  = e.clientX;
                 tapStartY  = e.clientY;
             } else if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
-                // Mouse AND stylus/pen — shoot comet on click/tap
                 if (!isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
                     shootInteractiveComet(e.clientX, e.clientY);
                 }
@@ -1030,9 +1310,8 @@
 
         const handlePointerMove = (e) => {
             if (hasFoundMoon) return;
-            lastInputTime = performance.now(); // reset idle drift timer
+            lastInputTime = performance.now();
             if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
-                // Mouse AND stylus move the spyglass
                 targetX = e.clientX;
                 targetY = e.clientY;
                 guideText.style.opacity = '0';
@@ -1062,11 +1341,10 @@
         overlay.addEventListener('pointercancel',      handlePointerUp);
         overlay.addEventListener('lostpointercapture', () => { isDragging = false; });
 
-        // ─── GPU RENDER LOOP (FPS Governed) ──────────────────────────────
+        // ─── GPU RENDER LOOP ──────────────────────────────────────────────
         function renderEngine(timestamp) {
             if (!timestamp) timestamp = performance.now();
 
-            // Frame pacing — cap at target FPS, normalises 60/120/144Hz displays
             if (timestamp - lastFrameTime < FRAME_DELAY) {
                 animationFrameId = requestAnimationFrame(renderEngine);
                 return;
@@ -1076,25 +1354,13 @@
             drawFrame(timestamp);
 
             if (!hasFoundMoon) {
-                // Auto-parallax — smooth sinusoidal drift, mimics gyro feel, zero permissions
+                // Auto-parallax
                 autoParallaxX = Math.sin(timestamp * 0.00023) * 12 + Math.sin(timestamp * 0.00041) * 6;
                 autoParallaxY = Math.cos(timestamp * 0.00019) * 8  + Math.cos(timestamp * 0.00037) * 4;
                 parallaxMaster.style.transform = `translate3d(${autoParallaxX}px,${autoParallaxY}px,0)`;
                 starsCanvas.style.transform    = `translate3d(${autoParallaxX * -0.4}px,${autoParallaxY * -0.4}px,0)`;
 
-                const dist   = Math.hypot(currentX - moonX, currentY - moonY);
-                const radius = vW * DIFFICULTY.detectionRadiusMultiplier; // uses cached vW
-                const intens = Math.max(0, 1 - dist / radius);
-
-                audio.updateHum(intens);
-
-                // Magnetic pull activates when spyglass is close to moon
-                if (dist < THRESHOLDS.magneticActivation && (isDragging || !isTouch)) {
-                    targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
-                    targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
-                }
-
-                // Idle intelligence: gentle drift when no input for 5 seconds
+                // Idle drift
                 if (performance.now() - lastInputTime > 5000 && !isDragging) {
                     targetX += Math.sin(performance.now() * 0.001) * 0.6;
                     targetY += Math.cos(performance.now() * 0.0013) * 0.6;
@@ -1104,67 +1370,89 @@
                 currentX += (targetX - currentX) * ease;
                 currentY += (targetY - currentY) * ease;
 
-                if (dist < radius) {
-                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(${1 + intens * THRESHOLDS.spyglassScale})`;
-                    if (intens > THRESHOLDS.compassAppear) {
-                        compass.style.transform = `rotate(${Math.atan2(moonY-currentY, moonX-currentX)}rad)`;
-                        compass.style.opacity   = `${(intens - THRESHOLDS.compassAppear) * 2.5}`;
+                // ── ACT 1: check if spyglass is over a hunt star ──────────
+                checkHuntStarProximity();
+
+                // ── ACT 2: moon logic (only when unlocked) ────────────────
+                if (moonUnlocked) {
+                    const dist   = Math.hypot(currentX - moonX, currentY - moonY);
+                    const radius = vW * DIFFICULTY.detectionRadiusMultiplier;
+                    const intens = Math.max(0, 1 - dist / radius);
+
+                    audio.updateHum(intens);
+
+                    if (dist < THRESHOLDS.magneticActivation && (isDragging || !isTouch)) {
+                        targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
+                        targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
+                    }
+
+                    if (dist < radius) {
+                        spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(${1 + intens * THRESHOLDS.spyglassScale})`;
+                        if (intens > THRESHOLDS.compassAppear) {
+                            compass.style.transform = `rotate(${Math.atan2(moonY-currentY, moonX-currentX)}rad)`;
+                            compass.style.opacity   = `${(intens - THRESHOLDS.compassAppear) * 2.5}`;
+                        } else {
+                            compass.style.opacity = '0';
+                        }
+                        const now = performance.now();
+                        if (intens > THRESHOLDS.hapticStart
+                            && now - lastVibeTime > 300 - intens * 250
+                            && navigator.vibrate && isTouch) {
+                            navigator.vibrate([5, 20, 5]);
+                            lastVibeTime = now;
+                        }
                     } else {
-                        compass.style.opacity = '0';
+                        spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
+                        compass.style.opacity    = '0';
                     }
-                    // Haptic feedback on mobile
-                    const now = performance.now();
-                    if (intens > THRESHOLDS.hapticStart
-                        && now - lastVibeTime > 300 - intens * 250
-                        && navigator.vibrate && isTouch) {
-                        navigator.vibrate([5, 20, 5]);
-                        lastVibeTime = now;
-                    }
-                } else {
-                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
-                    compass.style.opacity    = '0';
-                }
-
-                moonMaskLayer.style.setProperty('--x', `${currentX}px`);
-                moonMaskLayer.style.setProperty('--y', `${currentY}px`);
-
-                // ── WIN CONDITION ─────────────────────────────────────────
-                if (dist < DIFFICULTY.winDistance) {
-                    hasFoundMoon = true;
-                    currentX = moonX; currentY = moonY;
-
-                    finalTimeTaken = ((performance.now() - searchStartTime) / 1000).toFixed(1);
-                    scoreDisplay.innerHTML = `✨ Hilal Sighted in <span>${finalTimeTaken}s</span>`;
-
-                    audio.playWin();
-                    spyglass.style.display = 'none';
-                    compass.style.display  = 'none';
 
                     moonMaskLayer.style.setProperty('--x', `${currentX}px`);
                     moonMaskLayer.style.setProperty('--y', `${currentY}px`);
 
-                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                        overlay.animate([
-                            { transform: 'translateX(0px)'  },
-                            { transform: 'translateX(4px)'  },
-                            { transform: 'translateX(-4px)' },
-                            { transform: 'translateX(0px)'  }
-                        ], { duration: 350, easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)' });
+                    // ── WIN CONDITION ─────────────────────────────────────
+                    if (dist < DIFFICULTY.winDistance) {
+                        hasFoundMoon = true;
+                        currentX = moonX; currentY = moonY;
+
+                        finalTimeTaken = ((performance.now() - searchStartTime) / 1000).toFixed(1);
+                        scoreDisplay.innerHTML = `✨ Hilal Sighted in <span>${finalTimeTaken}s</span>`;
+
+                        audio.playWin();
+                        spyglass.style.display = 'none';
+                        compass.style.display  = 'none';
+
+                        moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+                        moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+
+                        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                            overlay.animate([
+                                { transform: 'translateX(0px)'  },
+                                { transform: 'translateX(4px)'  },
+                                { transform: 'translateX(-4px)' },
+                                { transform: 'translateX(0px)'  }
+                            ], { duration: 350, easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)' });
+                        }
+
+                        document.body.classList.add('found');
+                        triggerParticleBurst(currentX, currentY);
+                        if (navigator.vibrate && isTouch) navigator.vibrate([15, 30, 15]);
+
+                        setTimeout(() => {
+                            winUi.style.opacity       = '1';
+                            winUi.style.pointerEvents = 'auto';
+                            lanternsUi.style.top      = '0';
+                        }, 1200);
                     }
-
-                    document.body.classList.add('found');
-                    triggerParticleBurst(currentX, currentY);
-                    if (navigator.vibrate && isTouch) navigator.vibrate([15, 30, 15]);
-
-                    setTimeout(() => {
-                        winUi.style.opacity       = '1';
-                        winUi.style.pointerEvents = 'auto';
-                        lanternsUi.style.top      = '0';
-                    }, 1200);
+                } else {
+                    // Act 1: just move spyglass, no moon hum
+                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
+                    compass.style.opacity    = '0';
+                    // Keep mask parked off-screen so moon doesn't accidentally show
+                    moonMaskLayer.style.setProperty('--x', '-200px');
+                    moonMaskLayer.style.setProperty('--y', '-200px');
                 }
             }
 
-            // Battery saver: stop loop after win once all particles have decayed
             if (!hasFoundMoon || canvasParticles.length > 0) {
                 animationFrameId = requestAnimationFrame(renderEngine);
             }
