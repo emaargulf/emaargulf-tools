@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Emaar Gulf Eid Moon Sighting - Cinematic Engine V7">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Emaar Gulf | Premium Eid Experience</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Developer/Author: archengsafdar@gmail.com */
+        
+        :root {
+            --emaar-gold: #f1aa27;
+            --emaar-gold-rgb: 241, 170, 39;
+            --emaar-dark: #333333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body, html { 
+            width: 100vw; height: 100dvh; overflow: hidden; background: #030510; 
+            font-family: 'Inter', sans-serif; 
+        }
+
+        h1, h2, h3 { font-family: 'Cairo', sans-serif; }
+
+        @media (pointer: fine) { #game-overlay.active { cursor: none; } }
+
+        /* ------------------------------------- */
+        /* START SCREEN (CINEMATIC PAN)          */
+        /* ------------------------------------- */
+        @keyframes cinematicPan {
+            0% { background-position: 0% 0%; background-size: 100% 100%; }
+            100% { background-position: 50% 50%; background-size: 120% 120%; }
+        }
+
+        #start-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a1128 0%, #030510 100%);
+            animation: cinematicPan 25s ease-in-out infinite alternate;
+            z-index: 300; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        
+        #start-screen::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(3,5,16,0.8) 100%);
+            z-index: -1;
+        }
+        
+        .brand-logo-main { width: 220px; max-width: 80%; margin-bottom: 30px; }
+        
+        #start-screen h2 { color: #fff; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px;}
+        #start-screen p { color: #ccc; max-width: 85%; font-size: 1rem; line-height: 1.5; font-weight: 400; }
+
+        #start-btn {
+            padding: 16px 45px; font-size: 1.1rem; font-weight: 600; color: #fff; font-family: 'Inter', sans-serif;
+            background: var(--emaar-gold); border: none; border-radius: 12px; margin-top: 40px;
+            cursor: pointer; box-shadow: 0 4px 20px rgba(var(--emaar-gold-rgb), 0.4); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (hover: hover) {
+            #start-btn:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 25px rgba(var(--emaar-gold-rgb), 0.6); }
+        }
+        #start-btn:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(var(--emaar-gold-rgb), 0.3); }
+
+        /* ------------------------------------- */
+        /* GPU ACCELERATED SKY & HORIZON         */
+        /* ------------------------------------- */
+        #game-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background: radial-gradient(circle at 50% 120%, #1a2a4c 0%, #050a1f 70%, #02040a 100%);
+            z-index: 100; opacity: 0; pointer-events: none;
+            /* GPU Layer Lock & Touch Scoping */
+            transform: translateZ(0); touch-action: none; overscroll-behavior: none;
+            transition: opacity 0.6s ease, transform 3.5s cubic-bezier(0.25, 1, 0.5, 1), filter 3.5s ease;
+            overflow: hidden;
+        }
+        #game-overlay.active { opacity: 1; pointer-events: auto; }
+
+        @keyframes pulseHorizon { 0% { opacity: 0.3; } 100% { opacity: 0.6; } }
+        
+        #horizon-glow {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 45%;
+            background: linear-gradient(to top, rgba(var(--emaar-gold-rgb), 0.12), transparent);
+            opacity: 0.3; pointer-events: none; z-index: 0;
+            animation: pulseHorizon 6s infinite alternate ease-in-out;
+            transition: opacity 2s ease;
+        }
+
+        .parallax-layer { 
+            position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
+            z-index: 1; pointer-events: none; will-change: transform;
+        }
+        
+        @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
+        #stars-static { opacity: 0.4; } 
+        #stars-1 { animation: twinkle 3s infinite ease-in-out; }
+        #stars-2 { animation: twinkle 5s infinite ease-in-out 1s; }
+        #stars-3 { animation: twinkle 7s infinite ease-in-out 2s; }
+
+        .comet {
+            position: absolute; width: 2px; height: 180px;
+            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+            border-radius: 50%; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9));
+            z-index: 5; pointer-events: none; transform-origin: top center;
+        }
+
+        /* ------------------------------------- */
+        /* VECTOR CLIPPING (High-Performance)    */
+        /* ------------------------------------- */
+        #moon-mask-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+            /* Replaced expensive radial-gradient with hardware-accelerated clip-path */
+            clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
+            -webkit-clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
+            will-change: clip-path, -webkit-clip-path; pointer-events: none;
+        }
+
+        #moon-container { 
+            position: absolute; top: 0; left: 0; width: 90px; height: 90px; 
+            will-change: transform; transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .moon-svg {
+            width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); 
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: rotate(-25deg);
+        }
+
+        /* ------------------------------------- */
+        /* OPTICAL GLASS SPYGLASS                */
+        /* ------------------------------------- */
+        #spyglass {
+            position: absolute; top: 0; left: 0; width: 180px; height: 180px;
+            border-radius: 50%; z-index: 50; pointer-events: none;
+            
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+            
+            will-change: transform; transition: opacity 0.6s ease;
+        }
+
+        #direction-compass {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; opacity: 0;
+            box-shadow: inset -35px 0 30px -10px rgba(var(--emaar-gold-rgb), 0.95);
+            will-change: transform, opacity; transition: opacity 0.3s ease;
+        }
+
+        #guide-text {
+            position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.8); font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+            pointer-events: none; transition: opacity 0.5s; z-index: 150; text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-weight: 600;
+        }
+
+        /* ------------------------------------- */
+        /* PARTICLES & WIN UI                    */
+        /* ------------------------------------- */
+        .particle {
+            position: absolute; width: 6px; height: 6px; border-radius: 50%;
+            background: #fff; box-shadow: 0 0 10px #fff, 0 0 20px var(--emaar-gold);
+            pointer-events: none; z-index: 120; opacity: 0; 
+            animation: burst var(--duration) cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes burst {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; }
+        }
+
+        #win-ui {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
+            text-align: center; opacity: 0; pointer-events: none;
+            transition: opacity 1.5s ease; z-index: 150; width: 100%;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .brand-icon-win { width: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(var(--emaar-gold-rgb), 0.6)); }
+
+        .score-pill {
+            background: rgba(3, 5, 16, 0.6); border: 1px solid rgba(241, 170, 39, 0.3);
+            color: var(--emaar-gold); font-size: 0.85rem; font-weight: 700;
+            padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
+            letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(5px);
+        }
+        .score-pill span { color: #fff; margin-left: 5px; font-weight: 500; }
+
+        .gold-text {
+            background: linear-gradient(135deg, #ffffff 0%, var(--emaar-gold) 50%, #b37a13 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        #win-ui h1 { font-size: 54px; font-weight: 800; margin-bottom: 0px; letter-spacing: 1px;}
+        #win-ui h2 { font-size: 26px; font-weight: 700; margin-bottom: 15px; }
+        
+        .eid-greeting {
+            color: #e2e8f0; font-size: 1.05rem; max-width: 85%; margin: 0 auto 35px auto;
+            line-height: 1.6; font-weight: 400; text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        }
+
+        #play-again-btn {
+            padding: 12px 35px; font-size: 1rem; font-weight: 600; color: var(--emaar-gold); font-family: 'Inter', sans-serif;
+            background: rgba(3, 5, 16, 0.6); border: 2px solid var(--emaar-gold); border-radius: 12px;
+            cursor: pointer; transition: all 0.3s; pointer-events: auto; backdrop-filter: blur(5px);
+        }
+        @media (hover: hover) {
+            #play-again-btn:hover { background: rgba(var(--emaar-gold-rgb), 0.15); box-shadow: 0 0 15px rgba(var(--emaar-gold-rgb), 0.4); transform: scale(1.05); }
+        }
+        #play-again-btn:active { transform: scale(0.95); }
+
+        @keyframes swing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+        .lanterns {
+            position: absolute; top: -350px; width: 100%; max-width: 700px; left: 50%; transform: translateX(-50%);
+            display: flex; justify-content: space-around; transition: top 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); z-index: 140;
+        }
+        .lantern-wrapper { display: flex; flex-direction: column; align-items: center; transform-origin: top center; }
+        .lantern-wrapper:nth-child(1) { animation: swing 3.5s ease-in-out infinite; }
+        .lantern-wrapper:nth-child(2) { animation: swing 4.2s ease-in-out infinite reverse; }
+        .lantern-wrapper:nth-child(3) { animation: swing 3.8s ease-in-out infinite; }
+
+        .lantern-string { width: 2px; background: linear-gradient(to bottom, rgba(var(--emaar-gold-rgb), 0), rgba(var(--emaar-gold-rgb), 0.8)); }
+        .fanoos { width: 50px; height: auto; filter: drop-shadow(0 10px 20px rgba(var(--emaar-gold-rgb), 0.4)); }
+
+        @keyframes moonPulse {
+            0%, 100% { filter: drop-shadow(0 0 25px rgba(var(--emaar-gold-rgb), 0.5)); }
+            50% { filter: drop-shadow(0 0 50px rgba(var(--emaar-gold-rgb), 1)); }
+        }
+
+        /* --- SUCCESS TRIGGER STATES --- */
+        .found #game-overlay { 
+            cursor: default; 
+            transform: scale(1.05) translateZ(0); 
+            background: radial-gradient(circle at 50% 120%, #0c1426 0%, #030510 80%, #010205 100%);
+        }
+        .found #horizon-glow { opacity: 0.6; }
+        .found .moon-svg { animation: moonPulse 2.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); filter: drop-shadow(0 0 50px rgba(var(--emaar-gold-rgb), 1)) !important; }
+        .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
+        
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" alt="Emaar Gulf Logo" class="brand-logo-main">
+        <h2>Find the Eid Moon</h2>
+        <p id="dynamic-instruction">Explore the night sky. Drag the lens to search. Tap for a shooting star.</p>
+        <button id="start-btn">Begin Search</button>
+    </div>
+
+    <div id="game-overlay">
+        <div id="horizon-glow"></div>
+        <div class="parallax-layer" id="parallax-master">
+            <div id="stars-static" style="width: 1px; height: 1px; background: transparent;"></div>
+            <div id="stars-1" style="width: 2px; height: 2px; background: transparent;"></div>
+            <div id="stars-2" style="width: 2px; height: 2px; background: transparent;"></div>
+            <div id="stars-3" style="width: 3px; height: 3px; background: transparent;"></div>
+            
+            <div id="moon-mask-layer">
+                <div id="moon-container">
+                    <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                                <stop offset="40%" stop-color="#f1aa27" stop-opacity="1"/>
+                                <stop offset="100%" stop-color="#a67111" stop-opacity="1"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M50,5 A45,45 0 1,1 15,85 A55,55 0 0,0 50,5 Z" fill="url(#moonGrad)"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div id="spyglass">
+            <div id="direction-compass"></div>
+        </div>
+
+        <div id="guide-text">
+            <span id="in-game-instruction">DRAG TO SCAN</span><br><br>
+            <span style="font-size: 10px; color: #888; font-weight: 400; font-family: 'Inter', sans-serif;">Click the sky for a shooting star</span>
+        </div>
+
+        <div class="lanterns" id="lanterns">
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height: 140px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="glow1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#glow1)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height: 80px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="glow2"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#glow2)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height: 180px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="glow3"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#glow3)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="win-ui">
+            <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" alt="Emaar Icon" class="brand-icon-win">
+            <div class="score-pill" id="score-display">Rank <span>0.0s</span></div>
+            <h1 class="gold-text">عيد مبارك</h1>
+            <h2 class="gold-text">Eid Mubarak</h2>
+            <p class="eid-greeting">May the blessings of this beautiful month bring peace, prosperity, and joy to your home.</p>
+            <button id="play-again-btn">Search Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Developer/Author: archengsafdar@gmail.com
+        
+        // --- HARDWARE SNIFFING ---
+        const logicalCores = navigator.hardwareConcurrency || 4;
+        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowEnd = logicalCores <= 4 || isMobileUserAgent;
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        const MAX_PARTICLES = isLowEnd ? 45 : 120;
+        const BURST_COUNT = isLowEnd ? 15 : 40;
+        
+        const DIFFICULTY = {
+            detectionRadiusMultiplier: 0.8,
+            magneticPull: 0.08,
+            winDistance: 50
+        };
+
+        // --- CORE STATE ---
+        const startScreen = document.getElementById('start-screen');
+        const startBtn = document.getElementById('start-btn');
+        const overlay = document.getElementById('game-overlay');
+        const moonMaskLayer = document.getElementById('moon-mask-layer');
+        const guideText = document.getElementById('guide-text');
+        const inGameInstruction = document.getElementById('in-game-instruction');
+        const dynamicInstruction = document.getElementById('dynamic-instruction');
+        const moonContainer = document.getElementById('moon-container');
+        const moonSvg = moonContainer.querySelector('.moon-svg');
+        const spyglass = document.getElementById('spyglass');
+        const compass = document.getElementById('direction-compass');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const parallaxMaster = document.getElementById('parallax-master');
+        const winUi = document.getElementById('win-ui');
+        const lanternsUi = document.getElementById('lanterns');
+        const scoreDisplay = document.getElementById('score-display');
+
+        let isDragging = false;
+        let hasFoundMoon = false;
+        let animationFrameId = null;
+        let cometTimer = null;
+        let isCometFlying = false; 
+        let lastVibeTime = 0;
+        let activeParticles = 0;
+        let searchStartTime = 0;
+        
+        let targetX = window.innerWidth / 2; let targetY = window.innerHeight / 2;
+        let currentX = targetX; let currentY = targetY;
+        let moonX = 0; let moonY = 0;
+
+        // Gyro Smoothing State
+        let gyroTargetX = 0, gyroTargetY = 0;
+        let gyroCurrentX = 0, gyroCurrentY = 0;
+
+        if (isLowEnd) {
+            spyglass.style.backdropFilter = 'none';
+            spyglass.style.webkitBackdropFilter = 'none';
+            spyglass.style.background = 'rgba(255, 255, 255, 0.08)';
+        } else {
+            spyglass.style.backdropFilter = 'blur(6px) brightness(1.15)';
+            spyglass.style.webkitBackdropFilter = 'blur(6px) brightness(1.15)';
+        }
+
+        if (!isTouch) {
+            dynamicInstruction.innerText = "Explore the night sky. Move your mouse to search. Click for a shooting star.";
+            inGameInstruction.innerText = "MOVE MOUSE TO SCAN";
+        }
+
+        // --- SPATIAL SOUND ENGINE (Concurrency Enabled) ---
+        const audioEngine = {
+            ambient: new Audio('ambient.mp3'),
+            chime: new Audio('chime.mp3'),
+            swooshBase: new Audio('swoosh.mp3'),
+            hum: new Audio('hum.mp3'),
+            
+            init() {
+                this.ambient.loop = true; this.ambient.volume = 0.2;
+                this.hum.loop = true; this.hum.volume = 0;
+                [this.ambient, this.chime, this.swooshBase, this.hum].forEach(a => a.load());
+            },
+            playStart() {
+                this.ambient.play().catch(()=>{});
+                this.hum.play().catch(()=>{});
+            },
+            updateHum(intensity) {
+                if(intensity > 0.1) {
+                    this.hum.volume = Math.min(0.4, intensity * 0.4);
+                } else { this.hum.volume = 0; }
+            },
+            playWin() {
+                this.hum.volume = 0;
+                this.chime.currentTime = 0;
+                this.chime.play().catch(()=>{});
+            },
+            playComet() {
+                // Audio Clone injection to prevent overlapping cutoffs
+                const s = this.swooshBase.cloneNode();
+                s.volume = 0.4;
+                s.play().catch(()=>{});
+                setTimeout(() => s.remove(), 2000); // GC
+            },
+            pauseAll() {
+                this.ambient.pause(); this.hum.pause();
+            }
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (cometTimer) clearTimeout(cometTimer);
+                audioEngine.pauseAll();
+            } else {
+                if (overlay.classList.contains('active') && !hasFoundMoon) {
+                    animationFrameId = requestAnimationFrame(renderEngine);
+                    spawnAmbientComet();
+                    audioEngine.playStart();
+                }
+            }
+        });
+
+        // --- LERP GYROSCOPE ---
+        function initGyroscope() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => { if (permissionState === 'granted') attachGyro(); })
+                        .catch(console.error);
+                } else { attachGyro(); }
+            }
+        }
+
+        function attachGyro() {
+            window.addEventListener('deviceorientation', (e) => {
+                if (!e.gamma || !e.beta || hasFoundMoon) return;
+                // Target acquisition only. Rendering is done in RAF.
+                gyroTargetX = Math.max(-35, Math.min(35, e.gamma)) * -0.8;
+                gyroTargetY = Math.max(-35, Math.min(35, e.beta - 45)) * -0.8; 
+            });
+        }
+
+        function generateStars(count, color) {
+            let boxShadow = "";
+            for (let i = 0; i < count; i++) {
+                let x = Math.floor(Math.random() * 100); let y = Math.floor(Math.random() * 100); 
+                boxShadow += `${x}vw ${y}vh ${color}${i < count - 1 ? ', ' : ''}`;
+            }
+            return boxShadow;
+        }
+
+        document.getElementById('stars-static').style.boxShadow = generateStars(isLowEnd ? 50 : 100, 'rgba(255,255,255,0.5)');
+        document.getElementById('stars-1').style.boxShadow = generateStars(isLowEnd ? 25 : 50, 'rgba(255,255,255,0.7)');
+        document.getElementById('stars-2').style.boxShadow = generateStars(isLowEnd ? 25 : 50, 'rgba(255,255,255,0.9)');
+        document.getElementById('stars-3').style.boxShadow = generateStars(isLowEnd ? 15 : 30, '#fff');
+
+        function shootInteractiveComet(clickX, clickY) {
+            isCometFlying = true;
+            audioEngine.playComet();
+            
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            
+            let radius = Math.max(window.innerWidth, window.innerHeight) + 300;
+            let angle = Math.random() * Math.PI * 2; 
+
+            let startX = clickX + Math.cos(angle) * radius;
+            let startY = clickY + Math.sin(angle) * radius;
+            let endX = clickX - Math.cos(angle) * radius;
+            let endY = clickY - Math.sin(angle) * radius;
+
+            let angleDeg = (Math.atan2(endY - startY, endX - startX) * 180 / Math.PI) + 90;
+
+            document.getElementById('game-overlay').appendChild(comet);
+
+            let anim = comet.animate([
+                { transform: `translate3d(${startX}px, ${startY}px, 0) rotate(${angleDeg}deg)`, opacity: 0 },
+                { transform: `translate3d(${startX - (startX - endX)*0.1}px, ${startY - (startY - endY)*0.1}px, 0) rotate(${angleDeg}deg)`, opacity: 1, offset: 0.1 },
+                { transform: `translate3d(${endX}px, ${endY}px, 0) rotate(${angleDeg}deg)`, opacity: 0 }
+            ], { duration: 1200 + Math.random() * 400, easing: 'linear' });
+
+            anim.onfinish = () => { comet.remove(); isCometFlying = false; };
+        }
+
+        function spawnAmbientComet() {
+            if (Math.random() > 0.4 && !isCometFlying && overlay.classList.contains('active')) {
+                shootInteractiveComet(Math.random() * window.innerWidth, Math.random() * (window.innerHeight * 0.6));
+            }
+            cometTimer = setTimeout(spawnAmbientComet, 3500 + Math.random() * 4000);
+        }
+
+        function triggerParticleBurst(x, y) {
+            for (let i = 0; i < BURST_COUNT; i++) {
+                if (activeParticles >= MAX_PARTICLES) return;
+                activeParticles++;
+
+                let p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = `${x}px`; p.style.top = `${y}px`;
+                
+                let angle = Math.random() * Math.PI * 2;
+                let velocity = 50 + Math.random() * 180; 
+                let tx = Math.cos(angle) * velocity;
+                let ty = Math.sin(angle) * velocity;
+                let duration = 800 + Math.random() * 600;
+
+                p.style.setProperty('--tx', `${tx}px`);
+                p.style.setProperty('--ty', `${ty}px`);
+                p.style.setProperty('--duration', `${duration}ms`);
+                
+                document.body.appendChild(p);
+                
+                setTimeout(() => { p.remove(); activeParticles--; }, duration + 100); 
+            }
+        }
+
+        function initializeEngine() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            if (cometTimer) clearTimeout(cometTimer);
+            
+            hasFoundMoon = false;
+            document.body.classList.remove('found');
+            guideText.style.opacity = '1';
+            winUi.style.opacity = '0';
+            winUi.style.pointerEvents = 'none';
+            lanternsUi.style.top = '-350px';
+            
+            spyglass.style.display = 'block';
+            compass.style.display = 'block';
+            spyglass.style.opacity = '1';
+            spyglass.style.transform = `translate3d(${window.innerWidth/2 - 90}px, ${window.innerHeight/2 - 90}px, 0) scale(1)`;
+            moonSvg.style.filter = `drop-shadow(0 0 15px rgba(255,255,255,0.2))`;
+            parallaxMaster.style.transform = `translate3d(0, 0, 0)`;
+            
+            do {
+                moonX = Math.random() * (window.innerWidth - 240) + 120;
+                moonY = Math.random() * (window.innerHeight - 240) + 120;
+            } while (Math.hypot(moonX - window.innerWidth/2, moonY - window.innerHeight/2) < 200);
+            
+            moonContainer.style.transform = `translate3d(${moonX - 45}px, ${moonY - 45}px, 0)`;
+
+            targetX = window.innerWidth / 2; targetY = window.innerHeight / 2;
+            currentX = targetX; currentY = targetY;
+            
+            moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+            moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+            
+            compass.style.opacity = '0';
+            searchStartTime = Date.now();
+        }
+
+        startBtn.addEventListener('click', () => {
+            startScreen.style.opacity = '0';
+            startScreen.style.visibility = 'hidden';
+            overlay.classList.add('active');
+            
+            audioEngine.init();
+            audioEngine.playStart();
+            initGyroscope();
+
+            initializeEngine();
+            spawnAmbientComet(); 
+            animationFrameId = requestAnimationFrame(renderEngine);
+        });
+
+        playAgainBtn.addEventListener('click', () => {
+            initializeEngine();
+            audioEngine.playStart();
+            animationFrameId = requestAnimationFrame(renderEngine);
+        });
+
+        window.addEventListener('resize', () => {
+            if (!overlay.classList.contains('active') || hasFoundMoon) return;
+            moonX = Math.min(Math.max(moonX, 120), window.innerWidth - 120);
+            moonY = Math.min(Math.max(moonY, 120), window.innerHeight - 120);
+            moonContainer.style.transform = `translate3d(${moonX - 45}px, ${moonY - 45}px, 0)`;
+            targetX = Math.min(targetX, window.innerWidth);
+            targetY = Math.min(targetY, window.innerHeight);
+        });
+
+        // --- UNIFIED POINTER EVENT ENGINE ---
+        // Discarded legacy Touch bindings to prevent double-firing
+        if (!isTouch) {
+            overlay.addEventListener('pointermove', (e) => {
+                if (!hasFoundMoon) {
+                    targetX = e.clientX; targetY = e.clientY;
+                    guideText.style.opacity = '0'; 
+                }
+            });
+            overlay.addEventListener('pointerdown', (e) => {
+                if (!isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
+                    shootInteractiveComet(e.clientX, e.clientY);
+                }
+            });
+        } else {
+            overlay.addEventListener('pointerdown', (e) => {
+                overlay.setPointerCapture(e.pointerId);
+                isDragging = false; 
+                tapStartX = e.clientX; tapStartY = e.clientY;
+            });
+            overlay.addEventListener('pointermove', (e) => {
+                let dragDist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
+                if (dragDist > 15 && !hasFoundMoon) {
+                    isDragging = true; guideText.style.opacity = '0'; 
+                }
+                if (isDragging) {
+                    if(e && e.cancelable) e.preventDefault(); 
+                    targetX = Math.min(e.clientX, window.innerWidth); 
+                    targetY = Math.min(e.clientY, window.innerHeight);
+                }
+            });
+            const handlePointerUp = (e) => {
+                if (overlay.hasPointerCapture(e.pointerId)) overlay.releasePointerCapture(e.pointerId);
+                if (!isDragging && !isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
+                    shootInteractiveComet(e.clientX, e.clientY);
+                }
+                isDragging = false;
+            };
+            overlay.addEventListener('pointerup', handlePointerUp);
+            overlay.addEventListener('pointercancel', handlePointerUp);
+        }
+
+        // --- RENDER LOOP ---
+        function renderEngine() {
+            if (!hasFoundMoon) {
+                // Lerp Gyroscope for buttery smooth 3D pan
+                gyroCurrentX += (gyroTargetX - gyroCurrentX) * 0.08;
+                gyroCurrentY += (gyroTargetY - gyroCurrentY) * 0.08;
+                parallaxMaster.style.transform = `translate3d(${gyroCurrentX}px, ${gyroCurrentY}px, 0)`;
+
+                let distanceToMoon = Math.hypot(currentX - moonX, currentY - moonY);
+                let detectionRadius = window.innerWidth * DIFFICULTY.detectionRadiusMultiplier; 
+                let intensity = Math.max(0, 1 - (distanceToMoon / detectionRadius));
+                
+                audioEngine.updateHum(intensity);
+
+                if (distanceToMoon < 150 && (isDragging || !isTouch)) {
+                    targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
+                    targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
+                }
+
+                const easeFactor = isTouch ? 0.25 : 0.12;
+                currentX += (targetX - currentX) * easeFactor;
+                currentY += (targetY - currentY) * easeFactor;
+
+                if (distanceToMoon < detectionRadius) {
+                    let lensScale = 1 + (intensity * 0.15);
+                    spyglass.style.transform = `translate3d(${currentX - 90}px, ${currentY - 90}px, 0) scale(${lensScale})`;
+                    
+                    if (intensity > 0.4) {
+                        let glowRadius = 15 + ((intensity - 0.4) * 60);
+                        moonSvg.style.filter = `drop-shadow(0 0 ${glowRadius}px rgba(241, 170, 39, ${0.4 + (intensity * 0.6)}))`;
+                    }
+                    
+                    if (intensity > 0.6) {
+                        let angleRadians = Math.atan2(moonY - currentY, moonX - currentX);
+                        compass.style.transform = `rotate(${angleRadians}rad)`;
+                        compass.style.opacity = `${(intensity - 0.6) * 2.5}`; 
+                    } else { compass.style.opacity = '0'; }
+
+                    let now = Date.now();
+                    let vibeDelay = 300 - (intensity * 250); 
+                    if (intensity > 0.3 && (now - lastVibeTime > vibeDelay) && navigator.vibrate && isTouch) {
+                        // Premium Haptics: Structured Pattern
+                        navigator.vibrate([5, 20, 5]);
+                        lastVibeTime = now;
+                    }
+                } else {
+                    spyglass.style.transform = `translate3d(${currentX - 90}px, ${currentY - 90}px, 0) scale(1)`;
+                    compass.style.opacity = '0';
+                    moonSvg.style.filter = `drop-shadow(0 0 15px rgba(255,255,255,0.2))`;
+                }
+
+                moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+                moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+
+                // WIN CONDITION
+                if (distanceToMoon < DIFFICULTY.winDistance) { 
+                    hasFoundMoon = true;
+                    currentX = moonX; currentY = moonY;
+                    
+                    // Rank Calculation
+                    let timeTaken = (Date.now() - searchStartTime) / 1000;
+                    let rank = timeTaken < 8 ? 'Master' : timeTaken < 18 ? 'Moon Seeker' : 'Stargazer';
+                    scoreDisplay.innerHTML = `${rank} <span>${timeTaken.toFixed(1)}s</span>`;
+
+                    audioEngine.playWin();
+                    
+                    spyglass.style.display = 'none'; compass.style.display = 'none';
+                    
+                    moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+                    moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+                    
+                    parallaxMaster.style.transform = `translate3d(0, 0, 0)`; // Lock gyro
+                    document.body.classList.add('found');
+                    triggerParticleBurst(currentX, currentY); 
+                    
+                    if (navigator.vibrate && isTouch) navigator.vibrate([15, 30, 15]);
+                    
+                    // Cinematic Delay (The Final Polish)
+                    setTimeout(() => {
+                        winUi.style.opacity = '1';
+                        winUi.style.pointerEvents = 'auto';
+                        lanternsUi.style.top = '0';
+                    }, 1200);
+
+                    return; 
+                }
+            }
+            animationFrameId = requestAnimationFrame(renderEngine);
+        }
+    </script>
+</body>
+</html>
