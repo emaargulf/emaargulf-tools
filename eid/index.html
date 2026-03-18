@@ -3,31 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Emaar Gulf Eid Moon Sighting - Premium Eid Experience">
+    <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+
     <title>Emaar Gulf | Premium Eid Experience</title>
-    
+
+    <link rel="icon" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://emaargulf.github.io/emaargulf-tools/eid/">
+    <meta name="theme-color" content="#030510">
+
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://emaargulf.github.io/emaargulf-tools/eid/">
     <meta property="og:title" content="🌙 Eid Mubarak from Emaar Gulf">
     <meta property="og:description" content="May the blessings of this beautiful season bring peace, prosperity, and joy to your home. Click to explore the night sky and find the Eid Moon.">
     <meta property="og:image" content="https://emaargulf.github.io/emaargulf-tools/eid/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Emaar Gulf Eid Moon Sighting - Cinematic night sky with crescent moon and golden lanterns">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://emaargulf.github.io/emaargulf-tools/eid/">
     <meta property="twitter:title" content="🌙 Eid Mubarak from Emaar Gulf">
     <meta property="twitter:description" content="May the blessings of this beautiful season bring peace, prosperity, and joy to your home. Click to explore the night sky and find the Eid Moon.">
     <meta property="twitter:image" content="https://emaargulf.github.io/emaargulf-tools/eid/og-image.jpg">
-    <meta name="theme-color" content="#030510">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="preload" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" as="image">
-    <link rel="preload" href="ambient.mp3" as="audio">
-    <link rel="preload" href="chime.mp3" as="audio">
-    <link rel="preload" href="swoosh.mp3" as="audio">
-    <link rel="preload" href="hum.mp3" as="audio">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Emaar Gulf Eid Moon Sighting",
+      "description": "Find the Eid Moon in this interactive cinematic experience by Emaar Gulf",
+      "url": "https://emaargulf.github.io/emaargulf-tools/eid/",
+      "applicationCategory": "Game",
+      "author": { "@type": "Organization", "name": "Emaar Gulf" },
+      "inLanguage": ["en", "ar"]
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +49,7 @@
     
     <style>
         /* Developer/Author: archengsafdar@gmail.com */
+        /* V19 Hybrid Build — V18 Enterprise Chassis + V16 Cinematic Engine */
         
         :root {
             --emaar-gold: #f1aa27;
@@ -44,29 +59,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body, html { 
-            width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background: #030510; 
-            font-family: 'Inter', sans-serif; 
+            width: 100vw; height: 100dvh; overflow: hidden; 
+            background: #030510; font-family: 'Inter', sans-serif; 
         }
 
         h1, h2, h3 { font-family: 'Cairo', sans-serif; }
 
         @media (pointer: fine) { #game-overlay.active { cursor: none; } }
-
-        /* --- HARDWARE ORIENTATION LOCK --- */
-        #landscape-warning {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-            background: #030510; z-index: 9999; color: var(--emaar-gold);
-            justify-content: center; align-items: center; text-align: center; flex-direction: column;
-            font-family: 'Inter', sans-serif; font-weight: 600; padding: 20px;
-        }
-        #landscape-warning svg { margin-bottom: 20px; animation: tiltPhone 2s infinite ease-in-out; }
-        
-        @keyframes tiltPhone { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } }
-
-        @media (max-width: 900px) and (orientation: landscape) {
-            #landscape-warning { display: flex; }
-            #start-screen, #game-overlay, #film-noise { display: none !important; }
-        }
 
         /* ------------------------------------- */
         /* START SCREEN & FILM NOISE             */
@@ -77,7 +76,10 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        @keyframes cinematicPan { 0% { background-position: 0% 0%; background-size: 100% 100%; } 100% { background-position: 50% 50%; background-size: 120% 120%; } }
+        @keyframes cinematicPan { 
+            0% { background-position: 0% 0%; background-size: 100% 100%; } 
+            100% { background-position: 50% 50%; background-size: 120% 120%; } 
+        }
 
         #start-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -95,9 +97,9 @@
             background: radial-gradient(circle at center, transparent 30%, rgba(3,5,16,0.85) 100%); z-index: -1;
         }
         
-        .brand-logo-main { width: 220px; max-width: 80%; margin-bottom: 30px; }
+        .brand-logo-main { width: 220px; max-width: 80%; height: auto; margin-bottom: 30px; }
         
-        #start-screen h2 { color: #fff; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px;}
+        #start-screen h2 { color: #fff; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px; }
         #start-screen p { color: #ccc; max-width: 85%; font-size: 1rem; line-height: 1.5; font-weight: 400; margin-bottom: 10px; }
 
         #start-btn {
@@ -127,7 +129,7 @@
             transform: translateZ(0); touch-action: none; overscroll-behavior: none;
             animation: skyShift 20s infinite alternate ease-in-out;
             transition: opacity 0.6s ease; overflow: hidden;
-            will-change: transform, opacity;
+            will-change: transform, opacity; /* RESTORED FROM V16 */
         }
         #game-overlay.active { opacity: 1; pointer-events: auto; }
 
@@ -144,18 +146,16 @@
         /* ------------------------------------- */
         /* CANVAS RENDERING LAYERS               */
         /* ------------------------------------- */
-        .parallax-master { 
+        .parallax-layer { 
             position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
             z-index: 1; pointer-events: none; will-change: transform, filter;
             transition: filter 2.5s ease, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
         
+        /* RESTORED V16: will-change transform for 3D depth layer separation */
         #stars-canvas { position: absolute; top: 0; left: 0; will-change: transform; }
         
-        #vfx-canvas {
-            position: absolute; top: 0; left: 0; 
-            z-index: 120; pointer-events: none; transform: translateZ(0);
-        }
+        #vfx-canvas { position: absolute; top: 0; left: 0; z-index: 120; pointer-events: none; transform: translateZ(0); }
 
         .comet {
             position: absolute; width: 2px; height: 180px;
@@ -171,7 +171,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
             clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
             -webkit-clip-path: circle(44px at var(--x, 50%) var(--y, 50%));
-            will-change: clip-path, -webkit-clip-path, transform; pointer-events: none;
+            will-change: clip-path, -webkit-clip-path; pointer-events: none;
         }
 
         #moon-container { 
@@ -190,10 +190,9 @@
         #spyglass {
             position: absolute; top: 0; left: 0; width: 180px; height: 180px;
             border-radius: 50%; z-index: 50; pointer-events: none;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
-            background: rgba(255, 255, 255, 0.02);
-            -webkit-mask-image: -webkit-radial-gradient(white, black); 
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02);
             will-change: transform; transition: opacity 0.6s ease;
         }
 
@@ -212,7 +211,7 @@
         }
 
         /* ------------------------------------- */
-        /* WIN UI, Ranks & Toast                 */
+        /* WIN UI, Toast                         */
         /* ------------------------------------- */
         #win-ui {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
@@ -221,15 +220,16 @@
             display: flex; flex-direction: column; align-items: center;
         }
         
-        .brand-icon-win { width: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(var(--emaar-gold-rgb), 0.6)); }
+        .brand-icon-win { width: 50px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(var(--emaar-gold-rgb), 0.6)); }
 
         .score-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        
         .score-pill, .share-pill {
-            background: rgba(3, 5, 16, 0.6); border: 1px solid rgba(241, 170, 39, 0.3);
+            background: rgba(3,5,16,0.6); border: 1px solid rgba(241,170,39,0.3);
             color: var(--emaar-gold); font-size: 0.9rem; font-weight: 700;
-            padding: 8px 18px; border-radius: 20px; 
-            letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(5px);
-            display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease;
+            padding: 8px 18px; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+            backdrop-filter: blur(5px); display: flex; align-items: center; gap: 6px;
+            cursor: pointer; transition: all 0.2s ease;
         }
         .score-pill span { color: #fff; font-weight: 500; }
         .share-pill { color: #fff; border-color: rgba(255,255,255,0.3); pointer-events: auto; }
@@ -237,53 +237,49 @@
 
         #custom-share-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: rgba(3, 5, 16, 0.9); border: 1px solid var(--emaar-gold);
+            background: rgba(3,5,16,0.9); border: 1px solid var(--emaar-gold);
             color: #fff; padding: 12px 24px; border-radius: 30px; z-index: 1000;
-            font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px;
+            font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;
             backdrop-filter: blur(10px); transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            cursor: pointer;
         }
         #custom-share-toast.show { bottom: 40px; }
+        
+        /* RESTORED V16: Premium Share Toast UI */
         .toast-icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: rgba(241,170,39,0.2); border-radius: 50%; color: var(--emaar-gold); }
 
         .gold-text {
             background: linear-gradient(135deg, #ffffff 0%, var(--emaar-gold) 50%, #b37a13 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            text-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
-        #win-ui h1 { font-size: 54px; font-weight: 800; margin-bottom: 0px; letter-spacing: 1px;}
+        #win-ui h1 { font-size: 54px; font-weight: 800; margin-bottom: 0; letter-spacing: 1px; }
         #win-ui h2 { font-size: 26px; font-weight: 700; margin-bottom: 20px; }
         
         .eid-greeting-ar {
-            color: var(--emaar-gold); font-size: 1.35rem; max-width: 85%; margin: 0 auto 15px auto;
-            line-height: 1.6; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-family: 'Cairo', sans-serif;
+            color: var(--emaar-gold); font-size: 1.35rem; max-width: 85%; margin: 0 auto 10px auto;
+            line-height: 1.6; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            font-family: 'Cairo', sans-serif; text-align: right;
         }
         .eid-greeting-en {
             color: #e2e8f0; font-size: 1.05rem; max-width: 85%; margin: 0 auto 35px auto;
             line-height: 1.6; font-weight: 400; text-shadow: 0 2px 10px rgba(0,0,0,0.9);
         }
 
-        .action-buttons {
-            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 10px;
-        }
+        .action-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
 
         #play-again-btn, .portfolio-btn-secondary {
             padding: 12px 30px; font-size: 1rem; font-weight: 600; font-family: 'Inter', sans-serif;
-            border-radius: 12px; cursor: pointer; transition: all 0.3s; pointer-events: auto; 
-            backdrop-filter: blur(5px); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer; transition: all 0.3s; pointer-events: auto;
+            backdrop-filter: blur(5px); text-decoration: none; display: inline-flex;
+            align-items: center; justify-content: center;
         }
-        
-        #play-again-btn {
-            color: var(--emaar-gold); background: rgba(3, 5, 16, 0.6); border: 2px solid var(--emaar-gold);
-        }
-        
-        .portfolio-btn-secondary {
-            color: #fff; background: transparent; border: 2px solid rgba(255,255,255,0.3);
-        }
+        #play-again-btn { color: var(--emaar-gold); background: rgba(3,5,16,0.6); border: 2px solid var(--emaar-gold); }
+        .portfolio-btn-secondary { color: #fff; background: transparent; border: 2px solid rgba(255,255,255,0.3); }
 
-        @media (hover: hover) { 
-            #play-again-btn:hover { background: rgba(var(--emaar-gold-rgb), 0.15); box-shadow: 0 0 15px rgba(var(--emaar-gold-rgb), 0.4); transform: scale(1.05); } 
+        @media (hover: hover) {
+            #play-again-btn:hover { background: rgba(var(--emaar-gold-rgb), 0.15); box-shadow: 0 0 15px rgba(var(--emaar-gold-rgb), 0.4); transform: scale(1.05); }
             .portfolio-btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: scale(1.05); }
         }
         #play-again-btn:active, .portfolio-btn-secondary:active { transform: scale(0.95); }
@@ -291,14 +287,14 @@
         @keyframes swing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
 
         .lanterns {
-            position: absolute; top: -350px; width: 100%; max-width: 700px; left: 50%; transform: translateX(-50%);
-            display: flex; justify-content: space-around; transition: top 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); z-index: 140;
+            position: absolute; top: -350px; width: 100%; max-width: 700px; left: 50%;
+            transform: translateX(-50%); display: flex; justify-content: space-around;
+            transition: top 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); z-index: 140;
         }
         .lantern-wrapper { display: flex; flex-direction: column; align-items: center; transform-origin: top center; }
         .lantern-wrapper:nth-child(1) { animation: swing 3.5s ease-in-out infinite; }
         .lantern-wrapper:nth-child(2) { animation: swing 4.2s ease-in-out infinite reverse; }
         .lantern-wrapper:nth-child(3) { animation: swing 3.8s ease-in-out infinite; }
-
         .lantern-string { width: 2px; background: linear-gradient(to bottom, rgba(var(--emaar-gold-rgb), 0), rgba(var(--emaar-gold-rgb), 0.8)); }
         .fanoos { width: 50px; height: auto; filter: drop-shadow(0 10px 20px rgba(var(--emaar-gold-rgb), 0.4)); }
 
@@ -307,70 +303,64 @@
             50% { transform: scale(1.65) rotate(-10deg); filter: drop-shadow(0 0 30px rgba(var(--emaar-gold-rgb), 1)) drop-shadow(0 0 60px rgba(var(--emaar-gold-rgb), 0.6)) drop-shadow(0 0 120px rgba(var(--emaar-gold-rgb), 0.3)); }
         }
 
+        /* --- SUCCESS TRIGGER STATES --- */
         .found #game-overlay { cursor: default; }
-        .found .parallax-master { transform: scale(1.08) translate3d(0, 0, 0) !important; filter: blur(4px) brightness(0.7); }
+        .found .parallax-layer { transform: scale(1.08) translate3d(0,0,0) !important; filter: blur(4px) brightness(0.7); }
         .found #horizon-glow { opacity: 0.75; height: 60%; }
         .found .moon-svg { animation: moonPulseHDR 3.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); }
         .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
 
-        /* ========================================= */
-        /* MOBILE RESPONSIVENESS & SCALING FIX       */
-        /* ========================================= */
-        @media (max-width: 500px), (max-height: 800px) {
-            #win-ui { width: 92%; transform: translate(-50%, -48%); }
-            .brand-icon-win { width: 38px; margin-bottom: 8px; }
-            .score-container { margin-bottom: 12px; transform: scale(0.9); }
-            
-            #win-ui h1 { font-size: clamp(32px, 8vw, 42px); margin-bottom: -5px; }
-            #win-ui h2 { font-size: clamp(18px, 5vw, 22px); margin-bottom: 12px; }
-            
-            .eid-greeting-ar { font-size: clamp(1rem, 4.5vw, 1.15rem); margin-bottom: 8px; line-height: 1.4; }
-            .eid-greeting-en { font-size: clamp(0.85rem, 3.5vw, 0.95rem); margin-bottom: 20px; line-height: 1.4; max-width: 100%; }
-            
-            .action-buttons { gap: 10px; width: 100%; display: flex; flex-direction: column; align-items: center; }
-            #play-again-btn, .portfolio-btn-secondary { width: 100%; max-width: 280px; padding: 10px; font-size: 0.95rem; }
-            .lanterns { transform: translateX(-50%) scale(0.65); transform-origin: top center; }
-        }
-
-        @media (max-height: 650px) {
-            .brand-icon-win { display: none; }
-            .lanterns { transform: translateX(-50%) scale(0.5); }
-            .eid-greeting-en { margin-bottom: 12px; }
+        #noscript-msg {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; background: #030510;
+            color: #ccc; font-family: 'Inter', sans-serif; text-align: center; padding: 40px; z-index: 9999;
         }
     </style>
 </head>
 <body>
-    <div id="landscape-warning">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-            <line x1="12" y1="18" x2="12.01" y2="18"></line>
-        </svg>
-        Please rotate your device to portrait mode<br>for the best experience.
-    </div>
 
-    <div id="film-noise"></div>
+    <noscript>
+        <div id="noscript-msg">
+            <p style="font-size:2.5rem;margin-bottom:16px;">🌙</p>
+            <p style="font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:8px;">Eid Mubarak from Emaar Gulf</p>
+            <p>This experience requires JavaScript. Please enable it in your browser settings.</p>
+        </div>
+    </noscript>
 
-    <div id="start-screen">
-        <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" alt="Emaar Gulf Logo" class="brand-logo-main">
+    <div id="film-noise" aria-hidden="true"></div>
+
+    <div id="start-screen" role="main">
+        <img 
+            src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" 
+            alt="Emaar Gulf Logo" 
+            class="brand-logo-main"
+            width="220" height="60"
+            loading="eager"
+        >
         <h2>Find the Eid Moon</h2>
         <p id="dynamic-instruction">Explore the night sky. Drag the lens to search. Tap for a shooting star.</p>
-        <button id="start-btn">Begin Search</button>
+        <button id="start-btn" aria-label="Begin the Eid moon sighting experience">Begin Search</button>
         
-        <a href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link" target="_blank" class="portfolio-link-start">
+        <a 
+            href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="portfolio-link-start"
+            aria-label="Discover Emaar Gulf, opens in a new tab"
+        >
             Discover Emaar Gulf
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
     </div>
 
-    <div id="game-overlay">
-        <canvas id="vfx-canvas"></canvas>
-        <div id="horizon-glow"></div>
-        <div class="parallax-master" id="parallax-master">
+    <div id="game-overlay" role="application" aria-label="Eid moon sighting game — move your pointer or drag to scan the night sky">
+        <canvas id="vfx-canvas" aria-hidden="true"></canvas>
+        <div id="horizon-glow" aria-hidden="true"></div>
+        <div class="parallax-layer" id="parallax-master" aria-hidden="true">
             <canvas id="stars-canvas"></canvas>
-            
             <div id="moon-mask-layer">
                 <div id="moon-container">
-                    <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <defs>
                             <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
@@ -384,18 +374,18 @@
             </div>
         </div>
 
-        <div id="spyglass">
+        <div id="spyglass" aria-hidden="true">
             <div id="direction-compass"></div>
         </div>
 
-        <div id="guide-text">
+        <div id="guide-text" aria-live="polite" aria-atomic="true">
             <span id="in-game-instruction">DRAG TO SCAN</span><br><br>
-            <span style="font-size: 10px; color: #888; font-weight: 400; font-family: 'Inter', sans-serif;">Click the sky for a shooting star</span>
+            <span style="font-size:10px;color:#888;font-weight:400;font-family:'Inter',sans-serif;">Click the sky for a shooting star</span>
         </div>
 
-        <div class="lanterns" id="lanterns">
+        <div class="lanterns" id="lanterns" aria-hidden="true">
             <div class="lantern-wrapper">
-                <div class="lantern-string" style="height: 140px;"></div>
+                <div class="lantern-string" style="height:140px;"></div>
                 <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
                     <defs><radialGradient id="glow1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
                     <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
@@ -405,7 +395,7 @@
                 </svg>
             </div>
             <div class="lantern-wrapper">
-                <div class="lantern-string" style="height: 80px;"></div>
+                <div class="lantern-string" style="height:80px;"></div>
                 <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
                     <defs><radialGradient id="glow2"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
                     <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
@@ -415,7 +405,7 @@
                 </svg>
             </div>
             <div class="lantern-wrapper">
-                <div class="lantern-string" style="height: 180px;"></div>
+                <div class="lantern-string" style="height:180px;"></div>
                 <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
                     <defs><radialGradient id="glow3"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
                     <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
@@ -426,257 +416,290 @@
             </div>
         </div>
 
-        <div id="win-ui">
-            <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" alt="Emaar Icon" class="brand-icon-win">
+        <div id="win-ui" role="status" aria-live="assertive" aria-atomic="true">
+            <img 
+                src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" 
+                alt="Emaar Gulf" 
+                class="brand-icon-win"
+                width="50" height="50"
+            >
             <div class="score-container">
                 <div class="score-pill" id="score-display">✨ Hilal Sighted in <span>0.0s</span></div>
-                <div class="share-pill" id="share-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                <div class="share-pill" id="share-btn" role="button" tabindex="0" aria-label="Share your result">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                     Share
                 </div>
             </div>
-            <h1 class="gold-text">عيد مبارك</h1>
+            <h1 class="gold-text" lang="ar">عيد مبارك</h1>
             <h2 class="gold-text">Eid Mubarak</h2>
-            
-            <p class="eid-greeting-ar" id="eid-greeting-ar" dir="rtl">من قلب المملكة العربية السعودية إلى العالم، تتشرف إعمار الخليج بأن ترفع أسمى آيات التهاني والتبريكات بمناسبة عيد الفطر المبارك.<br><br>نسأل الله أن يتقبل طاعاتكم، وأن يعيده عليكم وعلى أحبابكم بالصحة والخير والازدهار.</p>
-            <p class="eid-greeting-en" id="eid-greeting-en">From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.</p>
+            <p class="eid-greeting-ar" id="eid-greeting-ar" dir="rtl" lang="ar">من قلب المملكة العربية السعودية إلى العالم، إعمار الخليج تهنئكم بعيد الفطر المبارك. تقبل الله طاعاتكم.</p>
+            <p class="eid-greeting-en" id="eid-greeting-en">From the heart of Saudi Arabia to the world, Emaar Gulf extends its warmest greetings.</p>
             
             <div class="action-buttons">
-                <button id="play-again-btn">Search Again</button>
-                <a href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link" target="_blank" class="portfolio-btn-secondary">
+                <button id="play-again-btn" aria-label="Search for the moon again">Search Again</button>
+                <a 
+                    href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="portfolio-btn-secondary"
+                    aria-label="Building Saudi Arabia's Future, opens Emaar Gulf portfolio in a new tab"
+                >
                     Building Saudi Arabia's Future
                 </a>
             </div>
         </div>
     </div>
     
-    <div id="custom-share-toast"></div>
+    <div id="custom-share-toast" role="alert" aria-live="assertive"></div>
 
     <script>
         // Developer/Author: archengsafdar@gmail.com
         "use strict";
-        
-        // --- HARDWARE SNIFFING ---
-        const logicalCores = navigator.hardwareConcurrency || 4;
+
+        const logicalCores      = navigator.hardwareConcurrency || 4;
         const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isLowEnd = logicalCores <= 4 || isMobileUserAgent;
-        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        
+        const isLowEnd          = logicalCores <= 2; 
+        const isTouch           = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
         const DIFFICULTY = { detectionRadiusMultiplier: 0.8, magneticPull: 0.08, winDistance: 50 };
+        const THRESHOLDS = { magneticActivation: 150, compassAppear: 0.6, hapticStart: 0.3, spyglassScale: 0.15 };
 
-        // --- CORE STATE ---
-        const startScreen = document.getElementById('start-screen');
-        const startBtn = document.getElementById('start-btn');
-        const overlay = document.getElementById('game-overlay');
-        const moonMaskLayer = document.getElementById('moon-mask-layer');
-        const guideText = document.getElementById('guide-text');
-        const inGameInstruction = document.getElementById('in-game-instruction');
+        const startScreen        = document.getElementById('start-screen');
+        const startBtn           = document.getElementById('start-btn');
+        const overlay            = document.getElementById('game-overlay');
+        const moonMaskLayer      = document.getElementById('moon-mask-layer');
+        const guideText          = document.getElementById('guide-text');
+        const inGameInstruction  = document.getElementById('in-game-instruction');
         const dynamicInstruction = document.getElementById('dynamic-instruction');
-        const moonContainer = document.getElementById('moon-container');
-        const spyglass = document.getElementById('spyglass');
-        const compass = document.getElementById('direction-compass');
-        const playAgainBtn = document.getElementById('play-again-btn');
-        const shareBtn = document.getElementById('share-btn');
-        const shareToast = document.getElementById('custom-share-toast');
-        const parallaxMaster = document.getElementById('parallax-master');
-        const winUi = document.getElementById('win-ui');
-        const lanternsUi = document.getElementById('lanterns');
-        const scoreDisplay = document.getElementById('score-display');
-        const greetingEnEl = document.getElementById('eid-greeting-en');
+        const moonContainer      = document.getElementById('moon-container');
+        const spyglass           = document.getElementById('spyglass');
+        const compass            = document.getElementById('direction-compass');
+        const playAgainBtn       = document.getElementById('play-again-btn');
+        const shareBtn           = document.getElementById('share-btn');
+        const shareToast         = document.getElementById('custom-share-toast');
+        const parallaxMaster     = document.getElementById('parallax-master');
+        const winUi              = document.getElementById('win-ui');
+        const lanternsUi         = document.getElementById('lanterns');
+        const scoreDisplay       = document.getElementById('score-display');
+        const greetingEnEl       = document.getElementById('eid-greeting-en');
 
-        let isDragging = false;
-        let hasFoundMoon = false;
+        let isDragging     = false;
+        let hasFoundMoon   = false;
         let animationFrameId = null;
-        let cometTimer = null;
-        let isCometFlying = false; 
-        let lastVibeTime = 0;
+        let cometTimer     = null;
+        let isCometFlying  = false;
+        let lastVibeTime   = 0;
         let searchStartTime = 0;
-        let finalTimeTaken = 0;
-        let lastInputTime = Date.now();
-        
-        let targetX = window.innerWidth / 2; 
-        let targetY = window.innerHeight / 2;
-        let currentX = targetX; 
-        let currentY = targetY;
-        let moonX = 0; 
-        let moonY = 0;
-        let tapStartX = 0; 
-        let tapStartY = 0;
+        let finalTimeTaken  = 0;
 
-        // Gyro & Frame Pacing
-        let gyroTargetX = 0, gyroTargetY = 0;
+        let targetX  = window.innerWidth  / 2;
+        let targetY  = window.innerHeight / 2;
+        let currentX = targetX;
+        let currentY = targetY;
+        let moonX    = 0;
+        let moonY    = 0;
+        let tapStartX = 0; 
+        let tapStartY = 0; 
+
+        // RESTORED V16: Idle Tracker for Living Engine
+        let lastInputTime = performance.now(); 
+
+        let cachedViewportW = window.innerWidth;
+        let cachedViewportH = window.innerHeight;
+
+        let gyroTargetX  = 0, gyroTargetY  = 0;
         let gyroCurrentX = 0, gyroCurrentY = 0;
-        let baseBeta = null;
-        let baseGamma = null;
+        let baseBeta     = null;
         let lastFrameTime = 0;
-        const FPS = 60;
+        const FPS         = 60;
         const FRAME_DELAY = 1000 / FPS;
 
         if (isLowEnd) {
-            spyglass.style.backdropFilter = 'none'; 
+            spyglass.style.backdropFilter       = 'none';
             spyglass.style.webkitBackdropFilter = 'none';
-            spyglass.style.background = 'rgba(255, 255, 255, 0.08)';
+            spyglass.style.background           = 'rgba(255,255,255,0.08)';
         } else {
-            spyglass.style.backdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
+            // RESTORED V16: Apple-Tier Lens Optics
+            spyglass.style.backdropFilter       = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
             spyglass.style.webkitBackdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
         }
 
         if (!isTouch) {
             dynamicInstruction.innerText = "Explore the night sky. Move your mouse to search. Click for a shooting star.";
-            inGameInstruction.innerText = "MOVE MOUSE TO SCAN";
+            inGameInstruction.innerText  = "MOVE MOUSE TO SCAN";
         }
 
-        // --- ALGORITHMIC PERSONALIZATION ---
         function updateLocalizedGreeting() {
-            const hour = new Date().getHours();
+            const hour      = new Date().getHours();
             const timePhase = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-            greetingEnEl.innerHTML = `From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.<br><br>May this beautiful ${timePhase} bring peace, prosperity, and lasting happiness to you and your loved ones.`;
+            let city = 'Riyadh';
+            try {
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                if (tz && tz.includes('/')) city = tz.split('/')[1].replace(/_/g, ' ');
+            } catch(e) {}
+            greetingEnEl.innerHTML = `From the heart of Saudi Arabia to the world, Emaar Gulf extends its warmest greetings. May this beautiful ${timePhase} in ${city} bring enduring peace, prosperity, and success to your family.`;
         }
         updateLocalizedGreeting();
 
-        // --- HIGH-DPI CANVAS MATRIX ---
         const starsCanvas = document.getElementById('stars-canvas');
-        const starsCtx = starsCanvas.getContext('2d', { alpha: true });
-        const vfxCanvas = document.getElementById('vfx-canvas');
-        const vfxCtx = vfxCanvas.getContext('2d', { alpha: true });
-        
-        let starData = [];
+        const starsCtx    = starsCanvas.getContext('2d', { alpha: true });
+        const vfxCanvas   = document.getElementById('vfx-canvas');
+        const vfxCtx      = vfxCanvas.getContext('2d', { alpha: true });
+
+        let starData        = [];
         let canvasParticles = [];
         let oldStarsW = 0, oldStarsH = 0;
+        let starsCSS_W = 0, starsCSS_H = 0;
+        let vfxCSS_W   = 0, vfxCSS_H   = 0;
 
         function resizeCanvases() {
             const dpr = window.devicePixelRatio || 1;
-            
-            const newStarsW = window.innerWidth * 1.1;
-            const newStarsH = window.innerHeight * 1.1;
-            
-            starsCanvas.width = newStarsW * dpr;
-            starsCanvas.height = newStarsH * dpr;
-            starsCanvas.style.width = `${newStarsW}px`;
-            starsCanvas.style.height = `${newStarsH}px`;
+
+            cachedViewportW = window.innerWidth;
+            cachedViewportH = window.innerHeight;
+
+            starsCSS_W = cachedViewportW * 1.1;
+            starsCSS_H = cachedViewportH * 1.1;
+            vfxCSS_W   = cachedViewportW;
+            vfxCSS_H   = cachedViewportH;
+
+            starsCanvas.width  = starsCSS_W * dpr;
+            starsCanvas.height = starsCSS_H * dpr;
+            starsCanvas.style.width  = `${starsCSS_W}px`;
+            starsCanvas.style.height = `${starsCSS_H}px`;
             starsCtx.setTransform(1, 0, 0, 1, 0, 0); 
             starsCtx.scale(dpr, dpr);
-            
-            vfxCanvas.width = window.innerWidth * dpr;
-            vfxCanvas.height = window.innerHeight * dpr;
-            vfxCanvas.style.width = `${window.innerWidth}px`;
-            vfxCanvas.style.height = `${window.innerHeight}px`;
+
+            vfxCanvas.width  = vfxCSS_W * dpr;
+            vfxCanvas.height = vfxCSS_H * dpr;
+            vfxCanvas.style.width  = `${vfxCSS_W}px`;
+            vfxCanvas.style.height = `${vfxCSS_H}px`;
             vfxCtx.setTransform(1, 0, 0, 1, 0, 0); 
             vfxCtx.scale(dpr, dpr);
 
             if (starData.length === 0) {
                 const count = isLowEnd ? 80 : 180;
-                for(let i=0; i<count; i++) {
+                for (let i = 0; i < count; i++) {
                     starData.push({
-                        x: Math.random() * newStarsW, y: Math.random() * newStarsH,
+                        x: Math.random() * starsCSS_W,
+                        y: Math.random() * starsCSS_H,
                         r: Math.random() * 1.5 + 0.5,
                         baseAlpha: Math.random() * 0.5 + 0.1,
-                        speed: Math.random() * 0.02 + 0.005, offset: Math.random() * Math.PI * 2
+                        speed: Math.random() * 0.02 + 0.005,
+                        offset: Math.random() * Math.PI * 2
                     });
                 }
             } else if (oldStarsW > 0) {
-                const ratioX = newStarsW / oldStarsW;
-                const ratioY = newStarsH / oldStarsH;
+                const ratioX = starsCSS_W / oldStarsW;
+                const ratioY = starsCSS_H / oldStarsH;
                 starData.forEach(s => { s.x *= ratioX; s.y *= ratioY; });
             }
-            oldStarsW = newStarsW; oldStarsH = newStarsH;
+            oldStarsW = starsCSS_W;
+            oldStarsH = starsCSS_H;
         }
+
         window.addEventListener('resize', resizeCanvases);
         resizeCanvases();
 
         function triggerParticleBurst(x, y) {
-            const burstAmount = isLowEnd ? 50 : 120;
-            for(let i = 0; i < burstAmount; i++) {
+            const count = isLowEnd ? 50 : 120;
+            for (let i = 0; i < count; i++) {
                 canvasParticles.push({
-                    x: x, y: y,
+                    x, y,
                     vx: (Math.random() - 0.5) * (Math.random() * 22 + 10),
                     vy: (Math.random() - 0.5) * (Math.random() * 22 + 10),
-                    life: 1.0, decay: Math.random() * 0.025 + 0.015, size: Math.random() * 3 + 2
+                    life: 1.0,
+                    decay: Math.random() * 0.025 + 0.015,
+                    size: Math.random() * 3 + 2
                 });
             }
             if (canvasParticles.length > 600) canvasParticles.splice(0, canvasParticles.length - 600);
         }
 
         function updateAndDrawCanvasLayers(time) {
-            starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+            starsCtx.clearRect(0, 0, starsCSS_W, starsCSS_H); 
             starsCtx.fillStyle = '#ffffff';
-            for(let i=0; i<starData.length; i++) {
-                let s = starData[i];
-                let currentAlpha = s.baseAlpha + Math.sin(time * s.speed + s.offset) * 0.3;
-                starsCtx.globalAlpha = Math.max(0.1, currentAlpha);
-                starsCtx.beginPath(); starsCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2); starsCtx.fill();
+            for (let i = 0; i < starData.length; i++) {
+                const s     = starData[i];
+                const alpha = s.baseAlpha + Math.sin(time * s.speed + s.offset) * 0.3;
+                starsCtx.globalAlpha = Math.max(0.1, alpha);
+                starsCtx.beginPath();
+                starsCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                starsCtx.fill();
             }
             starsCtx.globalAlpha = 1.0;
 
             if (canvasParticles.length > 0) {
                 vfxCtx.globalCompositeOperation = 'destination-out';
-                vfxCtx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-                vfxCtx.fillRect(0, 0, vfxCanvas.width, vfxCanvas.height);
-                vfxCtx.globalCompositeOperation = 'lighter';
+                vfxCtx.fillStyle = 'rgba(0,0,0,0.15)';
+                vfxCtx.fillRect(0, 0, vfxCSS_W, vfxCSS_H); 
 
-                for(let i = 0; i < canvasParticles.length; i++) {
-                    let p = canvasParticles[i];
+                vfxCtx.globalCompositeOperation = 'lighter';
+                vfxCtx.shadowBlur = 10; 
+
+                for (let i = 0; i < canvasParticles.length; i++) {
+                    const p = canvasParticles[i];
                     p.x += p.vx; p.y += p.vy; p.life -= p.decay;
-                    if (p.life > 0) {
-                        vfxCtx.fillStyle = `rgba(241, 170, 39, ${p.life})`;
-                        vfxCtx.shadowBlur = 10; vfxCtx.shadowColor = `rgba(255, 255, 255, ${p.life})`;
-                        vfxCtx.beginPath(); vfxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2); vfxCtx.fill();
+                    if (p.life > 0) { 
+                        vfxCtx.shadowColor = `rgba(255,255,255,${p.life})`; 
+                        vfxCtx.fillStyle   = `rgba(241,170,39,${p.life})`;
+                        vfxCtx.beginPath();
+                        vfxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        vfxCtx.fill();
                     }
                 }
-                vfxCtx.shadowBlur = 0;
+                vfxCtx.shadowBlur = 0; 
+                vfxCtx.globalCompositeOperation = 'source-over';
+                
+                // RESTORED V16: V8 Array Garbage Collection Optimization
                 canvasParticles = canvasParticles.filter(p => p.life > 0);
             } else {
-                vfxCtx.clearRect(0, 0, vfxCanvas.width, vfxCanvas.height);
+                vfxCtx.clearRect(0, 0, vfxCSS_W, vfxCSS_H); 
             }
         }
 
-        // --- SPATIAL SOUND ENGINE ---
         const audioEngine = {
-            ambient: new Audio('ambient.mp3'), 
-            chime: new Audio('chime.mp3'),     
-            swooshBase: new Audio('swoosh.mp3'), 
-            hum: new Audio('hum.mp3'),
-            
+            ambient:    new Audio('ambient.mp3'),
+            chime:      new Audio('chime.mp3'),
+            swooshBase: new Audio('swoosh.mp3'),
+            hum:        new Audio('hum.mp3'),
+
             init() {
                 this.ambient.loop = true; this.ambient.volume = 0.3;
-                this.hum.loop = true; this.hum.volume = 0;
-                this.chime.loop = true; this.chime.volume = 0.5; 
-                
+                this.hum.loop     = true; this.hum.volume     = 0;
+                this.chime.loop   = true; this.chime.volume   = 0.5;
                 [this.ambient, this.chime, this.swooshBase, this.hum].forEach(a => {
-                    a.onerror = () => console.warn('Audio asset load bypass executed');
+                    a.onerror = () => console.warn('Audio load failed:', a.src);
                     a.load();
                 });
             },
-            playStart() { 
-                this.chime.pause(); 
+            playStart() {
+                this.chime.pause(); this.chime.currentTime = 0;
+                this.ambient.play().catch(() => {});
+                this.hum.play().catch(() => {});
+            },
+            updateHum(intensity) {
+                this.hum.volume = intensity > 0.1 ? Math.min(0.4, intensity * 0.4) : 0;
+            },
+            playWin() {
+                this.hum.volume = 0;
+                this.ambient.pause();
                 this.chime.currentTime = 0;
-                if (this.ambient.paused) this.ambient.play().catch(()=>{}); 
-                if (this.hum.paused) this.hum.play().catch(()=>{}); 
-            },
-            updateHum(intensity) { 
-                this.hum.volume = intensity > 0.1 ? Math.min(0.4, intensity * 0.4) : 0; 
-            },
-            playWin() { 
-                this.hum.volume = 0; 
-                this.ambient.pause(); 
-                this.chime.currentTime = 0; 
-                this.chime.play().catch(()=>{}); 
+                this.chime.play().catch(() => {});
             },
             playComet() {
                 const s = this.swooshBase.cloneNode();
                 s.volume = 0.4;
                 s.onended = () => { s.src = ''; s.remove(); };
-                s.play().catch(()=>{});
+                s.play().catch(() => {});
             },
-            pauseAll() { 
-                this.ambient.pause(); 
-                this.hum.pause(); 
-                this.chime.pause(); 
+            pauseAll() {
+                this.ambient.pause(); this.hum.pause(); this.chime.pause();
             }
         };
 
-        document.addEventListener('pointerdown', () => { 
-            if(overlay.classList.contains('active')) audioEngine.playStart(); 
+        document.addEventListener('pointerdown', () => {
+            if (overlay.classList.contains('active')) audioEngine.playStart();
         }, { once: true });
 
         document.addEventListener('visibilitychange', () => {
@@ -686,50 +709,57 @@
                 audioEngine.pauseAll();
             } else {
                 if (overlay.classList.contains('active') && !hasFoundMoon) {
-                    lastFrameTime = performance.now();
+                    lastFrameTime    = performance.now();
                     animationFrameId = requestAnimationFrame(renderEngine);
                     spawnAmbientComet();
-                    if (audioEngine.ambient.paused) audioEngine.playStart();
+                    audioEngine.playStart();
                 }
             }
         });
 
-        // --- LERP GYROSCOPE ---
         function initGyroscope() {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(state => { if (state === 'granted') attachGyro(); }).catch(console.error);
-            } else if (window.DeviceOrientationEvent) { 
-                attachGyro(); 
+            if (!window.DeviceOrientationEvent) return;
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(s => { if (s === 'granted') attachGyro(); })
+                    .catch(console.error);
+            } else {
+                attachGyro();
             }
         }
 
         function attachGyro() {
             window.addEventListener('deviceorientation', (e) => {
                 if (!e.gamma || !e.beta || hasFoundMoon) return;
-                if (baseBeta === null) baseBeta = e.beta; 
-                if (baseGamma === null) baseGamma = e.gamma; 
-                let rawX = Math.max(-35, Math.min(35, e.gamma - baseGamma)) * -0.8;
-                let rawY = Math.max(-35, Math.min(35, e.beta - baseBeta)) * -0.8; 
+                if (baseBeta === null) baseBeta = e.beta;
+                const rawX = Math.max(-35, Math.min(35, e.gamma))          * -0.8;
+                const rawY = Math.max(-35, Math.min(35, e.beta - baseBeta)) * -0.8;
                 gyroTargetX = Math.abs(rawX) < 0.5 ? 0 : rawX;
                 gyroTargetY = Math.abs(rawY) < 0.5 ? 0 : rawY;
             });
         }
 
         function shootInteractiveComet(clickX, clickY) {
-            isCometFlying = true; audioEngine.playComet();
-            const comet = document.createElement('div'); comet.className = 'comet';
-            
-            let r = Math.max(window.innerWidth, window.innerHeight) + 300; let a = Math.random() * Math.PI * 2; 
-            let sX = clickX + Math.cos(a) * r; let sY = clickY + Math.sin(a) * r;
-            let eX = clickX - Math.cos(a) * r; let eY = clickY - Math.sin(a) * r;
-            let aDeg = (Math.atan2(eY - sY, eX - sX) * 180 / Math.PI) + 90;
+            isCometFlying = true;
+            audioEngine.playComet();
+            const comet = document.createElement('div');
+            comet.className = 'comet';
 
-            document.getElementById('game-overlay').appendChild(comet);
-            let anim = comet.animate([
-                { transform: `translate3d(${sX}px, ${sY}px, 0) rotate(${aDeg}deg)`, opacity: 0 },
-                { transform: `translate3d(${sX - (sX - eX)*0.1}px, ${sY - (sY - eY)*0.1}px, 0) rotate(${aDeg}deg)`, opacity: 1, offset: 0.1 },
-                { transform: `translate3d(${eX}px, ${eY}px, 0) rotate(${aDeg}deg)`, opacity: 0 }
+            const r    = Math.max(cachedViewportW, cachedViewportH) + 300;
+            const a    = Math.random() * Math.PI * 2;
+            const sX   = clickX + Math.cos(a) * r;
+            const sY   = clickY + Math.sin(a) * r;
+            const eX   = clickX - Math.cos(a) * r;
+            const eY   = clickY - Math.sin(a) * r;
+            const aDeg = (Math.atan2(eY - sY, eX - sX) * 180 / Math.PI) + 90;
+
+            overlay.appendChild(comet); 
+
+            const anim = comet.animate([
+                { transform: `translate3d(${sX}px,${sY}px,0) rotate(${aDeg}deg)`, opacity: 0 },
+                { transform: `translate3d(${sX-(sX-eX)*0.1}px,${sY-(sY-eY)*0.1}px,0) rotate(${aDeg}deg)`, opacity: 1, offset: 0.1 },
+                { transform: `translate3d(${eX}px,${eY}px,0) rotate(${aDeg}deg)`, opacity: 0 }
             ], { duration: 1200 + Math.random() * 400, easing: 'linear' });
 
             anim.onfinish = anim.oncancel = () => { comet.remove(); isCometFlying = false; };
@@ -737,7 +767,10 @@
 
         function spawnAmbientComet() {
             if (Math.random() > 0.4 && !isCometFlying && overlay.classList.contains('active')) {
-                shootInteractiveComet(Math.random() * window.innerWidth, Math.random() * (window.innerHeight * 0.6));
+                shootInteractiveComet(
+                    Math.random() * cachedViewportW,
+                    Math.random() * (cachedViewportH * 0.6)
+                );
             }
             cometTimer = setTimeout(spawnAmbientComet, 3500 + Math.random() * 4000);
         }
@@ -746,91 +779,108 @@
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             if (cometTimer) clearTimeout(cometTimer);
             canvasParticles = [];
-            vfxCtx.clearRect(0, 0, vfxCanvas.width, vfxCanvas.height);
-            
-            hasFoundMoon = false; document.body.classList.remove('found');
-            guideText.style.opacity = '1'; winUi.style.opacity = '0';
-            winUi.style.pointerEvents = 'none'; lanternsUi.style.top = '-350px';
-            
-            spyglass.style.display = 'block'; compass.style.display = 'block';
-            spyglass.style.opacity = '1';
-            spyglass.style.transform = `translate3d(${window.innerWidth/2 - 90}px, ${window.innerHeight/2 - 90}px, 0) scale(1)`;
-            
-            parallaxMaster.style.transition = 'none'; parallaxMaster.style.transform = `translate3d(0, 0, 0)`; parallaxMaster.style.filter = 'none';
-            baseBeta = null; baseGamma = null;
-            
-            do {
-                moonX = Math.random() * (window.innerWidth - 240) + 120;
-                moonY = Math.random() * (window.innerHeight - 240) + 120;
-            } while (Math.hypot(moonX - window.innerWidth/2, moonY - window.innerHeight/2) < 200);
-            
-            moonContainer.style.transform = `translate3d(${moonX - 45}px, ${moonY - 45}px, 0)`;
+            vfxCtx.clearRect(0, 0, vfxCSS_W, vfxCSS_H);
 
-            targetX = window.innerWidth / 2; targetY = window.innerHeight / 2;
-            currentX = targetX; currentY = targetY;
+            hasFoundMoon             = false;
+            guideText.style.opacity  = '1';
+            winUi.style.opacity      = '0';
+            winUi.style.pointerEvents = 'none';
+            lanternsUi.style.top     = '-350px';
+
+            spyglass.style.display   = 'block';
+            compass.style.display    = 'block';
+            spyglass.style.opacity   = '1';
+            spyglass.style.transform = `translate3d(${cachedViewportW/2-90}px,${cachedViewportH/2-90}px,0) scale(1)`;
+
+            parallaxMaster.style.transition = 'none';
+            parallaxMaster.style.transform  = 'translate3d(0,0,0)';
+            parallaxMaster.style.filter     = 'none';
+            baseBeta = null;
             
+            // RESTORED V16: Reset depth layers
+            starsCanvas.style.transform = 'translate3d(0,0,0)';
+
+            requestAnimationFrame(() => { document.body.classList.remove('found'); });
+
+            do {
+                moonX = Math.random() * (cachedViewportW - 240) + 120;
+                moonY = Math.random() * (cachedViewportH - 240) + 120;
+            } while (Math.hypot(moonX - cachedViewportW/2, moonY - cachedViewportH/2) < 200);
+
+            moonContainer.style.transform = `translate3d(${moonX-45}px,${moonY-45}px,0)`;
+
+            targetX  = cachedViewportW / 2; targetY  = cachedViewportH / 2;
+            currentX = targetX;             currentY = targetY;
+
             moonMaskLayer.style.setProperty('--x', `${currentX}px`);
             moonMaskLayer.style.setProperty('--y', `${currentY}px`);
             compass.style.opacity = '0';
-            searchStartTime = Date.now(); lastFrameTime = performance.now(); lastInputTime = Date.now();
+
+            searchStartTime = performance.now();
+            lastFrameTime   = performance.now();
+            lastInputTime   = performance.now(); // Reset Idle Tracker
             updateLocalizedGreeting();
         }
 
-        startBtn.addEventListener('click', async () => {
-            startScreen.style.opacity = '0'; startScreen.style.visibility = 'hidden';
+        startBtn.addEventListener('click', () => {
+            startScreen.style.opacity    = '0';
+            startScreen.style.visibility = 'hidden';
             overlay.classList.add('active');
-            
-            audioEngine.init(); audioEngine.playStart(); 
-            
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                try {
-                    const res = await DeviceOrientationEvent.requestPermission();
-                    if (res === 'granted') initGyroscope();
-                } catch(e) { console.warn("Gyro skipped"); }
-            } else {
-                initGyroscope();
-            }
-
-            initializeEngine(); spawnAmbientComet(); 
+            audioEngine.init();
+            audioEngine.playStart();
+            initGyroscope();
+            initializeEngine();
+            spawnAmbientComet();
             animationFrameId = requestAnimationFrame(renderEngine);
         });
 
         playAgainBtn.addEventListener('click', () => {
-            initializeEngine(); audioEngine.playStart();
+            initializeEngine();
+            audioEngine.playStart();
+            spawnAmbientComet(); 
             animationFrameId = requestAnimationFrame(renderEngine);
         });
 
+        shareBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); shareBtn.click(); }
+        });
+
         shareBtn.addEventListener('click', async () => {
+            if (!finalTimeTaken) return; 
             const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI just sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\nMay this season bring peace and prosperity to your home. Can you find the moon faster than me?\n\n🔭 Play here: ${window.location.href}`;
             if (navigator.share) {
                 navigator.share({ title: 'Eid Mubarak from Emaar Gulf', text: shareText }).catch(console.error);
             } else {
                 try {
                     await navigator.clipboard.writeText(shareText);
+                    // RESTORED V16: Premium Share Toast UI
                     shareToast.innerHTML = `<div class="toast-icon">✔</div> <span>Message copied to clipboard</span>`;
                 } catch(err) {
                     shareToast.innerHTML = `<span>Link: ${window.location.href}</span>`;
                 }
                 shareToast.classList.add('show');
-                setTimeout(() => shareToast.classList.remove('show'), 3500);
+                setTimeout(() => shareToast.classList.remove('show'), 3000);
             }
         });
 
         window.addEventListener('resize', () => {
+            cachedViewportW = window.innerWidth;
+            cachedViewportH = window.innerHeight;
             if (!overlay.classList.contains('active') || hasFoundMoon) return;
-            moonX = Math.min(Math.max(moonX, 120), window.innerWidth - 120);
-            moonY = Math.min(Math.max(moonY, 120), window.innerHeight - 120);
-            moonContainer.style.transform = `translate3d(${moonX - 45}px, ${moonY - 45}px, 0)`;
-            targetX = Math.min(targetX, window.innerWidth); targetY = Math.min(targetY, window.innerHeight);
+            moonX = Math.min(Math.max(moonX, 120), cachedViewportW - 120);
+            moonY = Math.min(Math.max(moonY, 120), cachedViewportH - 120);
+            moonContainer.style.transform = `translate3d(${moonX-45}px,${moonY-45}px,0)`;
+            targetX = Math.min(targetX, cachedViewportW);
+            targetY = Math.min(targetY, cachedViewportH);
         });
 
-        // --- UNIFIED POINTER EVENT ENGINE ---
         const handlePointerDown = (e) => {
-            lastInputTime = Date.now();
+            lastInputTime = performance.now(); // Record Input
             if (e.pointerType === 'touch') {
                 overlay.setPointerCapture(e.pointerId);
                 isDragging = true;
-                tapStartX = e.clientX; tapStartY = e.clientY;
+                tapStartX  = e.clientX;
+                tapStartY  = e.clientY;
             } else if (!isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
                 shootInteractiveComet(e.clientX, e.clientY);
             }
@@ -838,42 +888,43 @@
 
         const handlePointerMove = (e) => {
             if (hasFoundMoon) return;
-            lastInputTime = Date.now();
+            lastInputTime = performance.now(); // Record Input
             if (e.pointerType === 'mouse') {
-                targetX = e.clientX; targetY = e.clientY;
+                targetX = e.clientX;
+                targetY = e.clientY;
                 guideText.style.opacity = '0';
             } else if (isDragging && e.pointerType === 'touch') {
-                let dragDist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
-                if (dragDist > 15) guideText.style.opacity = '0';
-                if(e.cancelable) e.preventDefault(); 
-                targetX = Math.min(e.clientX, window.innerWidth); 
-                targetY = Math.min(e.clientY, window.innerHeight);
+                const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
+                if (dist > 15) guideText.style.opacity = '0';
+                if (e.cancelable) e.preventDefault();
+                targetX = Math.min(e.clientX, cachedViewportW);
+                targetY = Math.min(e.clientY, cachedViewportH);
             }
         };
 
         const handlePointerUp = (e) => {
             if (e.pointerType === 'touch') {
                 if (overlay.hasPointerCapture(e.pointerId)) overlay.releasePointerCapture(e.pointerId);
-                let dragDist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
-                if (dragDist < 15 && !isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
+                const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
+                if (dist < 15 && !isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
                     shootInteractiveComet(e.clientX, e.clientY);
                 }
                 isDragging = false;
             }
         };
 
-        overlay.addEventListener('pointerdown', handlePointerDown);
-        overlay.addEventListener('pointermove', handlePointerMove);
-        overlay.addEventListener('pointerup', handlePointerUp);
-        overlay.addEventListener('pointercancel', handlePointerUp);
+        overlay.addEventListener('pointerdown',        handlePointerDown);
+        overlay.addEventListener('pointermove',        handlePointerMove);
+        overlay.addEventListener('pointerup',          handlePointerUp);
+        overlay.addEventListener('pointercancel',      handlePointerUp);
         overlay.addEventListener('lostpointercapture', () => { isDragging = false; });
 
-        // --- GPU RENDER LOOP (FPS Governed) ---
         function renderEngine(timestamp) {
             if (!timestamp) timestamp = performance.now();
-            
+
             if (timestamp - lastFrameTime < FRAME_DELAY) {
-                animationFrameId = requestAnimationFrame(renderEngine); return;
+                animationFrameId = requestAnimationFrame(renderEngine);
+                return;
             }
             lastFrameTime = timestamp;
 
@@ -883,77 +934,98 @@
                 
                 gyroCurrentX += (gyroTargetX - gyroCurrentX) * 0.08;
                 gyroCurrentY += (gyroTargetY - gyroCurrentY) * 0.08;
-                parallaxMaster.style.transform = `translate3d(${gyroCurrentX}px, ${gyroCurrentY}px, 0)`;
-                starsCanvas.style.transform = `translate3d(${gyroCurrentX * -0.4}px, ${gyroCurrentY * -0.4}px, 0)`;
+                if (Math.abs(gyroCurrentX) > 0.01 || Math.abs(gyroCurrentY) > 0.01) {
+                    parallaxMaster.style.transform = `translate3d(${gyroCurrentX}px,${gyroCurrentY}px,0)`;
+                    // RESTORED V16: True Z-Axis Depth Parallax
+                    starsCanvas.style.transform = `translate3d(${gyroCurrentX * -0.4}px,${gyroCurrentY * -0.4}px,0)`;
+                }
 
-                let distanceToMoon = Math.hypot(currentX - moonX, currentY - moonY);
-                let detectionRadius = window.innerWidth * DIFFICULTY.detectionRadiusMultiplier; 
-                let intensity = Math.max(0, 1 - (distanceToMoon / detectionRadius));
-                
+                const distanceToMoon  = Math.hypot(currentX - moonX, currentY - moonY);
+                const detectionRadius = cachedViewportW * DIFFICULTY.detectionRadiusMultiplier; 
+                const intensity       = Math.max(0, 1 - (distanceToMoon / detectionRadius));
+
                 audioEngine.updateHum(intensity);
 
-                if (distanceToMoon < 150 && (isDragging || !isTouch)) {
+                // Magnetic pull
+                if (distanceToMoon < THRESHOLDS.magneticActivation && (isDragging || !isTouch)) {
                     targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
                     targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
                 }
-                
-                if (Date.now() - lastInputTime > 5000 && !isDragging) {
-                    targetX += Math.sin(Date.now() * 0.001) * 0.6;
-                    targetY += Math.cos(Date.now() * 0.0013) * 0.6;
+
+                // RESTORED V16: Idle Intelligence (Living Engine)
+                if (performance.now() - lastInputTime > 5000 && !isDragging) {
+                    targetX += Math.sin(performance.now() * 0.001) * 0.6;
+                    targetY += Math.cos(performance.now() * 0.0013) * 0.6;
                 }
 
                 const easeFactor = isTouch ? 0.25 : 0.12;
-                currentX += (targetX - currentX) * easeFactor; currentY += (targetY - currentY) * easeFactor;
+                currentX += (targetX - currentX) * easeFactor;
+                currentY += (targetY - currentY) * easeFactor;
 
                 if (distanceToMoon < detectionRadius) {
-                    spyglass.style.transform = `translate3d(${currentX - 90}px, ${currentY - 90}px, 0) scale(${1 + (intensity * 0.15)})`;
-                    if (intensity > 0.6) {
-                        compass.style.transform = `rotate(${Math.atan2(moonY - currentY, moonX - currentX)}rad)`;
-                        compass.style.opacity = `${(intensity - 0.6) * 2.5}`; 
-                    } else { compass.style.opacity = '0'; }
+                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(${1 + intensity * THRESHOLDS.spyglassScale})`;
 
-                    let now = Date.now();
-                    if (intensity > 0.3 && (now - lastVibeTime > (300 - intensity * 250)) && navigator.vibrate && isTouch) {
-                        navigator.vibrate([5, 20, 5]); lastVibeTime = now;
+                    if (intensity > THRESHOLDS.compassAppear) { 
+                        compass.style.transform = `rotate(${Math.atan2(moonY-currentY, moonX-currentX)}rad)`;
+                        compass.style.opacity   = `${(intensity - THRESHOLDS.compassAppear) * 2.5}`;
+                    } else {
+                        compass.style.opacity = '0';
+                    }
+
+                    const now = performance.now();
+                    if (intensity > THRESHOLDS.hapticStart 
+                        && (now - lastVibeTime > 300 - intensity * 250)
+                        && navigator.vibrate && isTouch) {
+                        navigator.vibrate([5, 20, 5]);
+                        lastVibeTime = now;
                     }
                 } else {
-                    spyglass.style.transform = `translate3d(${currentX - 90}px, ${currentY - 90}px, 0) scale(1)`;
-                    compass.style.opacity = '0';
+                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
+                    compass.style.opacity    = '0';
                 }
 
                 moonMaskLayer.style.setProperty('--x', `${currentX}px`);
                 moonMaskLayer.style.setProperty('--y', `${currentY}px`);
 
                 // WIN CONDITION
-                if (distanceToMoon < DIFFICULTY.winDistance) { 
-                    hasFoundMoon = true; currentX = moonX; currentY = moonY;
-                    
-                    finalTimeTaken = ((Date.now() - searchStartTime) / 1000).toFixed(1);
+                if (distanceToMoon < DIFFICULTY.winDistance) {
+                    hasFoundMoon = true;
+                    currentX = moonX; currentY = moonY;
+
+                    finalTimeTaken = ((performance.now() - searchStartTime) / 1000).toFixed(1);
                     scoreDisplay.innerHTML = `✨ Hilal Sighted in <span>${finalTimeTaken}s</span>`;
 
                     audioEngine.playWin();
-                    spyglass.style.display = 'none'; compass.style.display = 'none';
-                    
+                    spyglass.style.display = 'none';
+                    compass.style.display  = 'none';
+
                     moonMaskLayer.style.setProperty('--x', `${currentX}px`);
                     moonMaskLayer.style.setProperty('--y', `${currentY}px`);
-                    
-                    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                         overlay.animate([
-                            { transform: 'translateX(0px)' }, { transform: 'translateX(4px)' },
-                            { transform: 'translateX(-4px)' }, { transform: 'translateX(0px)' }
+                            { transform: 'translateX(0px)' },
+                            { transform: 'translateX(4px)' },
+                            { transform: 'translateX(-4px)' },
+                            { transform: 'translateX(0px)' }
                         ], { duration: 350, easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)' });
                     }
-                    
+
                     document.body.classList.add('found');
-                    triggerParticleBurst(currentX, currentY); 
+                    triggerParticleBurst(currentX, currentY);
                     if (navigator.vibrate && isTouch) navigator.vibrate([15, 30, 15]);
-                    
+
                     setTimeout(() => {
-                        winUi.style.opacity = '1'; winUi.style.pointerEvents = 'auto'; lanternsUi.style.top = '0';
+                        winUi.style.opacity       = '1';
+                        winUi.style.pointerEvents = 'auto';
+                        lanternsUi.style.top      = '0';
                     }, 1200);
                 }
             }
-            animationFrameId = requestAnimationFrame(renderEngine);
+
+            if (!hasFoundMoon || canvasParticles.length > 0) {
+                animationFrameId = requestAnimationFrame(renderEngine);
+            }
         }
     </script>
 </body>
