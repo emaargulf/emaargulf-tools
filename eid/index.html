@@ -645,9 +645,8 @@
         let currentX = targetX, currentY = targetY;
         let moonX = 0, moonY = 0;
 
-        let gyroTargetX = 0,  gyroTargetY = 0;
-        let gyroCurrentX = 0, gyroCurrentY = 0;
-        let baseBeta = null;
+        // Auto-parallax (replaces gyroscope — no permission needed, works in all browsers/WebViews)
+        let autoParallaxX = 0, autoParallaxY = 0;
 
         let lastFrameTime = 0;
         const FPS         = 60;
@@ -741,17 +740,18 @@
 
         // ─── PARTICLE BURST ──────────────────────────────────────────────
         function triggerParticleBurst(x, y) {
-            const n = isLowEnd ? 50 : 120;
+            // Mobile gets fewer, faster-decaying particles to avoid frame drops
+            const n = isLowEnd ? 30 : (isTouch ? 55 : 90);
             for (let i = 0; i < n; i++) {
                 canvasParticles.push({
                     x, y,
-                    vx: (Math.random() - 0.5) * (Math.random() * 22 + 10),
-                    vy: (Math.random() - 0.5) * (Math.random() * 22 + 10),
-                    life: 1.0, decay: Math.random() * 0.025 + 0.015,
-                    size: Math.random() * 3 + 2
+                    vx: (Math.random() - 0.5) * (Math.random() * 18 + 8),
+                    vy: (Math.random() - 0.5) * (Math.random() * 18 + 8),
+                    life: 1.0, decay: Math.random() * 0.04 + 0.025,  // faster decay = shorter burst
+                    size: Math.random() * 2.5 + 1.5
                 });
             }
-            if (canvasParticles.length > 600) canvasParticles.splice(0, canvasParticles.length - 600);
+            if (canvasParticles.length > 200) canvasParticles.splice(0, canvasParticles.length - 200);
         }
 
         // ─── CANVAS DRAW ─────────────────────────────────────────────────
@@ -771,23 +771,28 @@
             // Particles — destination-out trail + additive bloom
             if (canvasParticles.length > 0) {
                 vfxCtx.globalCompositeOperation = 'destination-out';
-                vfxCtx.fillStyle = 'rgba(0,0,0,0.15)';
-                vfxCtx.fillRect(0, 0, vCSS_W, vCSS_H); // CSS px — not physical px
+                vfxCtx.fillStyle = 'rgba(0,0,0,0.2)';
+                vfxCtx.fillRect(0, 0, vCSS_W, vCSS_H);
 
                 vfxCtx.globalCompositeOperation = 'lighter';
-                vfxCtx.shadowBlur = 10; // set once before loop, not per particle
+                // No per-particle shadowColor — avoids string alloc every frame
+                // Single ambient glow set once; particles use flat fill for perf
+                vfxCtx.shadowBlur  = isTouch ? 6 : 10;
+                vfxCtx.shadowColor = 'rgba(241,170,39,0.6)';
 
                 for (let i = canvasParticles.length - 1; i >= 0; i--) {
                     const p = canvasParticles[i];
-                    p.x += p.vx; p.y += p.vy; p.life -= p.decay;
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.15; // subtle gravity
+                    p.life -= p.decay;
                     if (p.life <= 0) { canvasParticles.splice(i, 1); continue; }
-                    vfxCtx.shadowColor = `rgba(255,255,255,${p.life})`;
-                    vfxCtx.fillStyle   = `rgba(241,170,39,${p.life})`;
+                    vfxCtx.globalAlpha = p.life;
+                    vfxCtx.fillStyle   = p.life > 0.5 ? '#f1aa27' : '#ffffff';
                     vfxCtx.beginPath();
-                    vfxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    vfxCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
                     vfxCtx.fill();
                 }
-                vfxCtx.shadowBlur = 0;
+                vfxCtx.globalAlpha = 1.0;
+                vfxCtx.shadowBlur  = 0;
                 vfxCtx.globalCompositeOperation = 'source-over';
             } else {
                 vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
@@ -852,23 +857,6 @@
             }
         });
 
-        // ─── GYROSCOPE ───────────────────────────────────────────────────
-        // attachGyro is called directly — no wrapper function — so that the
-        // iOS permission call in startBtn (below) happens inside the gesture stack
-        function attachGyro() {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            if (!window.DeviceOrientationEvent) return;
-            window.addEventListener('deviceorientation', (e) => {
-                // FIX: e.gamma === 0 is valid — only skip null/undefined
-                if (e.gamma === null || e.gamma === undefined || hasFoundMoon) return;
-                if (baseBeta === null) baseBeta = e.beta ?? 0;
-                const rawX = Math.max(-35, Math.min(35,  e.gamma))               * -0.8;
-                const rawY = Math.max(-35, Math.min(35, (e.beta ?? 0) - baseBeta)) * -0.8;
-                gyroTargetX = Math.abs(rawX) < 0.5 ? 0 : rawX;
-                gyroTargetY = Math.abs(rawY) < 0.5 ? 0 : rawY;
-            });
-        }
-
         // ─── COMET SYSTEM ────────────────────────────────────────────────
         function shootInteractiveComet(cx, cy) {
             isCometFlying = true;
@@ -929,7 +917,6 @@
             parallaxMaster.style.transform  = 'translate3d(0,0,0)';
             parallaxMaster.style.filter     = 'none';
             starsCanvas.style.transform     = 'translate3d(0,0,0)'; // reset depth layer
-            baseBeta = null;
 
             // Defer .found removal by one frame — prevents parallax flash on replay
             requestAnimationFrame(() => document.body.classList.remove('found'));
@@ -955,23 +942,7 @@
         }
 
         // ─── START BUTTON ────────────────────────────────────────────────
-        // CRITICAL: async/await used so iOS requestPermission() is called
-        // directly inside the gesture handler — not delegated through a function.
-        // This is required for iOS Safari 16+ and all WKWebViews (WhatsApp, Instagram).
-        startBtn.addEventListener('click', async () => {
-
-            // iOS gyro permission — must be first, directly in gesture
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches === false) {
-                if (typeof DeviceOrientationEvent !== 'undefined' &&
-                    typeof DeviceOrientationEvent.requestPermission === 'function') {
-                    try {
-                        const state = await DeviceOrientationEvent.requestPermission();
-                        if (state === 'granted') attachGyro();
-                    } catch(e) { /* permission denied — game still works without gyro */ }
-                } else {
-                    attachGyro(); // Android / desktop — no permission needed
-                }
-            }
+        startBtn.addEventListener('click', () => {
 
             // Lock orientation to portrait (Android Chrome + some iOS contexts)
             if (screen.orientation && screen.orientation.lock) {
@@ -1105,16 +1076,11 @@
             drawFrame(timestamp);
 
             if (!hasFoundMoon) {
-                // Gyro parallax smoothing (LERP)
-                gyroCurrentX += (gyroTargetX - gyroCurrentX) * 0.08;
-                gyroCurrentY += (gyroTargetY - gyroCurrentY) * 0.08;
-
-                // Only write style if perceptibly non-zero — avoids redundant paint
-                if (Math.abs(gyroCurrentX) > 0.01 || Math.abs(gyroCurrentY) > 0.01) {
-                    parallaxMaster.style.transform = `translate3d(${gyroCurrentX}px,${gyroCurrentY}px,0)`;
-                    // True Z-axis depth: stars layer counter-moves at 40% speed
-                    starsCanvas.style.transform    = `translate3d(${gyroCurrentX * -0.4}px,${gyroCurrentY * -0.4}px,0)`;
-                }
+                // Auto-parallax — smooth sinusoidal drift, mimics gyro feel, zero permissions
+                autoParallaxX = Math.sin(timestamp * 0.00023) * 12 + Math.sin(timestamp * 0.00041) * 6;
+                autoParallaxY = Math.cos(timestamp * 0.00019) * 8  + Math.cos(timestamp * 0.00037) * 4;
+                parallaxMaster.style.transform = `translate3d(${autoParallaxX}px,${autoParallaxY}px,0)`;
+                starsCanvas.style.transform    = `translate3d(${autoParallaxX * -0.4}px,${autoParallaxY * -0.4}px,0)`;
 
                 const dist   = Math.hypot(currentX - moonX, currentY - moonY);
                 const radius = vW * DIFFICULTY.detectionRadiusMultiplier; // uses cached vW
