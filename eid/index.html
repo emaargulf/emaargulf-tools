@@ -2,7 +2,7 @@
 <!--
     ╔══════════════════════════════════════════════════════════════╗
     ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
-    ║  Version  : V34                                              ║
+    ║  Version  : V35                                              ║
     ║  Developer: archengsafdar@gmail.com                         ║
     ║  Built for: Emaar Gulf · emaargulf.github.io                ║
     ║  © 2026 Emaar Gulf. All rights reserved.                    ║
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
     <meta name="author" content="archengsafdar@gmail.com">
-    <meta name="version" content="V34">
+    <meta name="version" content="V35">
     <meta name="generator" content="Emaar Gulf — archengsafdar@gmail.com">
     <meta name="copyright" content="© 2026 Emaar Gulf. All rights reserved.">
 
@@ -71,8 +71,8 @@
         /* ═══════════════════════════════════════════════════════
            Developer/Author: archengsafdar@gmail.com
            Project : Emaar Gulf — Eid Moon Sighting Experience
-           Version : V34
-           Built on: V33 base
+           Version : V35
+           Built on: V34 base
            Changes in V33:
            1. Arabic canvas text: direction=rtl + textAlign=right
               fixed — punctuation (، .) now renders on correct side
@@ -343,12 +343,16 @@
         .eid-greeting-ar {
             color: var(--emaar-gold); font-size: clamp(1rem, 4vw, 1.35rem);
             max-width: 85%; margin: 0 auto 10px auto; line-height: 1.6; font-weight: 700;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-family: 'Cairo', sans-serif; text-align: right;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-family: 'Cairo', sans-serif;
+            text-align: center; direction: rtl;
         }
         .eid-greeting-en {
-            color: #e2e8f0; font-size: clamp(0.85rem, 3vw, 1.05rem);
+            color: #ffffff; font-size: clamp(1rem, 4vw, 1.35rem);
             max-width: 85%; margin: 0 auto 25px auto;
-            line-height: 1.6; font-weight: 400; text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            line-height: 1.6; font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
         }
 
         .action-buttons {
@@ -405,7 +409,7 @@
             #win-ui h1 { font-size: clamp(28px, 8vw, 42px); margin-bottom: -5px; }
             #win-ui h2 { font-size: clamp(16px, 5vw, 22px); margin-bottom: 12px; }
             .eid-greeting-ar { font-size: clamp(0.9rem, 4.5vw, 1.1rem); margin-bottom: 8px; line-height: 1.4; }
-            .eid-greeting-en { font-size: clamp(0.8rem, 3.5vw, 0.95rem); margin-bottom: 16px; line-height: 1.4; max-width: 100%; }
+            .eid-greeting-en { font-size: clamp(0.9rem, 4.5vw, 1.1rem); margin-bottom: 16px; line-height: 1.4; max-width: 100%; }
             .action-buttons { flex-direction: column; align-items: center; gap: 10px; width: 100%; }
             #play-again-btn, .portfolio-btn-secondary { width: 100%; max-width: 280px; padding: 11px 16px; font-size: 0.9rem; }
             .lanterns { transform: translateX(-50%) scale(0.65); transform-origin: top center; }
@@ -637,7 +641,7 @@
     <script>
         // ╔══════════════════════════════════════════════════════════════╗
         // ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
-        // ║  Version  : V34                                              ║
+        // ║  Version  : V35                                              ║
         // ║  Developer: archengsafdar@gmail.com                         ║
         // ║  Built for: Emaar Gulf · emaargulf.github.io                ║
         // ║  © 2026 Emaar Gulf. All rights reserved.                    ║
