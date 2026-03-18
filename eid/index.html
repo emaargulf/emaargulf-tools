@@ -1,9 +1,22 @@
 <!DOCTYPE html>
+<!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
+    ║  Version  : V30                                              ║
+    ║  Developer: archengsafdar@gmail.com                         ║
+    ║  Built for: Emaar Gulf · emaargulf.github.io                ║
+    ║  © 2026 Emaar Gulf. All rights reserved.                    ║
+    ╚══════════════════════════════════════════════════════════════╝
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
+    <meta name="author" content="archengsafdar@gmail.com">
+    <meta name="version" content="V30">
+    <meta name="generator" content="Emaar Gulf — archengsafdar@gmail.com">
+    <meta name="copyright" content="© 2026 Emaar Gulf. All rights reserved.">
 
     <title>Emaar Gulf | Premium Eid Experience</title>
 
@@ -57,13 +70,14 @@
     <style>
         /* ═══════════════════════════════════════════════════════
            Developer/Author: archengsafdar@gmail.com
-           V24 — Star Hunt + Procedural Clouds + Constellation Hints
-           Built on V23 base.
-           New systems:
-           1. Act 1: find 3 hidden stars before moon unlocks
-           2. Procedural cloud canvas with spyglass reveal
-           3. Constellation hint after 15s idle in Act 2
-           4. Nebula wisps on background canvas
+           Project : Emaar Gulf — Eid Moon Sighting Experience
+           Version : V30
+           Built on: V28 base
+           Changes in V30:
+           1. Narrative panel hidden on win (.found state)
+           2. Shoot-hint hidden on win (.found state)
+           3. narrativeTimeout cleared on win (no ghost messages)
+           4. Author watermark meta tags + HTML comment added
            ═══════════════════════════════════════════════════════ */
 
         :root {
@@ -224,36 +238,55 @@
             will-change: transform, opacity; transition: opacity 0.3s ease;
         }
 
-        #guide-text {
-            position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%);
-            color: rgba(255,255,255,0.8); font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
-            pointer-events: none; transition: opacity 0.5s; z-index: 150; text-align: center;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8); font-weight: 600;
+        /* ─── NARRATIVE MESSAGE PANEL ─── */
+        #narrative-panel {
+            position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
+            z-index: 155; display: flex; flex-direction: column; align-items: center; gap: 14px;
+            pointer-events: none; width: 90%; max-width: 380px; text-align: center;
         }
 
-        /* ─── STAR HUNT HUD ─── */
-        #star-hunt-hud {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 155; display: flex; flex-direction: column; align-items: center; gap: 8px;
-            pointer-events: none; transition: opacity 0.6s ease;
+        #narrative-msg {
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        #star-hunt-hud.hidden { opacity: 0; }
-        .star-hunt-label {
-            color: rgba(255,255,255,0.7); font-size: 11px; letter-spacing: 3px;
-            text-transform: uppercase; font-weight: 600; text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+        #narrative-msg.fade-out {
+            opacity: 0; transform: translateY(8px);
         }
+
+        .narr-arabic {
+            display: block; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: clamp(1rem, 5vw, 1.25rem); color: var(--emaar-gold);
+            text-shadow: 0 0 20px rgba(241,170,39,0.5), 0 2px 10px rgba(0,0,0,0.9);
+            line-height: 1.4; direction: rtl;
+        }
+        .narr-english {
+            display: block; font-family: 'Inter', sans-serif; font-weight: 500;
+            font-size: clamp(0.75rem, 3.5vw, 0.9rem);
+            color: rgba(255,255,255,0.7);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            margin-top: 4px; letter-spacing: 0.3px;
+        }
+
+        /* pip row lives inside narrative panel */
         .star-pips {
-            display: flex; gap: 10px; align-items: center;
+            display: flex; gap: 12px; align-items: center;
         }
         .star-pip {
-            width: 18px; height: 18px; position: relative;
+            width: 20px; height: 20px; position: relative;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5);
         }
         .star-pip svg { width: 100%; height: 100%; }
         .star-pip.found { transform: scale(1.4); }
         .star-pip.found svg path { fill: #f1aa27; filter: drop-shadow(0 0 5px rgba(241,170,39,0.9)); }
-        @keyframes pipPop { 0%{transform:scale(1)} 50%{transform:scale(1.8)} 100%{transform:scale(1.4)} }
+        @keyframes pipPop { 0%{transform:scale(1)} 50%{transform:scale(1.9)} 100%{transform:scale(1.4)} }
         .star-pip.popping { animation: pipPop 0.4s ease-out forwards; }
+
+        /* shoot-star hint stays small below the panel */
+        #shoot-hint {
+            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; pointer-events: none; z-index: 150; white-space: nowrap;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
 
         /* ─── WIN UI ─── */
         #win-ui {
@@ -359,6 +392,8 @@
         .found #horizon-glow    { opacity: 0.75; height: 60%; }
         .found .moon-svg        { animation: moonPulseHDR 3.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); }
         .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
+        .found #narrative-panel { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        .found #shoot-hint      { opacity: 0; transition: opacity 0.4s ease; }
 
         @media (max-width: 500px), (max-height: 800px) {
             #win-ui { width: 92%; transform: translate(-50%, -48%); }
@@ -462,32 +497,33 @@
             <div id="direction-compass"></div>
         </div>
 
-        <!-- ─── STAR HUNT HUD ─── -->
-        <div id="star-hunt-hud" aria-live="polite">
-            <div class="star-hunt-label">Find the 3 stars</div>
+        <!-- ─── NARRATIVE PANEL (bilingual, updates at each stage) ─── -->
+        <div id="narrative-panel" aria-live="polite" aria-atomic="true">
+            <div id="narrative-msg">
+                <span class="narr-arabic">هل تستطيع إيجاد النجوم الثلاثة المخفية؟</span>
+                <span class="narr-english">Can you find the 3 hidden stars? Move the lens to explore.</span>
+            </div>
             <div class="star-pips">
                 <div class="star-pip" id="pip-0">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
                     </svg>
                 </div>
                 <div class="star-pip" id="pip-1">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
                     </svg>
                 </div>
                 <div class="star-pip" id="pip-2">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <div id="guide-text" aria-live="polite" aria-atomic="true">
-            <span id="in-game-instruction">DRAG TO SCAN</span><br><br>
-            <span style="font-size:10px;color:#888;font-weight:400;font-family:'Inter',sans-serif;">Tap the sky for a shooting star</span>
-        </div>
+        <!-- small persistent hint for shooting stars -->
+        <div id="shoot-hint">Tap the sky for a shooting star</div>
 
         <div class="lanterns" id="lanterns" aria-hidden="true">
             <div class="lantern-wrapper">
@@ -552,6 +588,13 @@
     <div id="custom-share-toast" role="alert" aria-live="assertive"></div>
 
     <script>
+        // ╔══════════════════════════════════════════════════════════════╗
+        // ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
+        // ║  Version  : V30                                              ║
+        // ║  Developer: archengsafdar@gmail.com                         ║
+        // ║  Built for: Emaar Gulf · emaargulf.github.io                ║
+        // ║  © 2026 Emaar Gulf. All rights reserved.                    ║
+        // ╚══════════════════════════════════════════════════════════════╝
         "use strict";
 
         // ─── HARDWARE DETECTION ─────────────────────────────────────────
@@ -580,8 +623,6 @@
         const startBtn           = document.getElementById('start-btn');
         const overlay            = document.getElementById('game-overlay');
         const moonMaskLayer      = document.getElementById('moon-mask-layer');
-        const guideText          = document.getElementById('guide-text');
-        const inGameInstruction  = document.getElementById('in-game-instruction');
         const dynamicInstruction = document.getElementById('dynamic-instruction');
         const moonContainer      = document.getElementById('moon-container');
         const spyglass           = document.getElementById('spyglass');
@@ -595,10 +636,54 @@
         const lanternsUi         = document.getElementById('lanterns');
         const scoreDisplay       = document.getElementById('score-display');
         const greetingEnEl       = document.getElementById('eid-greeting-en');
-        const starHuntHud        = document.getElementById('star-hunt-hud');
         const cloudCanvas        = document.getElementById('cloud-canvas');
+        const narrativeMsg       = document.getElementById('narrative-msg');
+        const narrativePanel     = document.getElementById('narrative-panel');
 
-        // ─── STATE ───────────────────────────────────────────────────────
+        // ─── NARRATIVE MESSAGES ──────────────────────────────────────────
+        // Each stage has an Arabic line and an English line.
+        const NARRATIVES = {
+            start: {
+                ar: 'هل تستطيع إيجاد النجوم الثلاثة المخفية؟',
+                en: 'Can you find the 3 hidden stars? Move the lens to explore.'
+            },
+            found1: {
+                ar: 'أحسنت! نجمة واحدة! هل تجد الثانية؟',
+                en: 'Well done! One star found. Can you find the next one?'
+            },
+            found2: {
+                ar: 'رائع! نجمتان! ابحث عن الأخيرة…',
+                en: 'Excellent! Two stars found. One more remains…'
+            },
+            found3: {
+                ar: 'مذهل! وجدت النجوم الثلاث! الآن ابحث عن الهلال!',
+                en: 'Amazing! All 3 stars found. Now seek the crescent moon!'
+            },
+            moonPhase: {
+                ar: 'حرِّك العدسة لتجد هلال العيد المبارك',
+                en: 'Move the lens across the sky to sight the Eid Hilal.'
+            }
+        };
+
+        let narrativeTimeout = null;
+
+        function showNarrative(key, delay) {
+            if (narrativeTimeout) clearTimeout(narrativeTimeout);
+            const run = () => {
+                const msg = NARRATIVES[key];
+                if (!msg) return;
+                // Fade out current text
+                narrativeMsg.classList.add('fade-out');
+                setTimeout(() => {
+                    narrativeMsg.innerHTML =
+                        `<span class="narr-arabic">${msg.ar}</span>` +
+                        `<span class="narr-english">${msg.en}</span>`;
+                    narrativeMsg.classList.remove('fade-out');
+                }, 500);
+            };
+            if (delay) narrativeTimeout = setTimeout(run, delay);
+            else run();
+        }
         let isDragging       = false;
         let hasFoundMoon     = false;
         let animationFrameId = null;
@@ -643,7 +728,6 @@
 
         if (!isTouch) {
             dynamicInstruction.innerText = "Find 3 hidden stars, then sight the Hilal. Move your mouse to search.";
-            inGameInstruction.innerText  = "MOVE MOUSE TO SCAN";
         }
 
         // ─── LOCALISED GREETING ──────────────────────────────────────────
@@ -1112,7 +1196,6 @@
             huntStars[index].found = true;
             starsFoundCount++;
 
-            // Burst particles at star
             triggerStarBurst(huntStars[index].x, huntStars[index].y);
             if (navigator.vibrate && isTouch) navigator.vibrate([10, 15, 10]);
 
@@ -1120,14 +1203,16 @@
             const pip = document.getElementById(`pip-${index}`);
             if (pip) {
                 pip.classList.add('found', 'popping');
-                // Update pip star color inline
                 const path = pip.querySelector('path');
                 if (path) path.setAttribute('fill', '#f1aa27');
             }
 
-            if (starsFoundCount >= NUM_HUNT_STARS) {
-                // Short delay then unlock moon
-                setTimeout(unlockMoon, 600);
+            // Show contextual narrative
+            if (starsFoundCount === 1) showNarrative('found1');
+            else if (starsFoundCount === 2) showNarrative('found2');
+            else if (starsFoundCount >= NUM_HUNT_STARS) {
+                showNarrative('found3');
+                setTimeout(unlockMoon, 1800); // longer pause so user reads the message
             }
         }
 
@@ -1135,19 +1220,21 @@
             moonUnlocked = true;
             moonContainer.classList.add('visible');
 
-            // Update HUD
-            starHuntHud.classList.add('hidden');
-            setTimeout(() => { starHuntHud.style.display = 'none'; }, 700);
+            // Hide pip row — no longer needed
+            const pipRow = narrativePanel.querySelector('.star-pips');
+            if (pipRow) {
+                pipRow.style.transition = 'opacity 0.5s';
+                pipRow.style.opacity = '0';
+                setTimeout(() => { pipRow.style.display = 'none'; }, 500);
+            }
 
-            // Update instruction
-            guideText.style.opacity = '1';
-            inGameInstruction.innerText = isTouch ? 'DRAG TO FIND THE MOON' : 'MOVE MOUSE TO FIND THE MOON';
+            // Show moon-hunt narrative after the found3 message has been read
+            showNarrative('moonPhase', 1200);
 
             // Start constellation hint timer
             constellationAlpha = 0;
             if (constellationTimer) clearTimeout(constellationTimer);
             constellationTimer = setTimeout(() => {
-                // Fade constellation in over 3 seconds using rAF-friendly increments
                 const fadeIn = () => {
                     constellationAlpha = Math.min(1, constellationAlpha + 0.008);
                     if (constellationAlpha < 1) requestAnimationFrame(fadeIn);
@@ -1155,7 +1242,6 @@
                 fadeIn();
             }, CONSTELLATION_HINT_DELAY);
 
-            // Reset search timer to count from moon unlock
             searchStartTime = performance.now();
         }
 
@@ -1176,18 +1262,15 @@
             if (animationFrameId)    cancelAnimationFrame(animationFrameId);
             if (cometTimer)          clearTimeout(cometTimer);
             if (constellationTimer)  clearTimeout(constellationTimer);
+            if (narrativeTimeout)    clearTimeout(narrativeTimeout);
 
             canvasParticles = [];
             vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
             cloudCtx.clearRect(0, 0, cCSS_W, cCSS_H);
 
-            // Reset game flags
-            hasFoundMoon      = false;
-            moonUnlocked      = false;
+            hasFoundMoon       = false;
+            moonUnlocked       = false;
             constellationAlpha = 0;
-
-            guideText.style.opacity   = '1';
-            inGameInstruction.innerText = isTouch ? 'DRAG TO SCAN' : 'MOVE MOUSE TO SCAN';
 
             winUi.style.opacity       = '0';
             winUi.style.pointerEvents = 'none';
@@ -1208,9 +1291,13 @@
             // Hide moon until Act 1 complete
             moonContainer.classList.remove('visible');
 
-            // Reset star hunt HUD
-            starHuntHud.style.display = 'flex';
-            starHuntHud.classList.remove('hidden');
+            // Reset narrative panel — restore pip row and set opening message
+            const pipRow = narrativePanel.querySelector('.star-pips');
+            if (pipRow) { pipRow.style.display = 'flex'; pipRow.style.opacity = '1'; }
+            narrativeMsg.classList.remove('fade-out');
+            narrativeMsg.innerHTML =
+                `<span class="narr-arabic">${NARRATIVES.start.ar}</span>` +
+                `<span class="narr-english">${NARRATIVES.start.en}</span>`;
 
             // Place moon away from center
             do {
@@ -1226,7 +1313,6 @@
             moonMaskLayer.style.setProperty('--y', `${currentY}px`);
             compass.style.opacity = '0';
 
-            // Generate clouds and hunt stars
             generateClouds();
             placeHuntStars();
 
@@ -1314,10 +1400,7 @@
             if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
                 targetX = e.clientX;
                 targetY = e.clientY;
-                guideText.style.opacity = '0';
             } else if (isDragging && e.pointerType === 'touch') {
-                const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
-                if (dist > 15) guideText.style.opacity = '0';
                 if (e.cancelable) e.preventDefault();
                 targetX = Math.min(e.clientX, vW);
                 targetY = Math.min(e.clientY, vH);
@@ -1413,6 +1496,9 @@
                     if (dist < DIFFICULTY.winDistance) {
                         hasFoundMoon = true;
                         currentX = moonX; currentY = moonY;
+
+                        // Stop any pending narrative message immediately
+                        if (narrativeTimeout) clearTimeout(narrativeTimeout);
 
                         finalTimeTaken = ((performance.now() - searchStartTime) / 1000).toFixed(1);
                         scoreDisplay.innerHTML = `✨ Hilal Sighted in <span>${finalTimeTaken}s</span>`;
