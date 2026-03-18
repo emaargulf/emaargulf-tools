@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Tools Portal | Emaar Gulf Engineering Consultants</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --border: #e2e8f0;
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+            align-items: center; 
+            padding: 3rem 1.5rem; 
+        }
+        
+        header { 
+            text-align: center; 
+            margin-bottom: 3rem; 
+            max-width: 600px; 
+        }
+        
+        h1 { 
+            color: var(--primary); 
+            font-size: 1.8rem; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        p.subtitle { 
+            color: #718096; 
+            font-size: 1.1rem; 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.5rem; 
+            width: 100%; 
+            max-width: 800px; 
+        }
+        
+        /* Tablet & Desktop Layout */
+        @media (min-width: 600px) { 
+            .grid { grid-template-columns: 1fr 1fr; } 
+        }
+        
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 8px; 
+            padding: 2.5rem 2rem; 
+            text-align: center; 
+            text-decoration: none; 
+            color: inherit; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
+            border-color: var(--secondary); 
+        }
+        
+        .icon { 
+            font-size: 2.5rem; 
+            margin-bottom: 1rem; 
+        }
+        
+        .card h2 { 
+            color: var(--primary); 
+            font-size: 1.25rem; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .card p { 
+            color: #4a5568; 
+            font-size: 0.95rem; 
+        }
+        
+        footer { 
+            margin-top: auto; 
+            padding-top: 4rem; 
+            font-size: 0.85rem; 
+            color: #a0aec0; 
+            text-align: center; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Emaar Gulf Engineering Consultants</h1>
+        <p class="subtitle">Internal Tools & Applications Portal</p>
+    </header>
+
+    <main class="grid">
+        <a href="signature/signature_generator.html" class="card">
+            <div class="icon">✉️</div>
+            <h2>Signature Generator</h2>
+            <p>Generate your official Emaar Gulf email signature for client communications.</p>
+        </a>
+        
+        <a href="eid/" class="card">
+            <div class="icon">🌙</div>
+            <h2>Eid Greetings App</h2>
+            <p>Access and distribute official company Eid greeting assets.</p>
+        </a>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Emaar Gulf. Maintained by IT & Engineering.</p>
+    </footer>
+</body>
+</html>
