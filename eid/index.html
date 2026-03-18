@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Emaar Gulf Eid Moon Sighting - V16 Ultimate Master">
+    <meta name="description" content="Emaar Gulf Eid Moon Sighting - Premium Eid Experience">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -20,6 +20,10 @@
     <meta property="twitter:title" content="🌙 Eid Mubarak from Emaar Gulf">
     <meta property="twitter:description" content="May the blessings of this beautiful season bring peace, prosperity, and joy to your home. Click to explore the night sky and find the Eid Moon.">
     <meta property="twitter:image" content="https://emaargulf.github.io/emaargulf-tools/eid/og-image.jpg">
+    <meta name="theme-color" content="#030510">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" as="image">
     <link rel="preload" href="ambient.mp3" as="audio">
     <link rel="preload" href="chime.mp3" as="audio">
     <link rel="preload" href="swoosh.mp3" as="audio">
@@ -40,7 +44,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body, html { 
-            width: 100vw; height: 100dvh; overflow: hidden; background: #030510; 
+            width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; background: #030510; 
             font-family: 'Inter', sans-serif; 
         }
 
@@ -123,7 +127,7 @@
             transform: translateZ(0); touch-action: none; overscroll-behavior: none;
             animation: skyShift 20s infinite alternate ease-in-out;
             transition: opacity 0.6s ease; overflow: hidden;
-            will-change: transform, opacity; /* GPU HINT */
+            will-change: transform, opacity;
         }
         #game-overlay.active { opacity: 1; pointer-events: auto; }
 
@@ -138,7 +142,7 @@
         }
 
         /* ------------------------------------- */
-        /* CANVAS RENDERING LAYERS (TRUE DEPTH)  */
+        /* CANVAS RENDERING LAYERS               */
         /* ------------------------------------- */
         .parallax-master { 
             position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
@@ -146,7 +150,6 @@
             transition: filter 2.5s ease, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
         
-        /* Layer Depths (Controlled via JS) */
         #stars-canvas { position: absolute; top: 0; left: 0; will-change: transform; }
         
         #vfx-canvas {
@@ -190,6 +193,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
             background: rgba(255, 255, 255, 0.02);
+            -webkit-mask-image: -webkit-radial-gradient(white, black); 
             will-change: transform; transition: opacity 0.6s ease;
         }
 
@@ -231,7 +235,6 @@
         .share-pill { color: #fff; border-color: rgba(255,255,255,0.3); pointer-events: auto; }
         @media (hover: hover) { .share-pill:hover { background: rgba(255,255,255,0.1); } }
 
-        /* Premium Share Fallback Toast */
         #custom-share-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(3, 5, 16, 0.9); border: 1px solid var(--emaar-gold);
@@ -252,7 +255,6 @@
         #win-ui h1 { font-size: 54px; font-weight: 800; margin-bottom: 0px; letter-spacing: 1px;}
         #win-ui h2 { font-size: 26px; font-weight: 700; margin-bottom: 20px; }
         
-        /* Dual-Language Corporate Greeting (Refined) */
         .eid-greeting-ar {
             color: var(--emaar-gold); font-size: 1.35rem; max-width: 85%; margin: 0 auto 15px auto;
             line-height: 1.6; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-family: 'Cairo', sans-serif;
@@ -305,23 +307,36 @@
             50% { transform: scale(1.65) rotate(-10deg); filter: drop-shadow(0 0 30px rgba(var(--emaar-gold-rgb), 1)) drop-shadow(0 0 60px rgba(var(--emaar-gold-rgb), 0.6)) drop-shadow(0 0 120px rgba(var(--emaar-gold-rgb), 0.3)); }
         }
 
-        /* --- SUCCESS TRIGGER STATES (Camera & Bloom) --- */
         .found #game-overlay { cursor: default; }
-        
-        .found .parallax-master { 
-            transform: scale(1.08) translate3d(0, 0, 0) !important; 
-            filter: blur(4px) brightness(0.7); 
-        }
-        
+        .found .parallax-master { transform: scale(1.08) translate3d(0, 0, 0) !important; filter: blur(4px) brightness(0.7); }
         .found #horizon-glow { opacity: 0.75; height: 60%; }
-        
-        .found .moon-svg { 
-            animation: moonPulseHDR 3.5s infinite ease-in-out; 
-            transform: scale(1.6) rotate(-10deg); 
-        }
-        
+        .found .moon-svg { animation: moonPulseHDR 3.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); }
         .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
-        
+
+        /* ========================================= */
+        /* MOBILE RESPONSIVENESS & SCALING FIX       */
+        /* ========================================= */
+        @media (max-width: 500px), (max-height: 800px) {
+            #win-ui { width: 92%; transform: translate(-50%, -48%); }
+            .brand-icon-win { width: 38px; margin-bottom: 8px; }
+            .score-container { margin-bottom: 12px; transform: scale(0.9); }
+            
+            #win-ui h1 { font-size: clamp(32px, 8vw, 42px); margin-bottom: -5px; }
+            #win-ui h2 { font-size: clamp(18px, 5vw, 22px); margin-bottom: 12px; }
+            
+            .eid-greeting-ar { font-size: clamp(1rem, 4.5vw, 1.15rem); margin-bottom: 8px; line-height: 1.4; }
+            .eid-greeting-en { font-size: clamp(0.85rem, 3.5vw, 0.95rem); margin-bottom: 20px; line-height: 1.4; max-width: 100%; }
+            
+            .action-buttons { gap: 10px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+            #play-again-btn, .portfolio-btn-secondary { width: 100%; max-width: 280px; padding: 10px; font-size: 0.95rem; }
+            .lanterns { transform: translateX(-50%) scale(0.65); transform-origin: top center; }
+        }
+
+        @media (max-height: 650px) {
+            .brand-icon-win { display: none; }
+            .lanterns { transform: translateX(-50%) scale(0.5); }
+            .eid-greeting-en { margin-bottom: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -420,6 +435,8 @@
                     Share
                 </div>
             </div>
+            <h1 class="gold-text">عيد مبارك</h1>
+            <h2 class="gold-text">Eid Mubarak</h2>
             
             <p class="eid-greeting-ar" id="eid-greeting-ar" dir="rtl">من قلب المملكة العربية السعودية إلى العالم، تتشرف إعمار الخليج بأن ترفع أسمى آيات التهاني والتبريكات بمناسبة عيد الفطر المبارك.<br><br>نسأل الله أن يتقبل طاعاتكم، وأن يعيده عليكم وعلى أحبابكم بالصحة والخير والازدهار.</p>
             <p class="eid-greeting-en" id="eid-greeting-en">From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.</p>
@@ -437,6 +454,7 @@
 
     <script>
         // Developer/Author: archengsafdar@gmail.com
+        "use strict";
         
         // --- HARDWARE SNIFFING ---
         const logicalCores = navigator.hardwareConcurrency || 4;
@@ -446,7 +464,7 @@
         
         const DIFFICULTY = { detectionRadiusMultiplier: 0.8, magneticPull: 0.08, winDistance: 50 };
 
-        // --- CORE STATE & STRICT EXPLICIT DECLARATIONS ---
+        // --- CORE STATE ---
         const startScreen = document.getElementById('start-screen');
         const startBtn = document.getElementById('start-btn');
         const overlay = document.getElementById('game-overlay');
@@ -455,7 +473,6 @@
         const inGameInstruction = document.getElementById('in-game-instruction');
         const dynamicInstruction = document.getElementById('dynamic-instruction');
         const moonContainer = document.getElementById('moon-container');
-        const moonSvg = moonContainer.querySelector('.moon-svg');
         const spyglass = document.getElementById('spyglass');
         const compass = document.getElementById('direction-compass');
         const playAgainBtn = document.getElementById('play-again-btn');
@@ -475,7 +492,7 @@
         let lastVibeTime = 0;
         let searchStartTime = 0;
         let finalTimeTaken = 0;
-        let lastInputTime = Date.now(); // Idle Tracker
+        let lastInputTime = Date.now();
         
         let targetX = window.innerWidth / 2; 
         let targetY = window.innerHeight / 2;
@@ -490,6 +507,7 @@
         let gyroTargetX = 0, gyroTargetY = 0;
         let gyroCurrentX = 0, gyroCurrentY = 0;
         let baseBeta = null;
+        let baseGamma = null;
         let lastFrameTime = 0;
         const FPS = 60;
         const FRAME_DELAY = 1000 / FPS;
@@ -499,7 +517,6 @@
             spyglass.style.webkitBackdropFilter = 'none';
             spyglass.style.background = 'rgba(255, 255, 255, 0.08)';
         } else {
-            // Lens Optics Apple-Level Polish
             spyglass.style.backdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
             spyglass.style.webkitBackdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
         }
@@ -537,14 +554,14 @@
             starsCanvas.height = newStarsH * dpr;
             starsCanvas.style.width = `${newStarsW}px`;
             starsCanvas.style.height = `${newStarsH}px`;
-            starsCtx.setTransform(1, 0, 0, 1, 0, 0); // Hard Reset to prevent scale stack
+            starsCtx.setTransform(1, 0, 0, 1, 0, 0); 
             starsCtx.scale(dpr, dpr);
             
             vfxCanvas.width = window.innerWidth * dpr;
             vfxCanvas.height = window.innerHeight * dpr;
             vfxCanvas.style.width = `${window.innerWidth}px`;
             vfxCanvas.style.height = `${window.innerHeight}px`;
-            vfxCtx.setTransform(1, 0, 0, 1, 0, 0); // Hard Reset
+            vfxCtx.setTransform(1, 0, 0, 1, 0, 0); 
             vfxCtx.scale(dpr, dpr);
 
             if (starData.length === 0) {
@@ -607,7 +624,6 @@
                     }
                 }
                 vfxCtx.shadowBlur = 0;
-                // V8 Optimization
                 canvasParticles = canvasParticles.filter(p => p.life > 0);
             } else {
                 vfxCtx.clearRect(0, 0, vfxCanvas.width, vfxCanvas.height);
@@ -659,7 +675,6 @@
             }
         };
 
-        // Hardware-direct audio unlock
         document.addEventListener('pointerdown', () => { 
             if(overlay.classList.contains('active')) audioEngine.playStart(); 
         }, { once: true });
@@ -683,7 +698,6 @@
         function initGyroscope() {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                // Must be executed synchronously inside click handler
                 DeviceOrientationEvent.requestPermission().then(state => { if (state === 'granted') attachGyro(); }).catch(console.error);
             } else if (window.DeviceOrientationEvent) { 
                 attachGyro(); 
@@ -694,7 +708,8 @@
             window.addEventListener('deviceorientation', (e) => {
                 if (!e.gamma || !e.beta || hasFoundMoon) return;
                 if (baseBeta === null) baseBeta = e.beta; 
-                let rawX = Math.max(-35, Math.min(35, e.gamma)) * -0.8;
+                if (baseGamma === null) baseGamma = e.gamma; 
+                let rawX = Math.max(-35, Math.min(35, e.gamma - baseGamma)) * -0.8;
                 let rawY = Math.max(-35, Math.min(35, e.beta - baseBeta)) * -0.8; 
                 gyroTargetX = Math.abs(rawX) < 0.5 ? 0 : rawX;
                 gyroTargetY = Math.abs(rawY) < 0.5 ? 0 : rawY;
@@ -742,7 +757,7 @@
             spyglass.style.transform = `translate3d(${window.innerWidth/2 - 90}px, ${window.innerHeight/2 - 90}px, 0) scale(1)`;
             
             parallaxMaster.style.transition = 'none'; parallaxMaster.style.transform = `translate3d(0, 0, 0)`; parallaxMaster.style.filter = 'none';
-            baseBeta = null; 
+            baseBeta = null; baseGamma = null;
             
             do {
                 moonX = Math.random() * (window.innerWidth - 240) + 120;
@@ -767,7 +782,6 @@
             
             audioEngine.init(); audioEngine.playStart(); 
             
-            // Async iOS 13+ permission logic guaranteed to run inside user interaction
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 try {
                     const res = await DeviceOrientationEvent.requestPermission();
@@ -786,7 +800,6 @@
             animationFrameId = requestAnimationFrame(renderEngine);
         });
 
-        // Thematic Share UI Polish
         shareBtn.addEventListener('click', async () => {
             const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI just sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\nMay this season bring peace and prosperity to your home. Can you find the moon faster than me?\n\n🔭 Play here: ${window.location.href}`;
             if (navigator.share) {
@@ -868,7 +881,6 @@
 
             if (!hasFoundMoon) {
                 
-                // True Depth Parallax via Layer Separation
                 gyroCurrentX += (gyroTargetX - gyroCurrentX) * 0.08;
                 gyroCurrentY += (gyroTargetY - gyroCurrentY) * 0.08;
                 parallaxMaster.style.transform = `translate3d(${gyroCurrentX}px, ${gyroCurrentY}px, 0)`;
@@ -880,13 +892,11 @@
                 
                 audioEngine.updateHum(intensity);
 
-                // Magnetic Pull
                 if (distanceToMoon < 150 && (isDragging || !isTouch)) {
                     targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
                     targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
                 }
                 
-                // Idle Intelligence Drift
                 if (Date.now() - lastInputTime > 5000 && !isDragging) {
                     targetX += Math.sin(Date.now() * 0.001) * 0.6;
                     targetY += Math.cos(Date.now() * 0.0013) * 0.6;
