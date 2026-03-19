@@ -1639,7 +1639,7 @@
                 shareBtn.style.opacity = '';
                 shareBtn.style.pointerEvents = '';
                 // Fall back to text share
-                const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\n🔭 Play: ${window.location.href}`;
+                const shareText = `Eid Mubarak from Emaar Gulf 🌙\nI found all 3 stars & sighted the Eid Moon in ${finalTimeTaken}s — can you find them faster? 🔭\nFind the Eid Moon with Emaar Gulf 👇 ${window.location.href}`;
                 if (navigator.share) navigator.share({ title: 'Eid Mubarak', text: shareText }).catch(()=>{});
                 return;
             }
@@ -1651,12 +1651,12 @@
             canvas.toBlob(async (blob) => {
                 if (!blob) {
                     // Canvas was tainted or memory exhausted — fall back to text share
-                    const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\n🔭 Play: ${window.location.href}`;
+                    const shareText = `Eid Mubarak from Emaar Gulf 🌙\nI found all 3 stars & sighted the Eid Moon in ${finalTimeTaken}s — can you find them faster? 🔭\nFind the Eid Moon with Emaar Gulf 👇 ${window.location.href}`;
                     if (navigator.share) navigator.share({ title: 'Eid Mubarak', text: shareText }).catch(() => {});
                     return;
                 }
                 const file = new File([blob], 'eid-mubarak-emaar-gulf.png', { type: 'image/png' });
-                const shareText = `🌙 Eid Mubarak from Emaar Gulf!\n\nI sighted the Eid Moon in ${finalTimeTaken} seconds! ✨\n\n🔭 Play: ${window.location.href}`;
+                const shareText = `Eid Mubarak from Emaar Gulf 🌙\nI found all 3 stars & sighted the Eid Moon in ${finalTimeTaken}s — can you find them faster? 🔭\nFind the Eid Moon with Emaar Gulf 👇 ${window.location.href}`;
 
                 // Try native share with image file (iOS 15+ / Android)
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
