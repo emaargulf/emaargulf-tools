@@ -2,12 +2,12 @@
 <!--
     ╔══════════════════════════════════════════════════════════════╗
     ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
-    ║  Version  : V45                                              ║
-    ║  Developer: archengsafdar@gmail.com                         ║
+    ║  Version  : V46                                              ║
+    ║  Developer: archengsafdar[at]gmail.com                         ║
     ║  Built for: Emaar Gulf · emaargulf.github.io                ║
     ║  © 2026 Emaar Gulf. All rights reserved.                    ║
     ║                                                              ║
-    ║  Built with love ♥ archengsafdar@gmail.com                  ║
+    ║  Built with love ♥ archengsafdar[at]gmail.com                  ║
     ╚══════════════════════════════════════════════════════════════╝
 -->
 <html lang="en">
@@ -15,11 +15,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
-    <meta name="author" content="archengsafdar@gmail.com">
-    <meta name="version" content="V45">
-    <meta name="generator" content="Emaar Gulf — archengsafdar@gmail.com">
+    <meta name="author" content="archengsafdar&#64;gmail.com">
+    <meta name="version" content="V46">
+    <meta name="generator" content="Emaar Gulf — archengsafdar&#64;gmail.com">
     <meta name="copyright" content="© 2026 Emaar Gulf. All rights reserved.">
-    <meta name="credits" content="Built with love ♥ archengsafdar@gmail.com">
+    <meta name="credits" content="Built with love ♥ archengsafdar&#64;gmail.com">
 
     <title>Emaar Gulf | Premium Eid Experience</title>
 
@@ -56,10 +56,10 @@
       "url": "https://emaargulf-sa.web.app/eid/",
       "applicationCategory": "Game",
       "author": { "@type": "Organization", "name": "Emaar Gulf" },
-      "developer": { "@type": "Person", "name": "Safdar", "email": "archengsafdar@gmail.com" },
+      "developer": { "@type": "Person", "name": "Safdar", "email": "archengsafdar&#64;gmail.com" },
       "inLanguage": ["en", "ar"],
-      "version": "V45",
-      "creditText": "Built with love ♥ archengsafdar@gmail.com"
+      "version": "V46",
+      "creditText": "Built with love ♥ archengsafdar&#64;gmail.com"
     }
     </script>
 
@@ -75,28 +75,17 @@
 
     <style>
         /* ═══════════════════════════════════════════════════════
-           Developer/Author: archengsafdar@gmail.com
-           Built with love ♥ archengsafdar@gmail.com
+           Developer/Author: archengsafdar[at]gmail.com
+           Built with love ♥ archengsafdar[at]gmail.com
            Project : Emaar Gulf — Eid Moon Sighting Experience
-           Version : V45
-           Changes in V45:
-           1. iOS/Safari fix — moved hue-rotate animation off #game-overlay
-              onto a pseudo-element child, preventing Safari from flattening
-              the canvas GPU compositing layer (main cause of poor rendering
-              on iPhone 15).
-           2. Canvas DPR capped at 2 (was unbounded) — halves memory usage
-              on iPhone 15 / 15 Pro (DPR=3), prevents canvas blanking and
-              frame drops on Safari's aggressive GPU memory eviction.
-           3. Spyglass backdrop-filter simplified to blur(6px) only on
-              Safari/iOS — removes per-frame GPU recompositing caused by
-              chaining blur + brightness + contrast + saturate.
-           4. Added missing -webkit-backdrop-filter to all elements that
-              had backdrop-filter without the webkit prefix.
-           5. Cloud blur: replaced ctx.filter='blur(28px)' with CSS filter
-              on the canvas element — ctx.filter is silently ignored on
-              Safari iOS <18, causing raw ovals instead of soft clouds on
-              iPhone 15. CSS filter works universally.
-           6. All V44 features retained.
+           Version : V46
+           Changes in V46:
+           1. Cloud blur increased from 20px → 24px on CSS filter.
+              Reduces brightness side-effect introduced in V45 when
+              switching from ctx.filter to CSS element filter.
+              24px is the optimal value across all screen sizes —
+              soft enough on large screens, still visible on small.
+           2. All V45 fixes retained.
            ═══════════════════════════════════════════════════════ */
 
         :root {
@@ -577,7 +566,7 @@
             <p style="font-size:2.5rem;margin-bottom:16px;">🌙</p>
             <p style="font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:8px;">Eid Mubarak from Emaar Gulf</p>
             <p>This experience requires JavaScript. Please enable it in your browser settings.</p>
-            <p style="margin-top:24px;font-size:0.75rem;color:rgba(255,255,255,0.25);">Built with love ♥ archengsafdar@gmail.com</p>
+            <p style="margin-top:24px;font-size:0.75rem;color:rgba(255,255,255,0.25);">Built with love ♥ archengsafdar&#64;gmail.com</p>
         </div>
     </noscript>
 
@@ -614,7 +603,7 @@
         </a>
         <p class="dev-credit">
             <span class="dev-credit-main">Built with love ♥ nawavazhi</span>
-            <span class="dev-credit-email">archengsafdar@gmail.com</span>
+            <span class="dev-credit-email">archengsafdar&#64;gmail.com</span>
         </p>
     </div>
 
@@ -766,17 +755,17 @@
     <script>
         // ╔══════════════════════════════════════════════════════════════╗
         // ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
-        // ║  Version  : V45                                              ║
-        // ║  Developer: archengsafdar@gmail.com                         ║
+        // ║  Version  : V46                                              ║
+        // ║  Developer: archengsafdar\u0040gmail.com                         ║
         // ║  Built for: Emaar Gulf · emaargulf.github.io                ║
-        // ║  Built with love ♥ archengsafdar@gmail.com                  ║
+        // ║  Built with love ♥ archengsafdar\u0040gmail.com                  ║
         // ║  © 2026 Emaar Gulf. All rights reserved.                    ║
         // ╚══════════════════════════════════════════════════════════════╝
         "use strict";
 
         // ─── DEVELOPER CREDIT (visible in browser console) ──────────────
         console.log(
-            '%c 🌙 Emaar Gulf — Eid Moon Sighting V45 \n%c Built with love ♥  archengsafdar@gmail.com ',
+            '%c 🌙 Emaar Gulf — Eid Moon Sighting V46 \n%c Built with love ♥  archengsafdar\u0040gmail.com ',
             'background:#030510;color:#f1aa27;font-size:13px;font-weight:700;padding:6px 12px;border-top:1px solid #f1aa27;border-left:1px solid #f1aa27;border-right:1px solid #f1aa27;',
             'background:#030510;color:rgba(255,255,255,0.55);font-size:11px;padding:4px 12px 6px;border-bottom:1px solid #f1aa27;border-left:1px solid #f1aa27;border-right:1px solid #f1aa27;'
         );
@@ -1006,8 +995,8 @@
             // Cloud blur: CSS filter on the element is universally supported
             // (incl. Safari iOS). ctx.filter is NOT reliable on Safari — silently
             // ignored on iOS <18, causing raw ovals to show instead of soft clouds.
-            cloudCanvas.style.filter         = isLowEnd ? 'none' : 'blur(20px)';
-            cloudCanvas.style.webkitFilter   = isLowEnd ? 'none' : 'blur(20px)';
+            cloudCanvas.style.filter         = isLowEnd ? 'none' : 'blur(24px)';
+            cloudCanvas.style.webkitFilter   = isLowEnd ? 'none' : 'blur(24px)';
             cloudCtx.setTransform(1, 0, 0, 1, 0, 0);
             cloudCtx.scale(dpr, dpr);
 
@@ -1580,7 +1569,7 @@
         });
 
         // ─── SHARE CARD GENERATOR ────────────────────────────────────────
-        // V45: all text centred · personalised "Dear [Name]," when name provided
+        // V46: all text centred · personalised "Dear [Name]," when name provided
         async function generateShareCard(recipientName) {
             const W = 1080, H = 1080;
             const canvas = document.createElement('canvas');
@@ -1689,7 +1678,7 @@
             // English: ctx.direction='ltr' + textAlign='center' + x=W/2
             // ══════════════════════════════════════════════════════════════
 
-            // ── V45: Personalised salutation (English only) ───────────────
+            // ── V46: Personalised salutation (English only) ───────────────
             // When a recipient name is provided, render "Dear [Name],"
             // above the Arabic heading and shift all content down 45px.
             const hasName = recipientName && recipientName.trim().length > 0;
@@ -1780,7 +1769,7 @@
         }
 
         // ─── SHARE BUTTON HANDLER ────────────────────────────────────────
-        // V45: show name prompt modal first, then proceed with name (or blank)
+        // V46: show name prompt modal first, then proceed with name (or blank)
         shareBtn.addEventListener('click', () => {
             if (!hasWon) return;
             nameInput.value = '';
