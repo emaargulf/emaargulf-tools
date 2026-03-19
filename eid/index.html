@@ -796,15 +796,7 @@
         function updateLocalizedGreeting() {
             const hour      = new Date().getHours();
             const timePhase = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-            let city = 'Riyadh';
-            try {
-                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                if (tz && tz.includes('/')) city = tz.split('/')[1].replace(/_/g, ' ');
-            } catch(e) {}
-            // Build safely: set static HTML first, then inject city via textContent to avoid XSS
-            greetingEnEl.innerHTML = `From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.<br><br>May this beautiful ${timePhase} bring peace, prosperity, and lasting happiness to you and your loved ones in <span id="city-name"></span>.`;
-            const cityEl = document.getElementById('city-name');
-            if (cityEl) cityEl.textContent = city;
+            greetingEnEl.innerHTML = `From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.<br><br>May this beautiful ${timePhase} bring peace, prosperity, and lasting happiness to you and your loved ones.`;
         }
         updateLocalizedGreeting();
 
