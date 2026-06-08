@@ -3,134 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Tools Portal | Emaar Gulf Engineering Consultants</title>
+    <title>Brand Portal | Emaar Gulf Engineering</title>
+    <!-- Developer/Author: archengsafdar@gmail.com -->
     <style>
         :root {
-            --primary: #1a365d;
-            --secondary: #2b6cb0;
-            --bg: #f7fafc;
-            --card-bg: #ffffff;
-            --text: #2d3748;
-            --border: #e2e8f0;
+            /* Premium Emaar Gulf Corporate Palette */
+            --brand-navy: #0B1D35;
+            --brand-gold: #C5A059;
+            --brand-gold-light: #DBC38B;
+            --bg-color: #F8F9FA;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --card-bg: #FFFFFF;
         }
         
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         
         body { 
-            background-color: var(--bg); 
-            color: var(--text); 
-            line-height: 1.6; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            min-height: 100vh; 
             align-items: center; 
-            padding: 3rem 1.5rem; 
+        }
+
+        /* Top Brand Ribbon */
+        .brand-ribbon {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--brand-navy) 0%, var(--brand-gold) 100%);
         }
         
         header { 
             text-align: center; 
+            margin-top: 4rem;
             margin-bottom: 3rem; 
-            max-width: 600px; 
+            padding: 0 1.5rem;
         }
         
         h1 { 
-            color: var(--primary); 
-            font-size: 1.8rem; 
+            color: var(--brand-navy); 
+            font-size: 2rem; 
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             margin-bottom: 0.5rem; 
         }
         
         p.subtitle { 
-            color: #718096; 
-            font-size: 1.1rem; 
+            color: var(--brand-gold); 
+            font-size: 0.95rem; 
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
         
-        .grid { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 1.5rem; 
+        main { 
             width: 100%; 
-            max-width: 800px; 
-        }
-        
-        /* Tablet & Desktop Layout */
-        @media (min-width: 600px) { 
-            .grid { grid-template-columns: 1fr 1fr; } 
+            max-width: 500px; 
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: center;
         }
         
         .card { 
             background: var(--card-bg); 
-            border-radius: 8px; 
-            padding: 2.5rem 2rem; 
+            border-radius: 2px; /* Sharper edges for architectural feel */
+            padding: 3rem 2rem; 
             text-align: center; 
             text-decoration: none; 
             color: inherit; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; 
-            border: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(11, 29, 53, 0.05); 
+            border-top: 3px solid transparent;
+            transition: all 0.3s ease; 
         }
         
         .card:hover { 
             transform: translateY(-5px); 
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1); 
-            border-color: var(--secondary); 
+            box-shadow: 0 15px 35px rgba(11, 29, 53, 0.1); 
+            border-top: 3px solid var(--brand-gold);
         }
         
         .icon { 
-            font-size: 2.5rem; 
-            margin-bottom: 1rem; 
+            font-size: 3rem; 
+            margin-bottom: 1.5rem; 
+            color: var(--brand-navy);
         }
         
         .card h2 { 
-            color: var(--primary); 
-            font-size: 1.25rem; 
-            margin-bottom: 0.5rem; 
+            color: var(--brand-navy); 
+            font-size: 1.4rem; 
+            margin-bottom: 1rem; 
+            font-weight: 600;
         }
         
         .card p { 
-            color: #4a5568; 
+            color: var(--text-muted); 
             font-size: 0.95rem; 
+            line-height: 1.6;
+        }
+
+        .btn-text {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--brand-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .card:hover .btn-text {
+            color: var(--brand-navy);
         }
         
         footer { 
             margin-top: auto; 
-            padding-top: 4rem; 
-            font-size: 0.85rem; 
-            color: #a0aec0; 
+            padding: 3rem 1.5rem; 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
             text-align: center; 
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
+    <div class="brand-ribbon"></div>
+    
     <header>
-        <h1>Emaar Gulf Engineering Consultants</h1>
-        <p class="subtitle">Internal Tools & Applications Portal</p>
+        <h1>Emaar Gulf</h1>
+        <p class="subtitle">Engineering Consultants</p>
     </header>
 
-    <main class="grid">
-        <a href="signature/signature_generator.html" class="card">
-            <div class="icon">✉️</div>
-            <h2>Signature Generator</h2>
-            <p>Generate your official Emaar Gulf email signature for client communications.</p>
-        </a>
-        
-        <a href="eid/" class="card">
+    <main>
+        <!-- Explicitly routing to the HTML file inside the eid folder -->
+        <a href="eid/index.html" class="card">
             <div class="icon">🌙</div>
-            <h2>Eid Greetings App</h2>
-            <p>Access and distribute official company Eid greeting assets.</p>
+            <h2>Eid Greetings Portal</h2>
+            <p>Access the official Emaar Gulf Eid Al-Adha greeting cards and interactive assets for client distribution.</p>
+            <span class="btn-text">Open Portal &rarr;</span>
         </a>
     </main>
 
     <footer>
-        <p>&copy; 2026 Emaar Gulf. Maintained by IT & Engineering.</p>
+        <p>&copy; 2026 EMAAR GULF ENGINEERING CONSULTANTS. ALL RIGHTS RESERVED.</p>
     </footer>
 </body>
 </html>
