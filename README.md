@@ -1,15 +1,12 @@
 <div align="center">
-  
-  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-extended-dark.png" alt="Emaar Gulf Engineering Consultants" width="400">
-  
-  <br><br>
-
-  # 🏗️ Emaar Gulf | Tools Portal
-  
-  **Official Web Applications, Automation Scripts, and Corporate Utilities**
-  
-  <br>
+  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-dark.svg" alt="Emaar Gulf Icon" width="100" />
+  <br/><br/>
+  <h1>Emaar Gulf | Tools Portal</h1>
+  <h3>Official Web Applications & Corporate Utilities</h3>
+  <p><i>Single Source of Truth for Human Developers & Automated Systems</i></p>
 </div>
+
+---
 
 > **System Status:** Production / Active  
 > **Environment:** Vanilla HTML/CSS/JS (Zero-Dependencies)  
@@ -24,8 +21,7 @@ This repository serves as the central CDN and hosting environment for Emaar Gulf
 | Application Module | Description | Production URL |
 | :--- | :--- | :--- |
 | **Tools Hub** | Main landing page and directory for corporate utilities. | [Access Hub](https://emaargulf.github.io/emaargulf-tools/tools/index.html) |
-| **Signature Generator** | Automated tool for standardizing employee email signatures. | [Launch Generator](https://emaargulf.github.io/emaargulf-tools/signature/signature_generator.html) |
-| **Eid Greetings App** | Interactive, audio-enabled web application for client distribution. | [Launch Portal](https://emaargulf.github.io/emaargulf-tools/eid/) |
+| **Eid Al-Fitr App** | Interactive, audio-enabled web application for client distribution. | [Launch Portal](https://emaargulf.github.io/emaargulf-tools/eid_al-fitr/) |
 
 ---
 
@@ -36,14 +32,14 @@ The repository is organized into isolated, purpose-built modules to ensure modul
 ```text
 emaargulf-tools/
 │
-├── tools/                      # Utilities Core
-│   ├── index.html              # Main Tools Dashboard / Routing Hub
-│   └── README.md               # System Documentation (This File)
+├── tools/                      <-- Utilities Core
+│   ├── index.html              <-- Main Tools Dashboard / Routing Hub
+│   └── README.md               <-- System Documentation (This File)
 │
-└── eid/                        # Marketing & Interactive Campaigns
-    ├── index.html              # Main App Logic, Animations & UI
-    ├── og-image.jpg            # Open Graph (WhatsApp/Social) Thumbnail
-    ├── ambient.mp3             # Background atmospheric audio
-    ├── chime.mp3               # Interaction audio asset
-    ├── hum.mp3                 # Ambient interaction audio
-    └── swoosh.mp3              # Transition audio asset
+└── eid_al-fitr/                <-- Marketing & Interactive Campaigns
+    ├── index.html              <-- Main App Logic, Animations & UI
+    ├── og-image.jpg            <-- Open Graph (WhatsApp/Social) Thumbnail
+    ├── ambient.mp3             <-- Background atmospheric audio
+    ├── chime.mp3               <-- Interaction audio asset
+    ├── hum.mp3                 <-- Ambient interaction audio
+    └── swoosh.mp3              <-- Transition audio asset
