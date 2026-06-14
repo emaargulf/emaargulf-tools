@@ -1,1 +1,2031 @@
+<!DOCTYPE html>
+<!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
+    ║  Version  : V46                                              ║
+    ║  Developer: archengsafdar[at]gmail.com                         ║
+    ║  Built for: Emaar Gulf · emaargulf.github.io                ║
+    ║  © 2026 Emaar Gulf. All rights reserved.                    ║
+    ║                                                              ║
+    ║  Built with love ♥ archengsafdar[at]gmail.com                  ║
+    ╚══════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find the Eid Moon in this premium interactive experience by Emaar Gulf. Explore the night sky, search with a spyglass, and sight the Hilal.">
+    <meta name="author" content="archengsafdar&#64;gmail.com">
+    <meta name="version" content="V46">
+    <meta name="generator" content="Emaar Gulf — archengsafdar&#64;gmail.com">
+    <meta name="copyright" content="© 2026 Emaar Gulf. All rights reserved.">
+    <meta name="credits" content="Built with love ♥ archengsafdar&#64;gmail.com">
 
+    <title>Emaar Gulf | Premium Eid Experience</title>
+
+    <link rel="icon" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://emaargulf-sa.web.app/eid/">
+
+    <meta name="theme-color" content="#030510">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Eid Moon">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://emaargulf-sa.web.app/eid/">
+    <meta property="og:title" content="🌙 Eid Mubarak from Emaar Gulf">
+    <meta property="og:description" content="May the blessings of this beautiful season bring peace, prosperity, and joy to your home. Click to explore the night sky and find the Eid Moon.">
+    <meta property="og:image" content="https://emaargulf.github.io/emaargulf-tools/eid/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Emaar Gulf Eid Moon Sighting — cinematic night sky with crescent moon and golden lanterns">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://emaargulf-sa.web.app/eid/">
+    <meta property="twitter:title" content="🌙 Eid Mubarak from Emaar Gulf">
+    <meta property="twitter:description" content="May the blessings of this beautiful season bring peace, prosperity, and joy to your home. Click to explore the night sky and find the Eid Moon.">
+    <meta property="twitter:image" content="https://emaargulf.github.io/emaargulf-tools/eid/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Emaar Gulf Eid Moon Sighting",
+      "description": "Find the Eid Moon in this interactive cinematic experience by Emaar Gulf",
+      "url": "https://emaargulf-sa.web.app/eid/",
+      "applicationCategory": "Game",
+      "author": { "@type": "Organization", "name": "Emaar Gulf" },
+      "developer": { "@type": "Person", "name": "Safdar", "email": "archengsafdar&#64;gmail.com" },
+      "inLanguage": ["en", "ar"],
+      "version": "V46",
+      "creditText": "Built with love ♥ archengsafdar&#64;gmail.com"
+    }
+    </script>
+
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg" as="image">
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-tools/eid/ambient.mp3" as="audio">
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-tools/eid/chime.mp3" as="audio">
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-tools/eid/swoosh.mp3" as="audio">
+    <link rel="preload" href="https://emaargulf.github.io/emaargulf-tools/eid/hum.mp3" as="audio">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════════════════════
+           Developer/Author: archengsafdar[at]gmail.com
+           Built with love ♥ archengsafdar[at]gmail.com
+           Project : Emaar Gulf — Eid Moon Sighting Experience
+           Version : V46
+           Changes in V46:
+           1. Cloud blur increased from 20px → 24px on CSS filter.
+              Reduces brightness side-effect introduced in V45 when
+              switching from ctx.filter to CSS element filter.
+              24px is the optimal value across all screen sizes —
+              soft enough on large screens, still visible on small.
+           2. All V45 fixes retained.
+           ═══════════════════════════════════════════════════════ */
+
+        :root {
+            --emaar-gold: #f1aa27;
+            --emaar-gold-rgb: 241, 170, 39;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden; background: #030510;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3 { font-family: 'Cairo', sans-serif; }
+
+        @media (pointer: fine) { #game-overlay.active { cursor: none; } }
+
+        #landscape-warning {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100dvh;
+            background: #030510; z-index: 9999; color: var(--emaar-gold);
+            justify-content: center; align-items: center;
+            text-align: center; flex-direction: column;
+            font-family: 'Inter', sans-serif; font-weight: 600; padding: 20px;
+        }
+        #landscape-warning svg { margin-bottom: 20px; animation: tiltPhone 2s infinite ease-in-out; }
+        @keyframes tiltPhone { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } }
+
+        @media (max-width: 900px) and (orientation: landscape) {
+            #landscape-warning { display: flex; }
+            #start-screen, #game-overlay, #film-noise { display: none !important; }
+        }
+
+        #film-noise {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
+            pointer-events: none; z-index: 200; opacity: 0.035; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes cinematicPan {
+            0%   { background-position: 0% 0%;   background-size: 100% 100%; }
+            100% { background-position: 50% 50%; background-size: 120% 120%; }
+        }
+
+        #start-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a1128 0%, #030510 100%);
+            animation: cinematicPan 30s ease-in-out infinite alternate;
+            z-index: 300; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        @media (prefers-reduced-motion: reduce) { #start-screen { animation: none; } }
+
+        #start-screen::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(3,5,16,0.85) 100%); z-index: -1;
+        }
+
+        .brand-logo-main { width: 220px; max-width: 80%; height: auto; margin-bottom: 30px; }
+        #start-screen h2 { color: #fff; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px; }
+        #start-screen p  { color: #ccc; max-width: 85%; font-size: 1rem; line-height: 1.5; font-weight: 400; margin-bottom: 10px; }
+
+        #start-btn {
+            padding: 16px 45px; font-size: 1.1rem; font-weight: 600; color: #fff;
+            font-family: 'Inter', sans-serif; background: var(--emaar-gold); border: none;
+            border-radius: 12px; margin-top: 30px; cursor: pointer; min-height: 44px;
+            box-shadow: 0 4px 20px rgba(var(--emaar-gold-rgb), 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (hover: hover) { #start-btn:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 25px rgba(var(--emaar-gold-rgb), 0.6); } }
+        #start-btn:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(var(--emaar-gold-rgb), 0.3); }
+
+        .portfolio-link-start {
+            margin-top: 20px; color: #888; font-size: 0.95rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: color 0.3s ease; font-weight: 500; letter-spacing: 0.5px; min-height: 44px;
+        }
+        @media (hover: hover) { .portfolio-link-start:hover { color: var(--emaar-gold); } }
+
+        .dev-credit {
+            margin-top: 18px; text-align: center; pointer-events: none;
+            user-select: none; line-height: 1.6;
+        }
+        .dev-credit-main {
+            display: block; font-family: 'Inter', sans-serif; font-weight: 400;
+            font-size: 0.72rem; color: rgba(255,255,255,0.15); letter-spacing: 0.4px;
+        }
+        .dev-credit-email {
+            display: block; font-family: 'Inter', sans-serif; font-weight: 400;
+            font-size: 0.6rem; color: rgba(255,255,255,0.08); letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+
+        @keyframes skyShift { 0% { opacity: 0.92; } 100% { opacity: 1; } }
+
+        #game-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background: radial-gradient(circle at 50% 120%, #1a2a4c 0%, #050a1f 70%, #02040a 100%);
+            z-index: 100; opacity: 0; pointer-events: none;
+            transform: translateZ(0); touch-action: none; overscroll-behavior: none;
+            transition: opacity 0.6s ease; overflow: hidden;
+            will-change: transform, opacity;
+        }
+        /* Sky colour shift lives on a pseudo-element so it never touches
+           the canvas GPU layers — fixes Safari/iOS compositing bug */
+        #game-overlay::before {
+            content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background: radial-gradient(circle at 50% 120%, #1f2f52 0%, #060c22 70%, #030609 100%);
+            animation: skyShiftOverlay 20s infinite alternate ease-in-out;
+            opacity: 0;
+        }
+        @keyframes skyShiftOverlay { 0% { opacity: 0; } 100% { opacity: 0.35; } }
+        #game-overlay.active { opacity: 1; pointer-events: auto; }
+
+        @keyframes dawnShift { 0% { background-position: 0% 100%; opacity: 0.15; } 100% { background-position: 0% 0%; opacity: 0.4; } }
+
+        #horizon-glow {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(var(--emaar-gold-rgb), 0.15), transparent);
+            background-size: 100% 200%; opacity: 0.15; pointer-events: none; z-index: 0;
+            animation: dawnShift 8s infinite alternate ease-in-out;
+            transition: opacity 2.5s ease, height 2.5s ease;
+        }
+
+        .parallax-layer {
+            position: absolute; top: -5%; left: -5%; width: 110%; height: 110%;
+            z-index: 1; pointer-events: none; will-change: transform, filter;
+            transition: filter 2.5s ease, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #stars-canvas  { position: absolute; top: 0; left: 0; will-change: transform; }
+        #cloud-canvas  { position: absolute; top: 0; left: 0; z-index: 8; pointer-events: none; }
+        #vfx-canvas    { position: absolute; top: 0; left: 0; z-index: 120; pointer-events: none; transform: translateZ(0); }
+
+        .comet {
+            position: absolute; width: 2px; height: 180px;
+            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+            border-radius: 50%; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9));
+            z-index: 5; pointer-events: none; transform-origin: top center;
+        }
+
+        #moon-mask-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+            clip-path: circle(90px at var(--x, 50%) var(--y, 50%));
+            -webkit-clip-path: circle(90px at var(--x, 50%) var(--y, 50%));
+            will-change: clip-path, -webkit-clip-path; pointer-events: none;
+        }
+
+        #moon-container {
+            position: absolute; top: 0; left: 0; width: 90px; height: 90px;
+            opacity: 0; transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        #moon-container.visible { opacity: 1; }
+
+        .moon-svg {
+            width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: rotate(-25deg);
+        }
+
+        #spyglass {
+            position: absolute; top: 0; left: 0; width: 180px; height: 180px;
+            border-radius: 50%; z-index: 50; pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            will-change: transform; transition: opacity 0.6s ease;
+        }
+
+        #direction-compass {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; opacity: 0;
+            box-shadow: inset -35px 0 30px -10px rgba(var(--emaar-gold-rgb), 0.95);
+            will-change: transform, opacity; transition: opacity 0.3s ease;
+        }
+
+        /* ─── NARRATIVE MESSAGE PANEL ─── */
+        #narrative-panel {
+            position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
+            z-index: 155; display: flex; flex-direction: column; align-items: center; gap: 14px;
+            pointer-events: none; width: 90%; max-width: 380px; text-align: center;
+        }
+
+        #narrative-msg {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        #narrative-msg.fade-out {
+            opacity: 0; transform: translateY(8px);
+        }
+
+        .narr-arabic {
+            display: block; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: clamp(1rem, 5vw, 1.25rem); color: var(--emaar-gold);
+            text-shadow: 0 0 20px rgba(241,170,39,0.5), 0 2px 10px rgba(0,0,0,0.9);
+            line-height: 1.4; direction: rtl;
+        }
+        .narr-english {
+            display: block; font-family: 'Inter', sans-serif; font-weight: 500;
+            font-size: clamp(0.75rem, 3.5vw, 0.9rem);
+            color: rgba(255,255,255,0.7);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            margin-top: 4px; letter-spacing: 0.3px;
+        }
+
+        /* pip row lives inside narrative panel */
+        .star-pips {
+            display: flex; gap: 12px; align-items: center;
+        }
+        .star-pip {
+            width: 20px; height: 20px; position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+        }
+        .star-pip svg { width: 100%; height: 100%; }
+        .star-pip.found { transform: scale(1.4); }
+        .star-pip.found svg path { fill: #f1aa27; filter: drop-shadow(0 0 5px rgba(241,170,39,0.9)); }
+        @keyframes pipPop { 0%{transform:scale(1)} 50%{transform:scale(1.9)} 100%{transform:scale(1.4)} }
+        .star-pip.popping { animation: pipPop 0.4s ease-out forwards; }
+
+        /* shoot-star hint stays small below the panel */
+        #shoot-hint {
+            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; pointer-events: none; z-index: 150; white-space: nowrap;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        /* ─── WIN UI ─── */
+        #win-ui {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
+            text-align: center; opacity: 0; pointer-events: none; transition: opacity 1.5s ease;
+            z-index: 150; width: 100%; display: flex; flex-direction: column; align-items: center;
+            max-height: 90dvh; overflow-y: auto;
+        }
+
+        .brand-icon-win { width: 50px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(var(--emaar-gold-rgb), 0.6)); }
+
+        .score-container { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+
+        .score-pill, .share-pill {
+            background: rgba(3,5,16,0.6); border: 1px solid rgba(241,170,39,0.3);
+            color: var(--emaar-gold); font-size: 0.9rem; font-weight: 700;
+            padding: 8px 18px; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: flex; align-items: center; gap: 6px;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .score-pill span { color: #fff; font-weight: 500; }
+        .share-pill { color: #fff; border-color: rgba(255,255,255,0.3); pointer-events: auto; }
+        @media (hover: hover) { .share-pill:hover { background: rgba(255,255,255,0.1); } }
+
+        #custom-share-toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(3,5,16,0.9); border: 1px solid var(--emaar-gold);
+            color: #fff; padding: 12px 24px; border-radius: 30px; z-index: 1000;
+            font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;
+        }
+        #custom-share-toast.show { bottom: 40px; }
+        .toast-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 24px; height: 24px; background: rgba(241,170,39,0.2);
+            border-radius: 50%; color: var(--emaar-gold);
+        }
+
+        .gold-text {
+            background: linear-gradient(135deg, #ffffff 0%, var(--emaar-gold) 50%, #b37a13 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        #win-ui h1 { font-size: clamp(36px, 10vw, 54px); font-weight: 800; margin-bottom: 0; letter-spacing: 1px; }
+        #win-ui h2 { font-size: clamp(18px, 6vw, 26px); font-weight: 700; margin-bottom: 20px; }
+
+        .eid-greeting-ar {
+            color: var(--emaar-gold); font-size: clamp(1rem, 4vw, 1.35rem);
+            max-width: 85%; margin: 0 auto 28px auto; line-height: 1.6; font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-family: 'Cairo', sans-serif;
+            text-align: center; direction: rtl;
+        }
+        .eid-greeting-en {
+            color: #ffffff; font-size: clamp(1rem, 4vw, 1.35rem);
+            max-width: 85%; margin: 0 auto 25px auto;
+            line-height: 1.6; font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex; gap: 12px; justify-content: center;
+            flex-wrap: wrap; margin-top: 10px; padding-bottom: 10px;
+        }
+
+        #play-again-btn, .portfolio-btn-secondary {
+            padding: 12px 24px; font-size: 0.95rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; border-radius: 12px; cursor: pointer;
+            transition: all 0.3s; pointer-events: auto; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            text-decoration: none; display: inline-flex; align-items: center;
+            justify-content: center; min-height: 44px;
+        }
+        #play-again-btn      { color: var(--emaar-gold); background: rgba(3,5,16,0.6); border: 2px solid var(--emaar-gold); }
+        .portfolio-btn-secondary { color: #fff; background: transparent; border: 2px solid rgba(255,255,255,0.3); }
+
+        @media (hover: hover) {
+            #play-again-btn:hover          { background: rgba(var(--emaar-gold-rgb), 0.15); box-shadow: 0 0 15px rgba(var(--emaar-gold-rgb), 0.4); transform: scale(1.05); }
+            .portfolio-btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: scale(1.05); }
+        }
+        #play-again-btn:active, .portfolio-btn-secondary:active { transform: scale(0.95); }
+
+        @keyframes swing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        .lanterns {
+            position: absolute; top: -350px; width: 100%; max-width: 700px;
+            left: 50%; transform: translateX(-50%); display: flex; justify-content: space-around;
+            transition: top 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); z-index: 140;
+        }
+        .lantern-wrapper { display: flex; flex-direction: column; align-items: center; transform-origin: top center; }
+        .lantern-wrapper:nth-child(1) { animation: swing 3.5s ease-in-out infinite; }
+        .lantern-wrapper:nth-child(2) { animation: swing 4.2s ease-in-out infinite reverse; }
+        .lantern-wrapper:nth-child(3) { animation: swing 3.8s ease-in-out infinite; }
+        .lantern-string { width: 2px; background: linear-gradient(to bottom, rgba(var(--emaar-gold-rgb), 0), rgba(var(--emaar-gold-rgb), 0.8)); }
+        .fanoos { width: 50px; height: auto; filter: drop-shadow(0 10px 20px rgba(var(--emaar-gold-rgb), 0.4)); }
+
+        @keyframes moonPulseHDR {
+            0%, 100% { transform: scale(1.6) rotate(-10deg); filter: drop-shadow(0 0 20px rgba(var(--emaar-gold-rgb), 0.8)) drop-shadow(0 0 40px rgba(var(--emaar-gold-rgb), 0.4)); }
+            50%       { transform: scale(1.65) rotate(-10deg); filter: drop-shadow(0 0 30px rgba(var(--emaar-gold-rgb), 1)) drop-shadow(0 0 60px rgba(var(--emaar-gold-rgb), 0.6)) drop-shadow(0 0 120px rgba(var(--emaar-gold-rgb), 0.3)); }
+        }
+
+        .found #game-overlay    { cursor: default; }
+        .found .parallax-layer  { transform: scale(1.08) translate3d(0,0,0) !important; filter: blur(4px) brightness(0.7); }
+        .found #horizon-glow    { opacity: 0.75; height: 60%; }
+        .found .moon-svg        { animation: moonPulseHDR 3.5s infinite ease-in-out; transform: scale(1.6) rotate(-10deg); }
+        .found #moon-mask-layer { clip-path: none; -webkit-clip-path: none; }
+        .found #narrative-panel { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        .found #shoot-hint      { opacity: 0; transition: opacity 0.4s ease; }
+
+        @media (max-width: 500px), (max-height: 800px) {
+            #win-ui { width: 92%; transform: translate(-50%, -48%); }
+            .brand-icon-win { width: 38px; margin-bottom: 8px; }
+            .score-container { margin-bottom: 12px; }
+            #win-ui h1 { font-size: clamp(28px, 8vw, 42px); margin-bottom: -5px; }
+            #win-ui h2 { font-size: clamp(16px, 5vw, 22px); margin-bottom: 12px; }
+            .eid-greeting-ar { font-size: clamp(0.9rem, 4.5vw, 1.1rem); margin-bottom: 18px; line-height: 1.4; }
+            .eid-greeting-en { font-size: clamp(0.9rem, 4.5vw, 1.1rem); margin-bottom: 16px; line-height: 1.4; max-width: 100%; }
+            .action-buttons { flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+            #play-again-btn, .portfolio-btn-secondary { width: 100%; max-width: 280px; padding: 11px 16px; font-size: 0.9rem; }
+            .lanterns { transform: translateX(-50%) scale(0.65); transform-origin: top center; }
+        }
+        @media (max-height: 650px) {
+            #win-ui { transform: translate(-50%, -50%); }
+            .brand-icon-win { display: none; }
+            .lanterns { transform: translateX(-50%) scale(0.5); }
+            .eid-greeting-en { margin-bottom: 10px; }
+        }
+        @media (max-width: 360px) {
+            #start-screen h2 { font-size: 1.8rem; }
+            .score-pill, .share-pill { font-size: 0.75rem; padding: 6px 12px; }
+        }
+
+        /* ─── SHARE IMAGE MODAL ─── */
+        #share-modal {
+            display: flex; position: fixed; inset: 0; z-index: 2000;
+            background: rgba(3,5,16,0.88); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center; justify-content: center; flex-direction: column;
+            gap: 18px; padding: 24px;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        #share-modal.open { opacity: 1; visibility: visible; pointer-events: auto; }
+        #share-modal-img {
+            max-width: min(420px, 90vw); max-height: 70dvh;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            object-fit: contain;
+        }
+        .share-modal-actions {
+            display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+        }
+        .share-modal-btn {
+            padding: 12px 28px; border-radius: 12px; font-family: 'Inter', sans-serif;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none;
+            min-height: 44px; transition: all 0.2s ease;
+        }
+        .share-modal-btn.primary {
+            background: var(--emaar-gold); color: #fff;
+            box-shadow: 0 4px 16px rgba(var(--emaar-gold-rgb), 0.4);
+        }
+        .share-modal-btn.secondary {
+            background: transparent; color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        @media (hover: hover) {
+            .share-modal-btn.primary:hover  { transform: scale(1.04); }
+            .share-modal-btn.secondary:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+        }
+        .share-modal-hint {
+            font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 1px;
+            text-transform: uppercase; text-align: center;
+        }
+
+        /* ─── NAME PROMPT MODAL ─── */
+        #name-modal {
+            position: fixed; inset: 0; z-index: 600;
+            background: rgba(3,5,16,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        #name-modal.open { opacity: 1; visibility: visible; }
+
+        #name-modal-inner {
+            background: linear-gradient(145deg, #0d1a3a, #050a1f);
+            border: 1px solid rgba(241,170,39,0.35);
+            border-radius: 20px; padding: 32px 28px 24px;
+            width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .name-modal-moon {
+            font-size: 2rem; margin-bottom: 12px; display: block;
+        }
+
+        .name-modal-title {
+            font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 1.15rem; color: #fff; margin-bottom: 6px;
+        }
+        .name-modal-subtitle {
+            font-size: 0.8rem; color: rgba(255,255,255,0.45);
+            margin-bottom: 20px; letter-spacing: 0.3px;
+        }
+
+        #name-input {
+            width: 100%; padding: 13px 16px; border-radius: 10px;
+            border: 1px solid rgba(241,170,39,0.4);
+            background: rgba(255,255,255,0.05); color: #fff;
+            font-family: 'Inter', sans-serif; font-size: 1rem;
+            outline: none; text-align: center; margin-bottom: 18px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            caret-color: var(--emaar-gold);
+        }
+        #name-input::placeholder { color: rgba(255,255,255,0.25); }
+        #name-input:focus {
+            border-color: var(--emaar-gold);
+            box-shadow: 0 0 0 3px rgba(241,170,39,0.15);
+        }
+
+        .name-modal-actions { display: flex; gap: 10px; }
+        .name-modal-btn {
+            flex: 1; padding: 13px 10px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; border: none;
+            transition: transform 0.2s ease, opacity 0.2s ease; min-height: 44px;
+        }
+        .name-modal-btn.primary {
+            background: var(--emaar-gold); color: #030510;
+        }
+        .name-modal-btn.secondary {
+            background: transparent; color: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        @media (hover: hover) {
+            .name-modal-btn.primary:hover  { opacity: 0.9; transform: scale(1.03); }
+            .name-modal-btn.secondary:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <noscript>
+        <div id="noscript-msg">
+            <p style="font-size:2.5rem;margin-bottom:16px;">🌙</p>
+            <p style="font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:8px;">Eid Mubarak from Emaar Gulf</p>
+            <p>This experience requires JavaScript. Please enable it in your browser settings.</p>
+            <p style="margin-top:24px;font-size:0.75rem;color:rgba(255,255,255,0.25);">Built with love ♥ archengsafdar&#64;gmail.com</p>
+        </div>
+    </noscript>
+
+    <div id="landscape-warning" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+        Please rotate your device to portrait mode<br>for the best experience.
+    </div>
+
+    <div id="film-noise" aria-hidden="true"></div>
+
+    <!-- ═══════════════ START SCREEN ═══════════════ -->
+    <div id="start-screen" role="main">
+        <img
+            src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg"
+            alt="Emaar Gulf Logo"
+            class="brand-logo-main"
+            width="220" height="60"
+            loading="eager"
+        >
+        <h2>Find the Eid Moon</h2>
+        <p id="dynamic-instruction">Three stars are hidden in the night sky. Find them, then sight the Hilal.</p>
+        <button id="start-btn" aria-label="Begin the Eid moon sighting experience">Begin the Search</button>
+        <a
+            href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link"
+            target="_blank" rel="noopener noreferrer"
+            class="portfolio-link-start"
+            aria-label="Discover Emaar Gulf, opens in a new tab"
+        >
+            Discover Emaar Gulf
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <p class="dev-credit">
+            <span class="dev-credit-main">Built with love ♥ nawavazhi</span>
+            <span class="dev-credit-email">archengsafdar&#64;gmail.com</span>
+        </p>
+    </div>
+
+    <!-- ═══════════════ GAME OVERLAY ═══════════════ -->
+    <div id="game-overlay" role="application" aria-label="Eid moon sighting game — move or drag to scan the night sky">
+        <canvas id="vfx-canvas" aria-hidden="true"></canvas>
+        <canvas id="cloud-canvas" aria-hidden="true"></canvas>
+        <div id="horizon-glow" aria-hidden="true"></div>
+
+        <div class="parallax-layer" id="parallax-master" aria-hidden="true">
+            <canvas id="stars-canvas"></canvas>
+        </div>
+
+        <div id="moon-mask-layer" aria-hidden="true">
+            <div id="moon-container">
+                <svg class="moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+                            <stop offset="40%"  stop-color="#f1aa27" stop-opacity="1"/>
+                            <stop offset="100%" stop-color="#a67111" stop-opacity="1"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50,5 A45,45 0 1,1 15,85 A55,55 0 0,0 50,5 Z" fill="url(#moonGrad)"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="spyglass" aria-hidden="true">
+            <div id="direction-compass"></div>
+        </div>
+
+        <!-- ─── NARRATIVE PANEL (bilingual, updates at each stage) ─── -->
+        <div id="narrative-panel" aria-live="polite" aria-atomic="true">
+            <div id="narrative-msg">
+                <span class="narr-arabic">السماء تحجب أسرارها… حرِّك العدسة لتبدأ الرحلة</span>
+                <span class="narr-english">The night sky holds its secrets. Move the lens to begin.</span>
+            </div>
+            <div class="star-pips">
+                <div class="star-pip" id="pip-0">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+                <div class="star-pip" id="pip-1">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+                <div class="star-pip" id="pip-2">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- small persistent hint for shooting stars -->
+        <div id="shoot-hint">Tap the sky for a shooting star</div>
+
+        <div class="lanterns" id="lanterns" aria-hidden="true">
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height:140px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="g1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#g1)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height:80px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="g2"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#g2)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+            <div class="lantern-wrapper">
+                <div class="lantern-string" style="height:180px;"></div>
+                <svg class="fanoos" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+                    <defs><radialGradient id="g3"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#f1aa27" stop-opacity="0"/></radialGradient></defs>
+                    <path d="M 40 30 Q 50 10 60 30 Z" fill="#f1aa27"/><circle cx="50" cy="15" r="8" fill="none" stroke="#f1aa27" stroke-width="3"/>
+                    <polygon points="35,30 65,30 75,120 25,120" fill="rgba(241,170,39,0.15)" stroke="#f1aa27" stroke-width="4"/>
+                    <circle cx="50" cy="85" r="30" fill="url(#g3)"/><rect x="47" y="70" width="6" height="30" fill="#fff" rx="3"/>
+                    <polygon points="25,120 75,120 65,145 35,145" fill="#f1aa27"/><polygon points="45,145 55,145 50,165" fill="#f1aa27"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="win-ui" role="status" aria-live="assertive" aria-atomic="true">
+            <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-icon-light.svg" alt="Emaar Gulf" class="brand-icon-win" width="50" height="50">
+            <div class="score-container">
+                <div class="score-pill" id="score-display">✨ Hilal Sighted in <span>0.0s</span></div>
+                <div class="share-pill" id="share-btn" role="button" tabindex="0" aria-label="Share your result">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Share
+                </div>
+            </div>
+            <h1 class="gold-text" lang="ar">عيد مبارك</h1>
+            <h2 class="gold-text">Eid Mubarak</h2>
+            <p class="eid-greeting-ar" id="eid-greeting-ar" dir="rtl" lang="ar">من قلب المملكة العربية السعودية إلى العالم، تتشرف إعمار الخليج بأن ترفع أسمى آيات التهاني والتبريكات بمناسبة عيد الفطر المبارك.<br><br>نسأل الله أن يتقبل طاعاتكم، وأن يعيده عليكم وعلى أحبابكم بالصحة والخير والازدهار.</p>
+            <p class="eid-greeting-en" id="eid-greeting-en">From the heart of the Kingdom of Saudi Arabia to the world, Emaar Gulf extends its warmest wishes on the blessed occasion of Eid Al-Fitr.</p>
+            <div class="action-buttons">
+                <button id="play-again-btn" aria-label="Search for the moon again">Search Again 🔭</button>
+                <a
+                    href="https://drive.google.com/drive/folders/1ckrtKf6CHq0qmFz4DqABc90MnhszTpAZ?usp=drive_link"
+                    target="_blank" rel="noopener noreferrer"
+                    class="portfolio-btn-secondary"
+                    aria-label="Building Saudi Arabia's Future — opens portfolio in a new tab"
+                >
+                    Building Saudi Arabia's Future
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-share-toast" role="alert" aria-live="assertive"></div>
+
+    <!-- ═══════════════ NAME PROMPT MODAL ═══════════════ -->
+    <div id="name-modal" role="dialog" aria-label="Personalise your Eid greeting" aria-modal="true">
+        <div id="name-modal-inner">
+            <span class="name-modal-moon">🌙</span>
+            <p class="name-modal-title">Add a personal touch 🌙</p>
+            <p class="name-modal-subtitle">Enter a name to send a personal greeting</p>
+            <input id="name-input" type="text" placeholder="e.g. Mohammed" maxlength="40"
+                   autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+                   aria-label="Recipient name">
+            <div class="name-modal-actions">
+                <button class="name-modal-btn primary"   id="name-modal-confirm">Share ✨</button>
+                <button class="name-modal-btn secondary" id="name-modal-skip">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ SHARE IMAGE MODAL ═══════════════ -->
+    <div id="share-modal" role="dialog" aria-label="Share your Eid Mubarak card" aria-modal="true">
+        <img id="share-modal-img" src="" alt="Eid Mubarak share card">
+        <div class="share-modal-actions">
+            <button class="share-modal-btn primary" id="share-modal-download">Save Image</button>
+            <button class="share-modal-btn secondary" id="share-modal-close">Close</button>
+        </div>
+        <p class="share-modal-hint">Long-press the image to share on mobile</p>
+    </div>
+
+    <script>
+        // ╔══════════════════════════════════════════════════════════════╗
+        // ║  Emaar Gulf — Eid Moon Sighting Experience                   ║
+        // ║  Version  : V46                                              ║
+        // ║  Developer: archengsafdar\u0040gmail.com                         ║
+        // ║  Built for: Emaar Gulf · emaargulf.github.io                ║
+        // ║  Built with love ♥ archengsafdar\u0040gmail.com                  ║
+        // ║  © 2026 Emaar Gulf. All rights reserved.                    ║
+        // ╚══════════════════════════════════════════════════════════════╝
+        "use strict";
+
+        // ─── DEVELOPER CREDIT (visible in browser console) ──────────────
+        console.log(
+            '%c 🌙 Emaar Gulf — Eid Moon Sighting V46 \n%c Built with love ♥  archengsafdar\u0040gmail.com ',
+            'background:#030510;color:#f1aa27;font-size:13px;font-weight:700;padding:6px 12px;border-top:1px solid #f1aa27;border-left:1px solid #f1aa27;border-right:1px solid #f1aa27;',
+            'background:#030510;color:rgba(255,255,255,0.55);font-size:11px;padding:4px 12px 6px;border-bottom:1px solid #f1aa27;border-left:1px solid #f1aa27;border-right:1px solid #f1aa27;'
+        );
+
+        // ─── HARDWARE DETECTION ─────────────────────────────────────────
+        const logicalCores      = navigator.hardwareConcurrency || 4;
+        const isLowEnd          = logicalCores <= 2;
+        const isTouch           = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        // ─── GAME CONSTANTS ──────────────────────────────────────────────
+        const DIFFICULTY = {
+            detectionRadiusMultiplier: 0.8,
+            magneticPull:              0.08,
+            winDistance:               50
+        };
+        const THRESHOLDS = {
+            magneticActivation: 150,
+            compassAppear:      0.6,
+            hapticStart:        0.3,
+            spyglassScale:      0.15,
+            starCatchRadius:    55   // px radius to "catch" a hidden star
+        };
+        const NUM_HUNT_STARS = 3;
+        const CONSTELLATION_HINT_DELAY = 15000; // ms before hint appears
+
+        // ─── DOM REFERENCES ──────────────────────────────────────────────
+        const startScreen        = document.getElementById('start-screen');
+        const startBtn           = document.getElementById('start-btn');
+        const overlay            = document.getElementById('game-overlay');
+        const moonMaskLayer      = document.getElementById('moon-mask-layer');
+        const dynamicInstruction = document.getElementById('dynamic-instruction');
+        const moonContainer      = document.getElementById('moon-container');
+        const spyglass           = document.getElementById('spyglass');
+        const compass            = document.getElementById('direction-compass');
+        const playAgainBtn       = document.getElementById('play-again-btn');
+        const shareBtn           = document.getElementById('share-btn');
+        const shareToast         = document.getElementById('custom-share-toast');
+        const shareModal         = document.getElementById('share-modal');
+        const shareModalImg      = document.getElementById('share-modal-img');
+        const shareModalDownload = document.getElementById('share-modal-download');
+        const shareModalClose    = document.getElementById('share-modal-close');
+        const parallaxMaster     = document.getElementById('parallax-master');
+        const starsCanvas        = document.getElementById('stars-canvas');
+        const winUi              = document.getElementById('win-ui');
+        const lanternsUi         = document.getElementById('lanterns');
+        const scoreDisplay       = document.getElementById('score-display');
+        const greetingEnEl       = document.getElementById('eid-greeting-en');
+        const cloudCanvas        = document.getElementById('cloud-canvas');
+        const narrativeMsg       = document.getElementById('narrative-msg');
+        const narrativePanel     = document.getElementById('narrative-panel');
+        const nameModal          = document.getElementById('name-modal');
+        const nameInput          = document.getElementById('name-input');
+        const nameModalConfirm   = document.getElementById('name-modal-confirm');
+        const nameModalSkip      = document.getElementById('name-modal-skip');
+
+        // ─── NARRATIVE MESSAGES ──────────────────────────────────────────
+        // Each stage has an Arabic line and an English line.
+        const NARRATIVES = {
+            start: {
+                ar: 'السماء تحجب أسرارها… حرِّك العدسة لتبدأ الرحلة',
+                en: 'The night sky holds its secrets. Move the lens to begin.'
+            },
+            found1: {
+                ar: 'نجمة أضاءت الدرب… تبقّى نجمتان في الظلام',
+                en: 'A star reveals itself. Two more await in the dark.'
+            },
+            found2: {
+                ar: 'اقتربت… نجمة أخيرة تختبئ في أعماق السماء',
+                en: 'Almost there. One star still hides from you.'
+            },
+            found3: {
+                ar: 'تكلّمت النجوم… والهلال ينتظر نظرتك',
+                en: 'The stars have spoken. Now the Hilal awaits your eye.'
+            },
+            moonPhase: {
+                ar: 'في مكان ما من هذه السماء… هلال العيد ينتظرك',
+                en: 'Somewhere in this sky, the crescent moon is waiting for you.'
+            }
+        };
+
+        let narrativeTimeout = null;
+
+        function showNarrative(key, delay) {
+            if (narrativeTimeout) clearTimeout(narrativeTimeout);
+            const run = () => {
+                const msg = NARRATIVES[key];
+                if (!msg) return;
+                // Fade out current text
+                narrativeMsg.classList.add('fade-out');
+                setTimeout(() => {
+                    narrativeMsg.innerHTML =
+                        `<span class="narr-arabic">${msg.ar}</span>` +
+                        `<span class="narr-english">${msg.en}</span>`;
+                    narrativeMsg.classList.remove('fade-out');
+                }, 500);
+            };
+            if (delay) narrativeTimeout = setTimeout(run, delay);
+            else run();
+        }
+        let isDragging       = false;
+        let hasFoundMoon     = false;
+        let hasWon           = false; // explicit win flag (BUG 12)
+        let animationFrameId = null;
+        let cometTimer       = null;
+        let isCometFlying    = false;
+        let lastVibeTime     = 0;
+        let searchStartTime  = 0;
+        let finalTimeTaken   = 0;
+        let tapStartX = 0, tapStartY = 0;
+        let lastInputTime    = performance.now();
+        let idleAnchorX      = 0, idleAnchorY = 0; // BUG 6: anchor for bounded idle drift
+
+        // Act 1 — star hunt state
+        let starsFoundCount  = 0;
+        let huntStars        = [];   // [{x, y, found, pulseOffset}]
+        let moonUnlocked     = false;
+        let constellationAlpha = 0; // fades in after hint delay
+        let constellationTimer    = null;
+        let constellationFadeRafId = null; // BUG 9: cancellable handle for fadeIn loop
+
+        // Viewport cache
+        let vW = window.innerWidth;
+        let vH = window.innerHeight;
+
+        let targetX  = vW / 2, targetY  = vH / 2;
+        let currentX = targetX, currentY = targetY;
+        let moonX = 0, moonY = 0;
+
+        let autoParallaxX = 0, autoParallaxY = 0;
+
+        let lastFrameTime = 0;
+        const FPS         = 60;
+        const FRAME_DELAY = 1000 / FPS;
+
+        // ─── SPYGLASS QUALITY ────────────────────────────────────────────
+        // ─── SAFARI / IOS DETECTION ──────────────────────────────────────
+        // Safari handles chained backdrop-filter functions poorly — simplify
+        // to blur-only to prevent per-frame GPU recompositing on iPhone
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+                      || /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+        if (isLowEnd) {
+            spyglass.style.backdropFilter       = 'none';
+            spyglass.style.webkitBackdropFilter = 'none';
+            spyglass.style.background           = 'rgba(255,255,255,0.10)';
+        } else if (isSafari) {
+            // Safari: blur only — chaining brightness/contrast/saturate causes
+            // per-frame full layer recompositing on iOS
+            spyglass.style.backdropFilter       = 'blur(6px)';
+            spyglass.style.webkitBackdropFilter = 'blur(6px)';
+        } else {
+            spyglass.style.backdropFilter       = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
+            spyglass.style.webkitBackdropFilter = 'blur(6px) brightness(1.2) contrast(1.1) saturate(1.1)';
+        }
+
+        if (!isTouch) {
+            dynamicInstruction.innerText = "Find 3 hidden stars, then sight the Hilal. Move your mouse to search.";
+        }
+
+        // ─── LOCALISED GREETING ──────────────────────────────────────────
+        function updateLocalizedGreeting() {
+            greetingEnEl.innerHTML = `From the heart of the Kingdom of Saudi Arabia, Emaar Gulf wishes you and your family a joyful Eid Al-Fitr — filled with blessings, warmth, and everything you love.`;
+        }
+        updateLocalizedGreeting();
+
+        // ─── CANVAS SETUP ────────────────────────────────────────────────
+        const starsCtx  = starsCanvas.getContext('2d', { alpha: true });
+        const vfxCanvas = document.getElementById('vfx-canvas');
+        const vfxCtx    = vfxCanvas.getContext('2d', { alpha: true });
+        const cloudCtx  = cloudCanvas.getContext('2d', { alpha: true });
+
+        let starData = [], canvasParticles = [];
+        let oldStarsW = 0, oldStarsH = 0;
+        let sCSS_W = 0, sCSS_H = 0;
+        let vCSS_W = 0, vCSS_H = 0;
+        let cCSS_W = 0, cCSS_H = 0;
+
+        let cloudBlobs = [];
+        let cloudGenW  = 0, cloudGenH = 0; // viewport at time clouds were generated
+
+        function generateClouds() {
+            cloudBlobs = [];
+            cloudGenW  = vW; cloudGenH = vH;
+            const count = isLowEnd ? 5 : 8;
+            for (let i = 0; i < count; i++) {
+                cloudBlobs.push({
+                    x:      Math.random() * vW,
+                    y:      Math.random() * vH * 0.75 + vH * 0.05,
+                    rx:     Math.random() * 180 + 120,  // ellipse x-radius
+                    ry:     Math.random() * 60  + 40,   // ellipse y-radius
+                    speed:  (Math.random() * 0.008 + 0.004) * (Math.random() > 0.5 ? 1 : -1),
+                    alpha:  Math.random() * 0.35 + 0.25,
+                    phase:  Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function resizeCanvases() {
+            // Cap DPR at 2 — iPhone 15/Pro has DPR=3 which triples canvas
+            // memory usage and causes Safari GPU memory eviction / canvas blanking
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            vW = window.innerWidth;
+            vH = window.innerHeight;
+
+            sCSS_W = vW * 1.1; sCSS_H = vH * 1.1;
+            vCSS_W = vW;       vCSS_H = vH;
+            cCSS_W = vW;       cCSS_H = vH;
+
+            starsCanvas.width        = sCSS_W * dpr;
+            starsCanvas.height       = sCSS_H * dpr;
+            starsCanvas.style.width  = `${sCSS_W}px`;
+            starsCanvas.style.height = `${sCSS_H}px`;
+            starsCtx.setTransform(1, 0, 0, 1, 0, 0);
+            starsCtx.scale(dpr, dpr);
+
+            vfxCanvas.width        = vCSS_W * dpr;
+            vfxCanvas.height       = vCSS_H * dpr;
+            vfxCanvas.style.width  = `${vCSS_W}px`;
+            vfxCanvas.style.height = `${vCSS_H}px`;
+            vfxCtx.setTransform(1, 0, 0, 1, 0, 0);
+            vfxCtx.scale(dpr, dpr);
+
+            cloudCanvas.width        = cCSS_W * dpr;
+            cloudCanvas.height       = cCSS_H * dpr;
+            cloudCanvas.style.width  = `${cCSS_W}px`;
+            cloudCanvas.style.height = `${cCSS_H}px`;
+            // Cloud blur: CSS filter on the element is universally supported
+            // (incl. Safari iOS). ctx.filter is NOT reliable on Safari — silently
+            // ignored on iOS <18, causing raw ovals to show instead of soft clouds.
+            cloudCanvas.style.filter         = isLowEnd ? 'none' : 'blur(24px)';
+            cloudCanvas.style.webkitFilter   = isLowEnd ? 'none' : 'blur(24px)';
+            cloudCtx.setTransform(1, 0, 0, 1, 0, 0);
+            cloudCtx.scale(dpr, dpr);
+
+            if (starData.length === 0) {
+                const count = isLowEnd ? 80 : 180;
+                for (let i = 0; i < count; i++) {
+                    starData.push({
+                        x: Math.random() * sCSS_W,
+                        y: Math.random() * sCSS_H,
+                        r: Math.random() * 1.5 + 0.5,
+                        baseAlpha: Math.random() * 0.5 + 0.1,
+                        speed:  Math.random() * 0.02 + 0.005,
+                        offset: Math.random() * Math.PI * 2
+                    });
+                }
+            } else if (oldStarsW > 0) {
+                const rx = sCSS_W / oldStarsW, ry = sCSS_H / oldStarsH;
+                starData.forEach(s => { s.x *= rx; s.y *= ry; });
+            }
+            // Re-scale cloud blob positions to match new viewport dimensions,
+            // consistent with how star positions are handled above.
+            // Must run before oldStarsW/H are updated so we still have the old values.
+            if (cloudBlobs.length > 0 && cloudGenW > 0) {
+                const rcx = vW / cloudGenW, rcy = vH / cloudGenH;
+                cloudBlobs.forEach(b => { b.x *= rcx; b.y *= rcy; });
+                cloudGenW = vW; cloudGenH = vH;
+            }
+            oldStarsW = sCSS_W; oldStarsH = sCSS_H;
+        }
+
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // ─── PARTICLE BURST ──────────────────────────────────────────────
+        function triggerParticleBurst(x, y, color) {
+            const n = isLowEnd ? 30 : (isTouch ? 55 : 90);
+            const col = color || '#f1aa27';
+            for (let i = 0; i < n; i++) {
+                canvasParticles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * (Math.random() * 18 + 8),
+                    vy: (Math.random() - 0.5) * (Math.random() * 18 + 8),
+                    life: 1.0, decay: Math.random() * 0.04 + 0.025,
+                    size: Math.random() * 2.5 + 1.5,
+                    col
+                });
+            }
+            if (canvasParticles.length > 200) canvasParticles.splice(0, canvasParticles.length - 200);
+        }
+
+        // Small sparkle burst when a hunt star is found
+        function triggerStarBurst(x, y) {
+            const n = isLowEnd ? 16 : 28;
+            for (let i = 0; i < n; i++) {
+                const angle = (i / n) * Math.PI * 2;
+                const speed = Math.random() * 5 + 3;
+                canvasParticles.push({
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1.0, decay: Math.random() * 0.05 + 0.04,
+                    size: Math.random() * 2 + 1,
+                    col: '#ffffff'
+                });
+            }
+        }
+
+        // ─── CLOUD DRAW ──────────────────────────────────────────────────
+        // Clouds are drawn as blurred ellipses. The spyglass reveal works because
+        // the moon-mask-layer (clip-path) sits ABOVE the cloud canvas (z-index 10 > 8),
+        // so the spyglass circle always shows through clouds to the moon beneath.
+        function drawClouds(time) {
+            cloudCtx.clearRect(0, 0, cCSS_W, cCSS_H);
+            if (!moonUnlocked && starsFoundCount === 0) return; // no clouds in Act 1 until at least 1 star found
+
+            const opacity = moonUnlocked ? 1 : (starsFoundCount / NUM_HUNT_STARS) * 0.6;
+            if (opacity <= 0) return;
+
+            cloudCtx.save();
+
+            for (let i = 0; i < cloudBlobs.length; i++) {
+                const b = cloudBlobs[i];
+                // Drift horizontally, wrap around edges
+                b.x += b.speed * 0.5;
+                if (b.x > vW + b.rx + 50) b.x = -b.rx - 50;
+                if (b.x < -b.rx - 50)     b.x = vW + b.rx + 50;
+
+                // Gentle vertical bob
+                const bobY = b.y + Math.sin(time * 0.0003 + b.phase) * 8;
+
+                cloudCtx.globalAlpha = b.alpha * opacity;
+                cloudCtx.fillStyle   = '#1a2a5e';  // deep navy — dark sky cloud colour
+
+                cloudCtx.beginPath();
+                cloudCtx.ellipse(b.x, bobY, b.rx, b.ry, 0, 0, Math.PI * 2);
+                cloudCtx.fill();
+
+                // Second, slightly offset ellipse for depth
+                cloudCtx.globalAlpha = b.alpha * opacity * 0.5;
+                cloudCtx.fillStyle   = '#0d1a3a';
+                cloudCtx.beginPath();
+                cloudCtx.ellipse(b.x + b.rx * 0.3, bobY - b.ry * 0.2, b.rx * 0.75, b.ry * 0.7, 0, 0, Math.PI * 2);
+                cloudCtx.fill();
+            }
+
+            cloudCtx.globalAlpha = 1;
+            cloudCtx.restore();
+        }
+
+        // ─── CONSTELLATION HINT ──────────────────────────────────────────
+        function drawConstellation(time) {
+            if (constellationAlpha <= 0) return;
+
+            const r   = 80;
+            const pts = [
+                { x: moonX,     y: moonY - r },
+                { x: moonX + r, y: moonY      },
+                { x: moonX,     y: moonY + r  },
+                { x: moonX - r, y: moonY      }
+            ];
+
+            const lineAlpha = constellationAlpha * (0.3 + Math.sin(time * 0.002) * 0.1);
+
+            // Draw on vfxCtx — viewport-fixed, matches moonX/moonY exactly
+            vfxCtx.save();
+            vfxCtx.globalCompositeOperation = 'source-over';
+            vfxCtx.globalAlpha = lineAlpha;
+            vfxCtx.strokeStyle = '#c8a86b';
+            vfxCtx.lineWidth   = 0.8;
+            vfxCtx.setLineDash([4, 6]);
+
+            vfxCtx.beginPath();
+            vfxCtx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) vfxCtx.lineTo(pts[i].x, pts[i].y);
+            vfxCtx.closePath();
+            vfxCtx.stroke();
+            vfxCtx.setLineDash([]);
+
+            vfxCtx.fillStyle = '#f1d080';
+            for (const p of pts) {
+                const pulse = 1.5 + Math.sin(time * 0.003 + p.x) * 0.5;
+                vfxCtx.globalAlpha = constellationAlpha * 0.8;
+                vfxCtx.beginPath();
+                vfxCtx.arc(p.x, p.y, pulse, 0, Math.PI * 2);
+                vfxCtx.fill();
+            }
+
+            vfxCtx.restore();
+        }
+
+        // ─── HUNT STARS DRAW ─────────────────────────────────────────────
+        // Draws the 3 hidden golden stars on the stars canvas.
+        // They pulse subtly to be discoverable but not obvious.
+        function drawHuntStars(time) {
+            for (let i = 0; i < huntStars.length; i++) {
+                const s = huntStars[i];
+                if (s.found) continue;
+
+                const pulse = 1 + Math.sin(time * 0.003 + s.pulseOffset) * 0.4;
+                const alpha = 0.55 + Math.sin(time * 0.003 + s.pulseOffset) * 0.25;
+
+                // Draw on vfxCtx — viewport-fixed, coords match detection exactly
+                vfxCtx.save();
+                vfxCtx.globalAlpha = alpha;
+                vfxCtx.globalCompositeOperation = 'source-over';
+
+                // Outer glow ring
+                vfxCtx.fillStyle = 'rgba(241,210,100,0.18)';
+                vfxCtx.beginPath();
+                vfxCtx.arc(s.x, s.y, 14 * pulse, 0, Math.PI * 2);
+                vfxCtx.fill();
+
+                // Star core
+                drawStarShape(vfxCtx, s.x, s.y, 6 * pulse, 3 * pulse, '#f1d264');
+
+                vfxCtx.restore();
+            }
+        }
+
+        function drawStarShape(ctx, cx, cy, outerR, innerR, color) {
+            const points = 5;
+            const step   = Math.PI / points;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = i * step - Math.PI / 2;
+                if (i === 0) ctx.moveTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+                else         ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // ─── NEBULA WISPS ────────────────────────────────────────────────
+        // Painted once onto the stars canvas background (static, not animated)
+        // Called inside drawFrame every frame but skipped after first pass
+        // Actually: drawn per-frame at very low opacity so they don't flicker
+        function drawNebula(time) {
+            const wisps = [
+                { x: vW * 0.25, y: vH * 0.3,  rx: 180, ry: 60,  col: 'rgba(80,40,120,0.035)' },
+                { x: vW * 0.75, y: vH * 0.5,  rx: 140, ry: 50,  col: 'rgba(30,60,120,0.03)'  },
+                { x: vW * 0.5,  y: vH * 0.15, rx: 200, ry: 40,  col: 'rgba(60,30,100,0.025)' },
+                { x: vW * 0.15, y: vH * 0.7,  rx: 120, ry: 45,  col: 'rgba(20,50,100,0.02)'  }
+            ];
+            for (const w of wisps) {
+                starsCtx.globalAlpha = 1;
+                starsCtx.fillStyle   = w.col;
+                starsCtx.beginPath();
+                starsCtx.ellipse(w.x, w.y, w.rx, w.ry, 0, 0, Math.PI * 2);
+                starsCtx.fill();
+            }
+            starsCtx.globalAlpha = 1.0;
+        }
+
+        // ─── CANVAS DRAW FRAME ───────────────────────────────────────────
+        function drawFrame(time) {
+            // ── Stars canvas (parallax-shifted, inside parallax-master) ───
+            starsCtx.clearRect(0, 0, sCSS_W, sCSS_H);
+            drawNebula(time);
+
+            starsCtx.fillStyle = '#ffffff';
+            for (let i = 0; i < starData.length; i++) {
+                const s = starData[i];
+                starsCtx.globalAlpha = Math.max(0.1, s.baseAlpha + Math.sin(time * s.speed + s.offset) * 0.3);
+                starsCtx.beginPath();
+                starsCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                starsCtx.fill();
+            }
+            starsCtx.globalAlpha = 1.0;
+
+            // ── Cloud canvas (viewport-fixed, separate element) ───────────
+            drawClouds(time);
+
+            // ── VFX canvas (viewport-fixed) ───────────────────────────────
+            // Always clear first, then draw viewport-fixed overlays in source-over,
+            // then switch to lighter composite for additive particle bloom.
+            vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
+            vfxCtx.globalCompositeOperation = 'source-over';
+
+            // Hunt stars — drawn here so coords match viewport exactly
+            if (!moonUnlocked) drawHuntStars(time);
+
+            // Constellation hint — drawn here so it aligns with moonX/moonY
+            if (moonUnlocked && !hasFoundMoon) drawConstellation(time);
+
+            // Particles — additive bloom on top
+            if (canvasParticles.length > 0) {
+                // Fade trail: paint semi-transparent black over previous frame content
+                vfxCtx.globalCompositeOperation = 'destination-out';
+                vfxCtx.fillStyle = 'rgba(0,0,0,0.2)';
+                vfxCtx.fillRect(0, 0, vCSS_W, vCSS_H);
+
+                vfxCtx.globalCompositeOperation = 'lighter';
+                vfxCtx.shadowBlur  = isTouch ? 6 : 10;
+                vfxCtx.shadowColor = 'rgba(241,170,39,0.6)';
+
+                for (let i = canvasParticles.length - 1; i >= 0; i--) {
+                    const p = canvasParticles[i];
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.15;
+                    p.life -= p.decay;
+                    if (p.life <= 0) { canvasParticles.splice(i, 1); continue; }
+                    vfxCtx.globalAlpha = p.life;
+                    vfxCtx.fillStyle   = p.life > 0.5 ? (p.col || '#f1aa27') : '#ffffff';
+                    vfxCtx.beginPath();
+                    vfxCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                    vfxCtx.fill();
+                }
+                vfxCtx.globalAlpha = 1.0;
+                vfxCtx.shadowBlur  = 0;
+                vfxCtx.globalCompositeOperation = 'source-over';
+            }
+        }
+
+        // ─── AUDIO ENGINE ────────────────────────────────────────────────
+        const AUDIO_BASE = 'https://emaargulf.github.io/emaargulf-tools/eid/';
+        const audio = {
+            ambient:    new Audio(AUDIO_BASE + 'ambient.mp3'),
+            chime:      new Audio(AUDIO_BASE + 'chime.mp3'),
+            swooshBase: new Audio(AUDIO_BASE + 'swoosh.mp3'),
+            hum:        new Audio(AUDIO_BASE + 'hum.mp3'),
+
+            init() {
+                this.ambient.loop = true; this.ambient.volume = 0.3;
+                this.hum.loop     = true; this.hum.volume     = 0;
+                this.chime.loop   = true; this.chime.volume   = 0.5;
+                [this.ambient, this.chime, this.swooshBase, this.hum].forEach(a => {
+                    a.onerror = () => console.warn('Audio load failed:', a.src);
+                    a.load();
+                });
+            },
+            playStart() {
+                this.chime.pause(); this.chime.currentTime = 0;
+                // Defer play until the element has enough data to start,
+                // avoiding the race where playStart() fires before init()'s load() completes.
+                const tryPlay = (el) => {
+                    if (el.readyState >= 2) { el.play().catch(() => {}); }
+                    else { el.addEventListener('canplay', () => el.play().catch(() => {}), { once: true }); }
+                };
+                tryPlay(this.ambient);
+                tryPlay(this.hum);
+            },
+            updateHum(intensity) {
+                this.hum.volume = intensity > 0.1 ? Math.min(0.4, intensity * 0.4) : 0;
+            },
+            playWin() {
+                this.hum.volume = 0; this.ambient.pause();
+                this.chime.currentTime = 0; this.chime.play().catch(() => {});
+            },
+            playComet() {
+                const s = this.swooshBase.cloneNode();
+                s.volume = 0.4;
+                s.onended = () => { s.src = ''; s.remove(); };
+                s.play().catch(() => {});
+            },
+            pauseAll() { this.ambient.pause(); this.hum.pause(); this.chime.pause(); }
+        };
+
+        document.addEventListener('pointerdown', () => {
+            if (overlay.classList.contains('active')) audio.playStart();
+        }, { once: true });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (cometTimer)       clearTimeout(cometTimer);
+                if (constellationTimer) clearTimeout(constellationTimer);
+                audio.pauseAll();
+            } else {
+                if (overlay.classList.contains('active') && !hasFoundMoon) {
+                    lastFrameTime    = performance.now();
+                    animationFrameId = requestAnimationFrame(renderEngine);
+                    spawnAmbientComet();
+                    audio.playStart();
+                }
+            }
+        });
+
+        // ─── COMET SYSTEM ────────────────────────────────────────────────
+        function shootInteractiveComet(cx, cy) {
+            isCometFlying = true;
+            audio.playComet();
+
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+
+            const r    = Math.max(vW, vH) + 300;
+            const a    = Math.random() * Math.PI * 2;
+            const sX   = cx + Math.cos(a) * r, sY = cy + Math.sin(a) * r;
+            const eX   = cx - Math.cos(a) * r, eY = cy - Math.sin(a) * r;
+            const aDeg = (Math.atan2(eY - sY, eX - sX) * 180 / Math.PI) + 90;
+
+            overlay.appendChild(comet);
+
+            if (typeof comet.animate === 'function') {
+                const anim = comet.animate([
+                    { transform: `translate3d(${sX}px,${sY}px,0) rotate(${aDeg}deg)`, opacity: 0 },
+                    { transform: `translate3d(${sX-(sX-eX)*0.1}px,${sY-(sY-eY)*0.1}px,0) rotate(${aDeg}deg)`, opacity: 1, offset: 0.1 },
+                    { transform: `translate3d(${eX}px,${eY}px,0) rotate(${aDeg}deg)`, opacity: 0 }
+                ], { duration: 1200 + Math.random() * 400, easing: 'linear' });
+                anim.onfinish = anim.oncancel = () => { comet.remove(); isCometFlying = false; };
+            } else {
+                setTimeout(() => { comet.remove(); isCometFlying = false; }, 1600);
+            }
+        }
+
+        function spawnAmbientComet() {
+            if (!overlay.classList.contains('active')) return; // stop rescheduling once game is inactive
+            if (Math.random() > 0.4 && !isCometFlying) {
+                shootInteractiveComet(Math.random() * vW, Math.random() * (vH * 0.6));
+            }
+            cometTimer = setTimeout(spawnAmbientComet, 3500 + Math.random() * 4000);
+        }
+
+        // ─── STAR HUNT HELPERS ───────────────────────────────────────────
+        function placeHuntStars() {
+            huntStars = [];
+            for (let i = 0; i < NUM_HUNT_STARS; i++) {
+                let sx, sy, ok;
+                let attempts = 0;
+                // Place away from center, screen edges, and each other
+                do {
+                    sx = Math.random() * (vW - 200) + 100;
+                    sy = Math.random() * (vH - 200) + 100;
+                    ok = Math.hypot(sx - vW/2, sy - vH/2) > 130;
+                    if (ok) {
+                        for (const s of huntStars) {
+                            if (Math.hypot(sx - s.x, sy - s.y) < 130) { ok = false; break; }
+                        }
+                    }
+                    attempts++;
+                } while (!ok && attempts < 200);
+
+                huntStars.push({ x: sx, y: sy, found: false, pulseOffset: Math.random() * Math.PI * 2 });
+            }
+            starsFoundCount = 0;
+            // Reset all pips
+            for (let i = 0; i < NUM_HUNT_STARS; i++) {
+                const pip = document.getElementById(`pip-${i}`);
+                if (pip) pip.classList.remove('found', 'popping');
+            }
+        }
+
+        function markStarFound(index) {
+            if (huntStars[index].found) return;
+            huntStars[index].found = true;
+            starsFoundCount++;
+
+            triggerStarBurst(huntStars[index].x, huntStars[index].y);
+            if (navigator.vibrate && isTouch) navigator.vibrate([10, 15, 10]);
+
+            // Update pip
+            const pip = document.getElementById(`pip-${index}`);
+            if (pip) {
+                pip.classList.add('found', 'popping');
+                const path = pip.querySelector('path');
+                if (path) path.setAttribute('fill', '#f1aa27');
+            }
+
+            // Show contextual narrative
+            if (starsFoundCount === 1) showNarrative('found1');
+            else if (starsFoundCount === 2) showNarrative('found2');
+            else if (starsFoundCount >= NUM_HUNT_STARS) {
+                showNarrative('found3');
+                setTimeout(unlockMoon, 1800); // longer pause so user reads the message
+            }
+        }
+
+        function unlockMoon() {
+            moonUnlocked = true;
+            moonContainer.classList.add('visible');
+
+            // Hide pip row — no longer needed
+            const pipRow = narrativePanel.querySelector('.star-pips');
+            if (pipRow) {
+                pipRow.style.transition = 'opacity 0.5s';
+                pipRow.style.opacity = '0';
+                setTimeout(() => { pipRow.style.display = 'none'; }, 500);
+            }
+
+            // Show moon-hunt narrative after the found3 message has been read
+            showNarrative('moonPhase', 1200);
+
+            // Start constellation hint timer
+            constellationAlpha = 0;
+            if (constellationTimer) clearTimeout(constellationTimer);
+            if (constellationFadeRafId) { cancelAnimationFrame(constellationFadeRafId); constellationFadeRafId = null; }
+            constellationTimer = setTimeout(() => {
+                const fadeIn = () => {
+                    constellationAlpha = Math.min(1, constellationAlpha + 0.008);
+                    if (constellationAlpha < 1) constellationFadeRafId = requestAnimationFrame(fadeIn);
+                    else constellationFadeRafId = null;
+                };
+                constellationFadeRafId = requestAnimationFrame(fadeIn);
+            }, CONSTELLATION_HINT_DELAY);
+
+            searchStartTime = performance.now();
+        }
+
+        // ─── CHECK SPYGLASS OVER HUNT STARS (called from render loop) ────
+        function checkHuntStarProximity() {
+            if (moonUnlocked) return;
+            for (let i = 0; i < huntStars.length; i++) {
+                if (huntStars[i].found) continue;
+                const dist = Math.hypot(currentX - huntStars[i].x, currentY - huntStars[i].y);
+                if (dist < THRESHOLDS.starCatchRadius) {
+                    markStarFound(i);
+                }
+            }
+        }
+
+        // ─── ENGINE INIT / RESET ─────────────────────────────────────────
+        function initializeEngine() {
+            if (animationFrameId)    cancelAnimationFrame(animationFrameId);
+            if (cometTimer)          clearTimeout(cometTimer);
+            if (constellationTimer)  clearTimeout(constellationTimer);
+            if (constellationFadeRafId) { cancelAnimationFrame(constellationFadeRafId); constellationFadeRafId = null; }
+            if (narrativeTimeout)    clearTimeout(narrativeTimeout);
+
+            canvasParticles = [];
+            vfxCtx.clearRect(0, 0, vCSS_W, vCSS_H);
+            cloudCtx.clearRect(0, 0, cCSS_W, cCSS_H);
+
+            hasFoundMoon       = false;
+            hasWon             = false;
+            moonUnlocked       = false;
+            constellationAlpha = 0;
+
+            winUi.style.opacity       = '0';
+            winUi.style.pointerEvents = 'none';
+            lanternsUi.style.top      = '-350px';
+
+            spyglass.style.display   = 'block';
+            compass.style.display    = 'block';
+            spyglass.style.opacity   = '1';
+            spyglass.style.transform = `translate3d(${vW/2-90}px,${vH/2-90}px,0) scale(1)`;
+
+            parallaxMaster.style.transition = 'none';
+            parallaxMaster.style.transform  = 'translate3d(0,0,0)';
+            parallaxMaster.style.filter     = 'none';
+            starsCanvas.style.transform     = 'translate3d(0,0,0)';
+
+            requestAnimationFrame(() => document.body.classList.remove('found'));
+
+            // Hide moon until Act 1 complete
+            moonContainer.classList.remove('visible');
+
+            // Reset narrative panel — restore pip row and set opening message
+            const pipRow = narrativePanel.querySelector('.star-pips');
+            if (pipRow) { pipRow.style.display = 'flex'; pipRow.style.opacity = '1'; }
+            narrativeMsg.classList.remove('fade-out');
+            narrativeMsg.innerHTML =
+                `<span class="narr-arabic">${NARRATIVES.start.ar}</span>` +
+                `<span class="narr-english">${NARRATIVES.start.en}</span>`;
+
+            // Place moon away from center — with attempt cap to avoid infinite loop on small screens
+            let moonAttempts = 0;
+            do {
+                moonX = Math.random() * (vW - 240) + 120;
+                moonY = Math.random() * (vH - 240) + 120;
+                moonAttempts++;
+            } while (Math.hypot(moonX - vW/2, moonY - vH/2) < 200 && moonAttempts < 200);
+
+            moonContainer.style.transform = `translate3d(${moonX-45}px,${moonY-45}px,0)`;
+            targetX  = vW/2; targetY  = vH/2;
+            currentX = targetX; currentY = targetY;
+            idleAnchorX = targetX; idleAnchorY = targetY;
+
+            moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+            moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+            compass.style.opacity = '0';
+
+            generateClouds();
+            placeHuntStars();
+
+            searchStartTime = performance.now();
+            lastFrameTime   = performance.now();
+            lastInputTime   = performance.now();
+            updateLocalizedGreeting();
+        }
+
+        // ─── START BUTTON ────────────────────────────────────────────────
+        startBtn.addEventListener('click', () => {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('portrait').catch(() => {});
+            }
+
+            startScreen.style.opacity    = '0';
+            startScreen.style.visibility = 'hidden';
+            overlay.classList.add('active');
+
+            audio.init();
+            audio.playStart();
+            initializeEngine();
+            spawnAmbientComet();
+            animationFrameId = requestAnimationFrame(renderEngine);
+        });
+
+        // ─── PLAY AGAIN ──────────────────────────────────────────────────
+        playAgainBtn.addEventListener('click', () => {
+            initializeEngine();
+            audio.playStart();
+            spawnAmbientComet();
+            animationFrameId = requestAnimationFrame(renderEngine);
+        });
+
+        // ─── SHARE ───────────────────────────────────────────────────────
+        shareBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); shareBtn.click(); }
+        });
+
+        // ─── SHARE CARD GENERATOR ────────────────────────────────────────
+        // V46: all text centred · personalised "Dear [Name]," when name provided
+        async function generateShareCard(recipientName) {
+            const W = 1080, H = 1080;
+            const canvas = document.createElement('canvas');
+            canvas.width  = W;
+            canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            const GOLD  = '#f1aa27';
+            const WHITE = '#ffffff';
+
+            // ── Background: dark night sky ────────────────────────────────
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+            bgGrad.addColorStop(0,   '#0a1128');
+            bgGrad.addColorStop(0.4, '#050a1f');
+            bgGrad.addColorStop(1,   '#02040a');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, W, H);
+
+            // Radial horizon glow at bottom
+            const horizonGrad = ctx.createRadialGradient(W/2, H, 0, W/2, H, W * 0.9);
+            horizonGrad.addColorStop(0,   'rgba(241,170,39,0.12)');
+            horizonGrad.addColorStop(0.5, 'rgba(26,42,76,0.08)');
+            horizonGrad.addColorStop(1,   'rgba(0,0,0,0)');
+            ctx.fillStyle = horizonGrad;
+            ctx.fillRect(0, 0, W, H);
+
+            // ── Gold border frame ─────────────────────────────────────────
+            ctx.strokeStyle = GOLD;
+            ctx.lineWidth   = 6;
+            ctx.strokeRect(22, 22, W - 44, H - 44);
+
+            ctx.strokeStyle = 'rgba(241,170,39,0.2)';
+            ctx.lineWidth   = 1;
+            ctx.strokeRect(34, 34, W - 68, H - 68);
+
+            // ── Deterministic star field ──────────────────────────────────
+            [
+                [95,60,1.8,0],[180,110,1.2,1],[310,48,2.1,2],[490,88,1.5,3],
+                [650,62,1.9,4],[790,118,1.3,5],[920,72,2.0,6],[975,155,1.1,7],
+                [60,190,1.6,8],[270,215,1.0,9],[430,168,2.2,10],[590,198,1.4,11],
+                [740,178,1.8,12],[840,228,1.2,13],[992,265,1.6,14],[140,305,1.0,15],
+                [395,278,1.9,16],[695,298,1.5,17],[108,940,1.4,18],[265,972,1.1,19],
+                [478,952,1.7,20],[672,968,1.3,21],[835,938,2.0,22],[962,982,1.2,23],
+                [540,855,1.0,24],[200,880,1.5,25],[820,870,1.3,26],[960,840,1.8,27],
+            ].forEach(([x, y, r, idx]) => {
+                ctx.globalAlpha = 0.3 + (idx % 7) * 0.08;
+                ctx.fillStyle   = idx % 5 === 0 ? GOLD : WHITE;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            // ── Crescent watermark (offscreen canvas, isolated) ───────────
+            const cc = document.createElement('canvas');
+            cc.width = W; cc.height = H;
+            const cx2 = cc.getContext('2d');
+            cx2.fillStyle = GOLD;
+            cx2.beginPath();
+            cx2.arc(W / 2, H * 0.44, 290, 0, Math.PI * 2);
+            cx2.fill();
+            cx2.globalCompositeOperation = 'destination-out';
+            cx2.beginPath();
+            cx2.arc(W / 2 + 148, H * 0.44 - 34, 255, 0, Math.PI * 2);
+            cx2.fill();
+            ctx.save();
+            ctx.globalAlpha = 0.18;
+            ctx.drawImage(cc, 0, 0);
+            ctx.restore();
+
+            // ── Logo (centred) ────────────────────────────────────────────
+            const LOGO_LIGHT = 'https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-light.svg';
+            const LOGO_DARK  = 'https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-full-dark.svg';
+
+            await new Promise(resolve => {
+                const tryLoad = (src, fallback) => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => {
+                        const logoH = 62;
+                        const logoW = img.naturalWidth && img.naturalHeight
+                            ? (img.naturalWidth / img.naturalHeight) * logoH : 200;
+                        ctx.drawImage(img, W / 2 - logoW / 2, 75, logoW, logoH);
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        if (fallback) { tryLoad(fallback, null); return; }
+                        ctx.direction = 'ltr';
+                        ctx.textAlign = 'center';
+                        ctx.font      = 'bold 30px Inter, sans-serif';
+                        ctx.fillStyle = WHITE;
+                        ctx.fillText('EMAAR GULF', W / 2, 118);
+                        resolve();
+                    };
+                    img.src = src;
+                };
+                tryLoad(LOGO_LIGHT, LOGO_DARK);
+            });
+
+            // ══════════════════════════════════════════════════════════════
+            // ALL TEXT: centred layout, no dividers
+            // Arabic: ctx.direction='rtl' + textAlign='center' + x=W/2
+            //   → direction=rtl tells Bidi engine the base direction,
+            //     so punctuation (، .) resolves to the correct side even
+            //     when visually centred. This is correct and safe.
+            // English: ctx.direction='ltr' + textAlign='center' + x=W/2
+            // ══════════════════════════════════════════════════════════════
+
+            // ── V46: Personalised salutation (English only) ───────────────
+            // When a recipient name is provided, render "Dear [Name],"
+            // above the Arabic heading and shift all content down 45px.
+            const hasName = recipientName && recipientName.trim().length > 0;
+            const yShift  = hasName ? 50 : 0;
+
+            if (hasName) {
+                const n = recipientName.trim();
+                ctx.direction = 'ltr';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = GOLD;
+                ctx.font      = '600 44px Cairo, sans-serif';
+                ctx.fillText(`Dear ${n},`, W / 2, 195);
+            }
+
+            // ── Arabic main heading ───────────────────────────────────────
+            ctx.direction = 'rtl';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = GOLD;
+            ctx.font      = 'bold 108px Cairo, sans-serif';
+            ctx.fillText('عيد مبارك', W / 2, 240 + yShift);
+
+            // ── English heading ───────────────────────────────────────────
+            ctx.direction = 'ltr';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = WHITE;
+            ctx.font      = 'bold 52px Inter, sans-serif';
+            ctx.fillText('Eid Mubarak', W / 2, 316 + yShift);
+
+            // ── Small gold ornament dot ───────────────────────────────────
+            ctx.fillStyle   = GOLD;
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(W / 2, 356 + yShift, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+
+            // ── Arabic body (centred, direction=rtl) ─────────────────────
+            ctx.direction = 'rtl';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(255,255,255,0.88)';
+            ctx.font      = '33px Cairo, sans-serif';
+
+            const arLines = [
+                'من قلب المملكة العربية السعودية إلى العالم،',
+                'تتشرف إعمار الخليج بأن ترفع أسمى آيات التهاني',
+                'والتبريكات بمناسبة عيد الفطر المبارك.',
+                'نسأل الله أن يتقبل طاعاتكم،',
+                'وأن يعيده عليكم وعلى أحبابكم بالصحة والخير والازدهار.',
+            ];
+            const arStartY = 406 + yShift;
+            const arLineH  = 52;
+            arLines.forEach((line, i) => ctx.fillText(line, W / 2, arStartY + i * arLineH));
+
+            // ── Small gold ornament dot ───────────────────────────────────
+            const midDotY = arStartY + arLines.length * arLineH + 20;
+            ctx.fillStyle   = GOLD;
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(W / 2, midDotY, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+
+            // ── English body (centred, direction=ltr) ─────────────────────
+            ctx.direction = 'ltr';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(255,255,255,0.68)';
+            ctx.font      = '27px Inter, sans-serif';
+
+            const enLines = [
+                'From the heart of the Kingdom of Saudi Arabia to the world,',
+                'Emaar Gulf extends its warmest wishes on the blessed',
+                'occasion of Eid Al-Fitr. May this beautiful season bring',
+                'peace, prosperity, and lasting happiness to you and',
+                'your loved ones.',
+            ];
+            const enStartY = midDotY + 42;
+            const enLineH  = 42;
+            enLines.forEach((line, i) => ctx.fillText(line, W / 2, enStartY + i * enLineH));
+
+            // ── Website URL (centred, no divider) ─────────────────────────
+            ctx.direction = 'ltr';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = GOLD;
+            ctx.font      = '600 28px Inter, sans-serif';
+            ctx.fillText('www.emaargulf.com', W / 2, 1010);
+
+            return canvas;
+        }
+
+        // ─── SHARE BUTTON HANDLER ────────────────────────────────────────
+        // V46: show name prompt modal first, then proceed with name (or blank)
+        shareBtn.addEventListener('click', () => {
+            if (!hasWon) return;
+            nameInput.value = '';
+            nameModal.classList.add('open');
+            // Auto-focus the input after transition
+            setTimeout(() => nameInput.focus(), 320);
+        });
+
+        // Allow Enter key to confirm from the input
+        nameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); nameModalConfirm.click(); }
+            if (e.key === 'Escape') nameModalSkip.click();
+        });
+
+        async function proceedWithShare(recipientName) {
+            nameModal.classList.remove('open');
+
+            shareBtn.style.opacity       = '0.6';
+            shareBtn.style.pointerEvents = 'none';
+
+            const name     = recipientName && recipientName.trim() ? recipientName.trim() : '';
+            const salutation = name ? `Dear ${name},\n\n` : '';
+            const shareText = `${salutation}🌙 Eid Mubarak — from Emaar Gulf\n\nI just sighted the Hilal in ${finalTimeTaken}s.\nCan you find it faster? 🔭✨\n\nThe night sky is waiting for you 👇\nhttps://emaargulf-sa.web.app/eid`;
+
+            let canvas;
+            try {
+                canvas = await generateShareCard(name);
+            } catch(err) {
+                console.warn('Share card generation failed:', err);
+                shareBtn.style.opacity       = '';
+                shareBtn.style.pointerEvents = '';
+                if (navigator.share) navigator.share({ title: 'Eid Mubarak', text: shareText }).catch(() => {});
+                return;
+            }
+
+            shareBtn.style.opacity       = '';
+            shareBtn.style.pointerEvents = '';
+
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    if (navigator.share) navigator.share({ title: 'Eid Mubarak', text: shareText }).catch(() => {});
+                    return;
+                }
+                const file = new File([blob], 'eid-mubarak-emaar-gulf.png', { type: 'image/png' });
+
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({ title: 'Eid Mubarak from Emaar Gulf', text: shareText, files: [file] });
+                        return;
+                    } catch(err) {
+                        if (err.name === 'AbortError') return;
+                    }
+                }
+
+                // Desktop / unsupported: preview modal
+                const dataUrl = canvas.toDataURL('image/png');
+                shareModalImg.src = dataUrl;
+                shareModalDownload.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = dataUrl; a.download = 'eid-mubarak-emaar-gulf.png'; a.click();
+                };
+                shareModal.classList.add('open');
+            }, 'image/png');
+        }
+
+        nameModalConfirm.addEventListener('click', () => proceedWithShare(nameInput.value));
+        nameModalSkip.addEventListener('click',    () => proceedWithShare(''));
+
+        // Close name modal on backdrop click
+        nameModal.addEventListener('click', (e) => {
+            if (e.target === nameModal) nameModal.classList.remove('open');
+        });
+
+        // Modal close handlers
+        shareModalClose.addEventListener('click', () => shareModal.classList.remove('open'));
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) shareModal.classList.remove('open');
+        });
+
+        // ─── RESIZE HANDLER ──────────────────────────────────────────────
+        window.addEventListener('resize', () => {
+            if (!overlay.classList.contains('active') || hasFoundMoon) return;
+            moonX = Math.min(Math.max(moonX, 120), vW - 120);
+            moonY = Math.min(Math.max(moonY, 120), vH - 120);
+            moonContainer.style.transform = `translate3d(${moonX-45}px,${moonY-45}px,0)`;
+            targetX = Math.min(targetX, vW);
+            targetY = Math.min(targetY, vH);
+        });
+
+        // ─── UNIFIED POINTER ENGINE ──────────────────────────────────────
+        const handlePointerDown = (e) => {
+            lastInputTime = performance.now();
+            idleAnchorX = targetX; idleAnchorY = targetY; // refresh idle anchor on input
+            if (e.pointerType === 'touch') {
+                overlay.setPointerCapture(e.pointerId);
+                isDragging = true;
+                tapStartX  = e.clientX;
+                tapStartY  = e.clientY;
+            } else if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+                if (!isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
+                    shootInteractiveComet(e.clientX, e.clientY);
+                }
+            }
+        };
+
+        const handlePointerMove = (e) => {
+            if (hasFoundMoon) return;
+            lastInputTime = performance.now();
+            idleAnchorX = targetX; idleAnchorY = targetY; // refresh idle anchor on input
+            if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+                targetX = e.clientX;
+                targetY = e.clientY;
+            } else if (isDragging && e.pointerType === 'touch') {
+                if (e.cancelable) e.preventDefault();
+                targetX = Math.min(e.clientX, vW);
+                targetY = Math.min(e.clientY, vH);
+            }
+        };
+
+        const handlePointerUp = (e) => {
+            if (e.pointerType === 'touch') {
+                if (overlay.hasPointerCapture(e.pointerId)) overlay.releasePointerCapture(e.pointerId);
+                const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
+                if (dist < 15 && !isCometFlying && overlay.classList.contains('active') && !hasFoundMoon) {
+                    shootInteractiveComet(e.clientX, e.clientY);
+                }
+                isDragging = false;
+            }
+        };
+
+        overlay.addEventListener('pointerdown',        handlePointerDown);
+        overlay.addEventListener('pointermove',        handlePointerMove);
+        overlay.addEventListener('pointerup',          handlePointerUp);
+        overlay.addEventListener('pointercancel',      handlePointerUp);
+        overlay.addEventListener('lostpointercapture', () => { isDragging = false; });
+
+        // ─── GPU RENDER LOOP ──────────────────────────────────────────────
+        function renderEngine(timestamp) {
+            if (!timestamp) timestamp = performance.now();
+
+            if (timestamp - lastFrameTime < FRAME_DELAY) {
+                animationFrameId = requestAnimationFrame(renderEngine);
+                return;
+            }
+            lastFrameTime = timestamp;
+
+            drawFrame(timestamp);
+
+            if (!hasFoundMoon) {
+                // Auto-parallax
+                autoParallaxX = Math.sin(timestamp * 0.00023) * 12 + Math.sin(timestamp * 0.00041) * 6;
+                autoParallaxY = Math.cos(timestamp * 0.00019) * 8  + Math.cos(timestamp * 0.00037) * 4;
+                parallaxMaster.style.transform = `translate3d(${autoParallaxX}px,${autoParallaxY}px,0)`;
+                starsCanvas.style.transform    = `translate3d(${autoParallaxX * -0.4}px,${autoParallaxY * -0.4}px,0)`;
+
+                // Idle drift — oscillate around the last known position (anchor), not accumulate
+                if (performance.now() - lastInputTime > 5000 && !isDragging) {
+                    targetX = idleAnchorX + Math.sin(performance.now() * 0.001)  * 30;
+                    targetY = idleAnchorY + Math.cos(performance.now() * 0.0013) * 20;
+                }
+
+                const ease = isTouch ? 0.25 : 0.12;
+                currentX += (targetX - currentX) * ease;
+                currentY += (targetY - currentY) * ease;
+
+                // ── ACT 1: check if spyglass is over a hunt star ──────────
+                checkHuntStarProximity();
+
+                // ── ACT 2: moon logic (only when unlocked) ────────────────
+                if (moonUnlocked) {
+                    const dist   = Math.hypot(currentX - moonX, currentY - moonY);
+                    const radius = vW * DIFFICULTY.detectionRadiusMultiplier;
+                    const intens = Math.max(0, 1 - dist / radius);
+
+                    audio.updateHum(intens);
+
+                    if (dist < THRESHOLDS.magneticActivation && (isDragging || !isTouch)) {
+                        targetX += (moonX - targetX) * DIFFICULTY.magneticPull;
+                        targetY += (moonY - targetY) * DIFFICULTY.magneticPull;
+                    }
+
+                    if (dist < radius) {
+                        spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(${1 + intens * THRESHOLDS.spyglassScale})`;
+                        if (intens > THRESHOLDS.compassAppear) {
+                            compass.style.transform = `rotate(${Math.atan2(moonY-currentY, moonX-currentX)}rad)`;
+                            compass.style.opacity   = `${(intens - THRESHOLDS.compassAppear) * 2.5}`;
+                        } else {
+                            compass.style.opacity = '0';
+                        }
+                        const now = performance.now();
+                        if (intens > THRESHOLDS.hapticStart
+                            && now - lastVibeTime > Math.max(50, 300 - intens * 250)
+                            && navigator.vibrate && isTouch) {
+                            navigator.vibrate([5, 20, 5]);
+                            lastVibeTime = now;
+                        }
+                    } else {
+                        spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
+                        compass.style.opacity    = '0';
+                    }
+
+                    moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+                    moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+
+                    // ── WIN CONDITION ─────────────────────────────────────
+                    if (dist < DIFFICULTY.winDistance) {
+                        hasFoundMoon = true;
+                        hasWon       = true;
+                        currentX = moonX; currentY = moonY;
+
+                        // Stop any pending narrative message immediately
+                        if (narrativeTimeout) clearTimeout(narrativeTimeout);
+
+                        finalTimeTaken = ((performance.now() - searchStartTime) / 1000).toFixed(1);
+                        scoreDisplay.innerHTML = `✨ Hilal Sighted in <span>${finalTimeTaken}s</span>`;
+
+                        audio.playWin();
+                        spyglass.style.display = 'none';
+                        compass.style.display  = 'none';
+
+                        moonMaskLayer.style.setProperty('--x', `${currentX}px`);
+                        moonMaskLayer.style.setProperty('--y', `${currentY}px`);
+
+                        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                            overlay.animate([
+                                { transform: 'translateX(0px)'  },
+                                { transform: 'translateX(4px)'  },
+                                { transform: 'translateX(-4px)' },
+                                { transform: 'translateX(0px)'  }
+                            ], { duration: 350, easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)' });
+                        }
+
+                        document.body.classList.add('found');
+                        triggerParticleBurst(currentX, currentY);
+                        if (navigator.vibrate && isTouch) navigator.vibrate([15, 30, 15]);
+
+                        setTimeout(() => {
+                            winUi.style.opacity       = '1';
+                            winUi.style.pointerEvents = 'auto';
+                            lanternsUi.style.top      = '0';
+                        }, 1200);
+                    }
+                } else {
+                    // Act 1: just move spyglass, no moon hum
+                    spyglass.style.transform = `translate3d(${currentX-90}px,${currentY-90}px,0) scale(1)`;
+                    compass.style.opacity    = '0';
+                    // Keep mask parked off-screen so moon doesn't accidentally show
+                    moonMaskLayer.style.setProperty('--x', '-200px');
+                    moonMaskLayer.style.setProperty('--y', '-200px');
+                }
+            }
+
+            if (!hasFoundMoon || canvasParticles.length > 0) {
+                animationFrameId = requestAnimationFrame(renderEngine);
+            }
+        }
+    </script>
+</body>
+</html>
