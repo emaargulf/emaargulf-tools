@@ -43,3 +43,10 @@ emaargulf-tools/
     ├── chime.mp3               <-- Interaction audio asset
     ├── hum.mp3                 <-- Ambient interaction audio
     └── swoosh.mp3              <-- Transition audio asset
+```
+</details>
+
+**Maintained by:** nawavazhi  
+**Contact:** [nawavazhi@gmail.com](mailto:nawavazhi@gmail.com)  
+
+<!-- Developer/Author: archengsafdar@gmail.com -->
