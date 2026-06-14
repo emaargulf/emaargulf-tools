@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-main-light.svg" alt="Emaar Gulf Icon" width="72" />
+  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-main-light.svg" alt="Emaar Gulf Icon" width="200" />
   <br/><br/>
   <h1>EMAAR GULF | TOOLS PORTAL</h1>
   <p><i>Official Web Applications & Corporate Utilities</i></p>
