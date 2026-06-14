@@ -1,22 +1,21 @@
 <div align="center">
-  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-main-light.svg" alt="Emaar Gulf Icon" width="300" />
+  <img src="https://emaargulf.github.io/emaargulf-branding/assets/logos/logo-main-light.svg" alt="Emaar Gulf Icon" width="72" />
   <br/><br/>
-  <h1>Emaar Gulf | Tools Portal</h1>
-  <h3>Official Web Applications & Corporate Utilities</h3>
-  <p><i>Single Source of Truth for Human Developers & Automated Systems</i></p>
+  <h1>EMAAR GULF | TOOLS PORTAL</h1>
+  <p><i>Official Web Applications & Corporate Utilities</i></p>
 </div>
 
 ---
 
-> **System Status:** Production / Active  
-> **Environment:** Vanilla HTML/CSS/JS (Zero-Dependencies)  
-> **Target:** iOS, Android, Windows, macOS  
+> ❖ **System Status:** Production / Active  
+> ⎔ **Environment:** Vanilla HTML/CSS/JS (Zero-Dependencies)  
+> ⌂ **Target:** iOS, Android, Windows, macOS  
 
-This repository serves as the central CDN and hosting environment for Emaar Gulf Engineering Consultants' web tools and utilities. It is designed with a strict focus on mobile responsiveness, high performance, and corporate brand alignment (Brand Navy `#0B1D35` & Brand Gold `#C5A059`).
+This repository serves as the central CDN and hosting environment for Emaar Gulf Engineering Consultants' web tools. It is designed with a strict focus on performance, structural minimalism, and brand alignment (Charcoal `#35383C` & Gold `#F1AA27`).
 
 ---
 
-## 🚀 Live Production Environments
+## ▸ LIVE PRODUCTION ENVIRONMENTS
 
 | Application Module | Description | Production URL |
 | :--- | :--- | :--- |
@@ -25,9 +24,9 @@ This repository serves as the central CDN and hosting environment for Emaar Gulf
 
 ---
 
-## 📂 System Architecture
+## ▤ SYSTEM ARCHITECTURE
 
-The repository is organized into isolated, purpose-built modules to ensure modular scalability without code conflicts.
+The repository is organized into isolated, purpose-built modules to ensure modular scalability.
 
 ```text
 emaargulf-tools/
