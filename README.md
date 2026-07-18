@@ -19,7 +19,7 @@ This repository serves as the central CDN and hosting environment for Emaar Gulf
 
 | Application Module | Description | Production URL |
 | :--- | :--- | :--- |
-| **Tools Hub** | Main landing page and directory for corporate utilities. | [Access Hub](https://emaargulf.github.io/emaargulf-tools/tools/index.html) |
+| **Tools Hub** | Main landing page and directory for corporate utilities. | [Access Hub](https://emaargulf.github.io/emaargulf-tools/index.html) |
 | **Eid Al-Fitr App** | Interactive, audio-enabled web application for client distribution. | [Launch Portal](https://emaargulf.github.io/emaargulf-tools/eid_al-fitr/) |
 
 ---
